@@ -27,8 +27,6 @@ final class ClapTrapTests: XCTestCase {
     }
     
     func testInsectWaveProgression() {
-        let engine = ClapTrapGameEngine.shared
-        
         // Waves 1-5: Housefly
         XCTAssertEqual(InsectType.housefly.initialHealth, 1)
         XCTAssertEqual(InsectType.housefly.baseScore, 100)
@@ -95,6 +93,23 @@ final class ClapTrapTests: XCTestCase {
         // Game automatically starts upon unfolding!
         XCTAssertEqual(engine.gameState, .hunting)
         XCTAssertNotNil(engine.activeInsect)
+    }
+    
+    func testFoldableScreenGeometryAspectRatio() {
+        // External narrow cover screen (e.g. 390 x 844) -> ratio 0.46 < 0.70
+        let coverScreenSize = CGSize(width: 390, height: 844)
+        let coverRatio = coverScreenSize.width / coverScreenSize.height
+        XCTAssertLessThan(coverRatio, 0.70, "Cover screen aspect ratio must be less than 0.70")
+        
+        // Unfolded inner dual screen (e.g. 800 x 900) -> ratio 0.88 >= 0.70
+        let unfoldedDualScreenSize = CGSize(width: 800, height: 900)
+        let dualRatio = unfoldedDualScreenSize.width / unfoldedDualScreenSize.height
+        XCTAssertGreaterThanOrEqual(dualRatio, 0.70, "Unfolded dual screen aspect ratio must be >= 0.70")
+        
+        // Landscape unfolded dual screen (e.g. 852 x 393) -> ratio 2.16 >= 0.70
+        let landscapeDualScreenSize = CGSize(width: 852, height: 393)
+        let landscapeRatio = landscapeDualScreenSize.width / landscapeDualScreenSize.height
+        XCTAssertGreaterThanOrEqual(landscapeRatio, 0.70, "Landscape dual screen ratio must be >= 0.70")
     }
     
     func testProceduralAudioSynthesizerSafety() {

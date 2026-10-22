@@ -1,68 +1,74 @@
 import SwiftUI
 
 /// Redesigned Arcade HUD: Centered floating glassmorphic cockpit console.
-/// Beautifully formatted, perfectly positioned below bezels/notches,
-/// with glowing neon score, wave badge, lives, integrated wipe sponge,
-/// and urgent reaction countdown meter.
+/// Prominently positioned with comfortable top safe-area clearance,
+/// featuring bold glowing neon score, combo streak multiplier, wave target radar,
+/// heart lives, integrated sponge wipe button, and an urgent reaction countdown bar.
 public struct GameHUDView: View {
     @ObservedObject var gameEngine = ClapTrapGameEngine.shared
     
     public init() {}
     
     public var body: some View {
-        VStack(spacing: 10) {
-            // Centered Floating Glassmorphic Arcade Console
-            HStack(spacing: 16) {
-                // 1. LEFT POD: Score, High Score & Streak Multiplier
+        VStack(spacing: 8) {
+            // Centered Cyber-Arcade Cockpit Console
+            HStack(spacing: 14) {
+                // 1. LEFT POD: Score, High Score & Streak Combo
                 HStack(spacing: 8) {
-                    VStack(alignment: .leading, spacing: 1) {
+                    VStack(alignment: .leading, spacing: 2) {
                         Text("SCORE")
                             .font(.system(size: 9, weight: .black, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.6))
+                            .foregroundColor(.white.opacity(0.65))
+                            .tracking(1)
                         
                         Text("\(gameEngine.score)")
-                            .font(.system(size: 24, weight: .black, design: .rounded))
+                            .font(.system(size: 26, weight: .black, design: .rounded))
                             .foregroundStyle(
-                                LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
+                                LinearGradient(
+                                    colors: [.yellow, .orange],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
                             )
-                            .shadow(color: .yellow.opacity(0.6), radius: 4)
+                            .shadow(color: .yellow.opacity(0.7), radius: 6)
                         
                         if gameEngine.highScore > 0 {
                             Text("BEST: \(gameEngine.highScore)")
                                 .font(.system(size: 9, weight: .heavy, design: .monospaced))
-                                .foregroundColor(.orange.opacity(0.85))
+                                .foregroundColor(.orange.opacity(0.9))
                         }
                     }
                     
-                    // Streak Multiplier Pill
+                    // Streak Combo Multiplier
                     if gameEngine.streak > 1 {
                         let mult = min(5, 1 + (gameEngine.streak / 3))
                         VStack(spacing: 1) {
                             Text("🔥")
                                 .font(.system(size: 11))
                             Text("\(mult)X")
-                                .font(.system(size: 10, weight: .black, design: .monospaced))
+                                .font(.system(size: 11, weight: .black, design: .monospaced))
                                 .foregroundColor(.yellow)
                         }
-                        .padding(.horizontal, 6)
+                        .padding(.horizontal, 7)
                         .padding(.vertical, 4)
                         .background(
                             RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.orange.opacity(0.3))
+                                .fill(Color.orange.opacity(0.35))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .stroke(Color.orange, lineWidth: 1)
+                                        .stroke(Color.orange, lineWidth: 1.2)
                                 )
                         )
+                        .shadow(color: .orange.opacity(0.5), radius: 4)
                     }
                 }
                 
                 // Vertical Glass Divider
                 Rectangle()
-                    .fill(Color.white.opacity(0.18))
-                    .frame(width: 1.2, height: 36)
+                    .fill(Color.white.opacity(0.2))
+                    .frame(width: 1.2, height: 38)
                 
-                // 2. CENTER POD: Wave & Target Intel
+                // 2. CENTER POD: Wave & Target Intel Radar
                 VStack(spacing: 3) {
                     HStack(spacing: 4) {
                         Text("WAVE")
@@ -70,49 +76,50 @@ public struct GameHUDView: View {
                             .foregroundColor(.white.opacity(0.7))
                         
                         Text("\(gameEngine.currentWave)")
-                            .font(.system(size: 20, weight: .black, design: .monospaced))
+                            .font(.system(size: 22, weight: .black, design: .monospaced))
                             .foregroundColor(.cyan)
-                            .shadow(color: .cyan.opacity(0.8), radius: 4)
+                            .shadow(color: .cyan.opacity(0.9), radius: 6)
                     }
                     
                     if let insect = gameEngine.activeInsect {
                         let isWasp = insect.type == .wasp
                         let isBoss = insect.type == .mutantHorsefly
                         
-                        HStack(spacing: 3) {
+                        HStack(spacing: 4) {
                             Text(isWasp ? "⚠️" : (isBoss ? "👑" : "🪰"))
-                                .font(.system(size: 8))
+                                .font(.system(size: 9))
+                            
                             Text(insect.type.displayName.uppercased())
                                 .font(.system(size: 8, weight: .black, design: .monospaced))
                                 .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .white))
                         }
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
                         .background(
                             Capsule()
-                                .fill(isWasp ? Color.red.opacity(0.75) : Color.white.opacity(0.12))
+                                .fill(isWasp ? Color.red.opacity(0.85) : Color.white.opacity(0.14))
                         )
                     }
                 }
                 
                 // Vertical Glass Divider
                 Rectangle()
-                    .fill(Color.white.opacity(0.18))
-                    .frame(width: 1.2, height: 36)
+                    .fill(Color.white.opacity(0.2))
+                    .frame(width: 1.2, height: 38)
                 
-                // 3. RIGHT POD: Lives & Integrated Sponge Button
-                HStack(spacing: 12) {
-                    // Lives Hearts
-                    HStack(spacing: 4) {
+                // 3. RIGHT POD: Lives & Squeegee Sponge Button
+                HStack(spacing: 10) {
+                    // Hearts Lives
+                    HStack(spacing: 3) {
                         ForEach(0..<3, id: \.self) { idx in
                             Image(systemName: idx < gameEngine.lives ? "heart.fill" : "heart")
                                 .font(.system(size: 16, weight: .black))
-                                .foregroundColor(idx < gameEngine.lives ? .red : .gray.opacity(0.5))
-                                .shadow(color: idx < gameEngine.lives ? .red.opacity(0.8) : .clear, radius: 3)
+                                .foregroundColor(idx < gameEngine.lives ? .red : .gray.opacity(0.4))
+                                .shadow(color: idx < gameEngine.lives ? .red.opacity(0.8) : .clear, radius: 4)
                         }
                     }
                     
-                    // Compact Sponge Wipe Button
+                    // Squeegee Clean Screen Button
                     Button(action: {
                         gameEngine.wipeScreenWithSponge()
                     }) {
@@ -133,32 +140,39 @@ public struct GameHUDView: View {
                                 .fill(gameEngine.persistentSplatters.count > 0 ? Color.yellow.opacity(0.25) : Color.white.opacity(0.08))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 8)
-                                        .stroke(gameEngine.persistentSplatters.count > 0 ? Color.yellow : Color.white.opacity(0.2), lineWidth: 1)
+                                        .stroke(
+                                            gameEngine.persistentSplatters.count > 0 ? Color.yellow : Color.white.opacity(0.2),
+                                            lineWidth: 1
+                                        )
                                 )
                         )
                     }
                 }
             }
-            .padding(.horizontal, 20)
+            .padding(.horizontal, 18)
             .padding(.vertical, 10)
             .background(
                 RoundedRectangle(cornerRadius: 20)
-                    .fill(Color(red: 0.08, green: 0.10, blue: 0.14).opacity(0.88))
+                    .fill(Color(red: 0.08, green: 0.10, blue: 0.14).opacity(0.92))
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(
-                                LinearGradient(colors: [.yellow.opacity(0.6), .cyan.opacity(0.4), .white.opacity(0.2)], startPoint: .topLeading, endPoint: .bottomTrailing),
+                                LinearGradient(
+                                    colors: [.yellow.opacity(0.65), .cyan.opacity(0.4), .white.opacity(0.2)],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
                                 lineWidth: 1.5
                             )
                     )
             )
-            .shadow(color: .black.opacity(0.5), radius: 10, y: 5)
+            .shadow(color: .black.opacity(0.6), radius: 12, y: 6)
             .frame(maxWidth: 540)
-            .padding(.top, 24) // Safely clear camera cutouts / bezels
+            .padding(.top, 40) // Prominently clear dynamic islands, camera notches, and top edges
             
-            // Reaction Countdown Meter (Appears under console when insect lands!)
+            // Urgent Reaction Countdown Meter (Drops down under console when insect lands!)
             if gameEngine.gameState == .landed {
-                VStack(spacing: 4) {
+                VStack(spacing: 5) {
                     HStack(spacing: 8) {
                         Text("🚨 CLAP PHONE SHUT NOW! 🚨")
                             .font(.system(size: 12, weight: .black, design: .monospaced))
@@ -169,7 +183,7 @@ public struct GameHUDView: View {
                             .foregroundColor(.yellow)
                     }
                     
-                    // Animated Neon Countdown Bar
+                    // Animated Neon Laser Countdown Bar
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 4)
@@ -185,23 +199,23 @@ public struct GameHUDView: View {
                                     )
                                 )
                                 .frame(width: max(0, geo.size.width * CGFloat(gameEngine.reactionProgress)), height: 8)
-                                .shadow(color: .red.opacity(0.8), radius: 4)
+                                .shadow(color: .red.opacity(0.85), radius: 5)
                         }
                     }
                     .frame(height: 8)
                     .frame(maxWidth: 320)
                 }
                 .padding(.horizontal, 16)
-                .padding(.vertical, 6)
+                .padding(.vertical, 8)
                 .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.black.opacity(0.85))
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.black.opacity(0.88))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.red.opacity(0.8), lineWidth: 1.2)
+                            RoundedRectangle(cornerRadius: 14)
+                                .stroke(Color.red.opacity(0.85), lineWidth: 1.5)
                         )
                 )
-                .shadow(color: .red.opacity(0.5), radius: 8)
+                .shadow(color: .red.opacity(0.55), radius: 10)
                 .transition(.scale.combined(with: .opacity))
             }
         }

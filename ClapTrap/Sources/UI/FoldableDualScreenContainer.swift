@@ -8,7 +8,6 @@ public struct FoldableDualScreenContainer: View {
     @ObservedObject var foldSensor = FoldSensorManager.shared
     
     // Inward gesture tracking
-    @State private var dragFoldProgress: CGFloat = 0.0
     @State private var dragLastX: CGFloat = 0.0
     @State private var dragLastTime: Date = Date()
     @State private var isDraggingFold: Bool = false
@@ -18,179 +17,192 @@ public struct FoldableDualScreenContainer: View {
     public var body: some View {
         GeometryReader { proxy in
             let screenSize = proxy.size
-            let midX = screenSize.width / 2.0
+            let isExternalCoverScreen = (screenSize.width / screenSize.height) < 0.70
             
-            // Calculate active fold progress (0.0 = 180° flat open, 1.0 = 0° closed shut)
-            let foldProgress = (180.0 - foldSensor.hingeAngle) / 180.0
-            
-            ZStack {
-                // 1. DUAL-SCREEN BOOK FOLD PLAYFIELD
-                // Splits cleanly into Left Screen and Right Screen, folding inward
-                // symmetrically toward the central hinge seam!
-                HStack(spacing: 0) {
-                    // LEFT SCREEN HALF
-                    ZStack {
-                        // Picnic Table & Left Content
-                        PicnicTableView(hingeAngle: foldSensor.hingeAngle)
-                            .frame(width: screenSize.width, height: screenSize.height)
-                            .offset(x: midX * 0.5)
-                        
-                        // Centered Bait Prop
-                        WatermelonBaitView()
-                            .position(x: midX - 8, y: screenSize.height * 0.52)
-                        
-                        // Persistent Splatters on Left Half
-                        ForEach(gameEngine.persistentSplatters) { splatter in
-                            SplatView(splatter: splatter)
-                        }
-                        
-                        // Active Insect
-                        if let insect = gameEngine.activeInsect, insect.state != .swatted {
-                            InsectSpriteView(insect: insect)
-                                .position(insect.position)
-                        }
-                    }
-                    .frame(width: midX, height: screenSize.height)
-                    .clipped()
-                    // 3D fold left half inward toward central crease
-                    .rotation3DEffect(
-                        .degrees(foldProgress * 75.0),
-                        axis: (x: 0, y: 1, z: 0),
-                        anchor: .trailing,
-                        perspective: 0.5
-                    )
-                    
-                    // RIGHT SCREEN HALF
-                    ZStack {
-                        // Picnic Table & Right Content
-                        PicnicTableView(hingeAngle: foldSensor.hingeAngle)
-                            .frame(width: screenSize.width, height: screenSize.height)
-                            .offset(x: -midX * 0.5)
-                        
-                        // Centered Bait Prop
-                        WatermelonBaitView()
-                            .position(x: -8, y: screenSize.height * 0.52)
-                        
-                        // Persistent Splatters on Right Half
-                        ForEach(gameEngine.persistentSplatters) { splatter in
-                            SplatView(splatter: splatter)
-                                .offset(x: -midX)
-                        }
-                        
-                        // Active Insect
-                        if let insect = gameEngine.activeInsect, insect.state != .swatted {
-                            InsectSpriteView(insect: insect)
-                                .offset(x: -midX)
-                                .position(x: insect.position.x - midX, y: insect.position.y)
-                        }
-                    }
-                    .frame(width: midX, height: screenSize.height)
-                    .clipped()
-                    // 3D fold right half inward toward central crease
-                    .rotation3DEffect(
-                        .degrees(-foldProgress * 75.0),
-                        axis: (x: 0, y: 1, z: 0),
-                        anchor: .leading,
-                        perspective: 0.5
-                    )
-                }
-                .edgesIgnoringSafeArea(.all)
-                // Natural Inward Fold Gesture & Tap-to-Clap
-                .gesture(
-                    DragGesture(minimumDistance: 10)
-                        .onChanged { value in
-                            handleInwardDragChanged(value: value, midX: midX)
-                        }
-                        .onEnded { value in
-                            handleInwardDragEnded(value: value, midX: midX)
-                        }
-                )
-                .onTapGesture {
-                    handleDirectScreenClapTap()
-                }
-                
-                // 2. HUD LAYER (Score, Wave, Streak, Lives, Clean Screen Sponge)
-                if gameEngine.gameState != .menu && gameEngine.gameState != .gameOver {
-                    VStack {
-                        GameHUDView()
-                        Spacer()
-                    }
-                }
-                
-                // 3. REVEAL AFTERMATH BANNER (When reopened after a swat)
-                if gameEngine.gameState == .revealing, let outcome = gameEngine.lastOutcome {
-                    SwatAftermathBanner(outcome: outcome) {
-                        gameEngine.advanceToNextWave()
-                    }
-                    .transition(.scale(scale: 0.85).combined(with: .opacity))
-                }
-                
-                // 4. MENU SCREEN
-                if gameEngine.gameState == .menu && !foldSensor.isCoverScreen {
-                    TitleMenuView(
-                        onStartGame: {
-                            gameEngine.startGame()
-                        }
-                    )
-                    .transition(.opacity)
-                }
-                
-                // 5. EXTERNAL COVER SCREEN (Game Inactive - Open Hinge to Start!)
-                if foldSensor.isCoverScreen {
-                    ExternalCoverScreenView(
-                        onOpenHinge: {
-                            foldSensor.reopenFlat()
-                        }
-                    )
-                    .transition(.asymmetric(insertion: .opacity, removal: .scale(scale: 1.1).combined(with: .opacity)))
-                    .zIndex(100)
-                }
-                
-                // 5. GAME OVER SCREEN
-                if gameEngine.gameState == .gameOver {
-                    GameOverBragView(
-                        score: gameEngine.score,
-                        highScore: gameEngine.highScore,
-                        wave: gameEngine.currentWave,
-                        onRetry: {
-                            gameEngine.startGame()
-                        }
-                    )
-                    .transition(.scale.combined(with: .opacity))
-                }
-                
-                // 6. CRACKED SCREEN EASTER EGG OVERLAY
-                if gameEngine.showCrackedScreenOverlay {
-                    CrackedGlassOverlay(impactPoint: gameEngine.crackedScreenImpactPoint) {
-                        gameEngine.showCrackedScreenOverlay = false
-                    }
-                }
-                
-                // 7. SPONGE WIPE FOAM OVERLAY
-                if gameEngine.isSpongeWiping {
-                    SpongeWipeAnimationOverlay {
-                        // Handled in engine
-                    }
+            Group {
+                if isExternalCoverScreen {
+                    // 1. EXTERNAL COVER SCREEN (Phone Closed)
+                    // The game NEVER runs on this cover screen under any circumstance.
+                    // Strictly shows the trapped buzzing fly and prompts player to unfold.
+                    ExternalCoverScreenView()
+                        .edgesIgnoringSafeArea(.all)
+                } else {
+                    // 2. UNFOLDED INNER DUAL-SCREEN PLAYFIELD
+                    dualScreenPlayfield(screenSize: screenSize)
                 }
             }
             .onAppear {
-                gameEngine.dualScreenSize = screenSize
-                let aspectRatio = screenSize.width / screenSize.height
-                // If launching directly on the unfolded dual screen, automatically open!
-                if aspectRatio > 0.68 && foldSensor.isCoverScreen {
-                    foldSensor.reopenFlat()
-                }
+                updateScreenConfiguration(size: screenSize)
             }
             .onChange(of: proxy.size) { newSize in
-                gameEngine.dualScreenSize = newSize
-                let aspectRatio = newSize.width / newSize.height
-                // When foldable phone opens to dual-screen, automatically unlock & launch game!
-                if aspectRatio > 0.68 && foldSensor.isCoverScreen {
-                    foldSensor.reopenFlat()
-                } else if aspectRatio <= 0.65 && !foldSensor.isCoverScreen {
-                    // Closed back onto narrow external cover screen
-                    foldSensor.isCoverScreen = true
+                updateScreenConfiguration(size: newSize)
+            }
+        }
+    }
+    
+    // MARK: - Screen Geometry & Hardware Unfold Handling
+    
+    private func updateScreenConfiguration(size: CGSize) {
+        gameEngine.dualScreenSize = size
+        let aspectRatio = size.width / size.height
+        
+        if aspectRatio >= 0.70 {
+            // Unfolded to inner dual-screen!
+            if foldSensor.isCoverScreen {
+                foldSensor.isCoverScreen = false
+                gameEngine.handleDeviceUnfolded()
+            }
+        } else {
+            // Folded closed onto narrow external cover screen!
+            if !foldSensor.isCoverScreen {
+                foldSensor.isCoverScreen = true
+                ProceduralSoundEngine.shared.stopBuzz()
+            }
+        }
+    }
+    
+    // MARK: - Dual Screen Playfield
+    
+    @ViewBuilder
+    private func dualScreenPlayfield(screenSize: CGSize) -> some View {
+        let midX = screenSize.width / 2.0
+        let foldProgress = (180.0 - foldSensor.hingeAngle) / 180.0
+        
+        ZStack {
+            // 1. DUAL-SCREEN BOOK FOLD PLAYFIELD
+            // Splits cleanly into Left Screen and Right Screen, folding inward
+            // symmetrically toward the central hinge seam!
+            HStack(spacing: 0) {
+                // LEFT SCREEN HALF
+                ZStack {
+                    // Picnic Table & Left Content
+                    PicnicTableView(hingeAngle: foldSensor.hingeAngle)
+                        .frame(width: screenSize.width, height: screenSize.height)
+                        .offset(x: midX * 0.5)
+                    
+                    // Centered Bait Prop
+                    WatermelonBaitView()
+                        .position(x: midX - 8, y: screenSize.height * 0.52)
+                    
+                    // Persistent Splatters on Left Half
+                    ForEach(gameEngine.persistentSplatters) { splatter in
+                        SplatView(splatter: splatter)
+                    }
+                    
+                    // Active Insect
+                    if let insect = gameEngine.activeInsect, insect.state != .swatted {
+                        InsectSpriteView(insect: insect)
+                            .position(insect.position)
+                    }
                 }
+                .frame(width: midX, height: screenSize.height)
+                .clipped()
+                // 3D fold left half inward toward central crease
+                .rotation3DEffect(
+                    .degrees(foldProgress * 75.0),
+                    axis: (x: 0, y: 1, z: 0),
+                    anchor: .trailing,
+                    perspective: 0.5
+                )
+                
+                // RIGHT SCREEN HALF
+                ZStack {
+                    // Picnic Table & Right Content
+                    PicnicTableView(hingeAngle: foldSensor.hingeAngle)
+                        .frame(width: screenSize.width, height: screenSize.height)
+                        .offset(x: -midX * 0.5)
+                    
+                    // Centered Bait Prop
+                    WatermelonBaitView()
+                        .position(x: -8, y: screenSize.height * 0.52)
+                    
+                    // Persistent Splatters on Right Half
+                    ForEach(gameEngine.persistentSplatters) { splatter in
+                        SplatView(splatter: splatter)
+                            .offset(x: -midX)
+                    }
+                    
+                    // Active Insect
+                    if let insect = gameEngine.activeInsect, insect.state != .swatted {
+                        InsectSpriteView(insect: insect)
+                            .offset(x: -midX)
+                            .position(x: insect.position.x - midX, y: insect.position.y)
+                    }
+                }
+                .frame(width: midX, height: screenSize.height)
+                .clipped()
+                // 3D fold right half inward toward central crease
+                .rotation3DEffect(
+                    .degrees(-foldProgress * 75.0),
+                    axis: (x: 0, y: 1, z: 0),
+                    anchor: .leading,
+                    perspective: 0.5
+                )
+            }
+            .edgesIgnoringSafeArea(.all)
+            // Natural Inward Fold Gesture & Tap-to-Clap
+            .gesture(
+                DragGesture(minimumDistance: 10)
+                    .onChanged { value in
+                        handleInwardDragChanged(value: value, midX: midX)
+                    }
+                    .onEnded { value in
+                        handleInwardDragEnded(value: value, midX: midX)
+                    }
+            )
+            .onTapGesture {
+                handleDirectScreenClapTap()
+            }
+            
+            // 2. HUD LAYER (Score, Wave, Streak, Lives, Clean Screen Sponge)
+            if gameEngine.gameState != .menu && gameEngine.gameState != .gameOver {
+                VStack {
+                    GameHUDView()
+                    Spacer()
+                }
+            }
+            
+            // 3. REVEAL AFTERMATH BANNER (When reopened after a swat)
+            if gameEngine.gameState == .revealing, let outcome = gameEngine.lastOutcome {
+                SwatAftermathBanner(outcome: outcome) {
+                    gameEngine.advanceToNextWave()
+                }
+                .transition(.scale(scale: 0.85).combined(with: .opacity))
+            }
+            
+            // 4. MENU SCREEN
+            if gameEngine.gameState == .menu {
+                TitleMenuView(
+                    onStartGame: {
+                        gameEngine.startGame()
+                    }
+                )
+                .transition(.opacity)
+            }
+            
+            // 5. GAME OVER SCREEN
+            if gameEngine.gameState == .gameOver {
+                GameOverBragView(
+                    score: gameEngine.score,
+                    highScore: gameEngine.highScore,
+                    wave: gameEngine.currentWave,
+                    onRetry: {
+                        gameEngine.startGame()
+                    }
+                )
+                .transition(.scale.combined(with: .opacity))
+            }
+            
+            // 6. CRACKED SCREEN EASTER EGG OVERLAY
+            if gameEngine.showCrackedScreenOverlay {
+                CrackedGlassOverlay(impactPoint: gameEngine.crackedScreenImpactPoint) {
+                    gameEngine.showCrackedScreenOverlay = false
+                }
+            }
+            
+            // 7. SPONGE WIPE FOAM OVERLAY
+            if gameEngine.isSpongeWiping {
+                SpongeWipeAnimationOverlay {}
             }
         }
     }
@@ -207,13 +219,10 @@ public struct FoldableDualScreenContainer: View {
         self.dragLastTime = now
         self.isDraggingFold = true
         
-        // Distance toward central crease calculates fold progress (0.0 to 1.0)
         let distFromEdge: CGFloat
         if value.startLocation.x < midX {
-            // Swiping inward from left edge toward center
             distFromEdge = value.location.x
         } else {
-            // Swiping inward from right edge toward center
             distFromEdge = (midX * 2.0) - value.location.x
         }
         
@@ -231,7 +240,6 @@ public struct FoldableDualScreenContainer: View {
     }
     
     private func handleDirectScreenClapTap() {
-        // If insect is landed, a fast clap / slap down onto the screen swats it!
         if gameEngine.gameState == .landed {
             foldSensor.triggerDirectClapSwat(velocity: 1350.0)
         }
@@ -246,7 +254,6 @@ struct SwatAftermathBanner: View {
     var body: some View {
         VStack(spacing: 8) {
             if outcome.hit {
-                // Hit Praise
                 VStack(spacing: 4) {
                     Text(outcome.praiseText)
                         .font(.system(size: 22, weight: .black, design: .rounded))
@@ -269,7 +276,6 @@ struct SwatAftermathBanner: View {
                         .foregroundColor(.green)
                 }
             } else if outcome.isStung {
-                // Wasp Sting
                 VStack(spacing: 4) {
                     Text("🐝 YOU GOT STUNG! 🐝")
                         .font(.system(size: 20, weight: .black, design: .rounded))
@@ -285,7 +291,6 @@ struct SwatAftermathBanner: View {
                         .foregroundColor(.red)
                 }
             } else {
-                // Whiff / Miss
                 VStack(spacing: 4) {
                     Text("💨 WHIFF! MISSED! 💨")
                         .font(.system(size: 18, weight: .black, design: .rounded))
@@ -316,7 +321,10 @@ struct SwatAftermathBanner: View {
                 .fill(Color.black.opacity(0.88))
                 .overlay(
                     RoundedRectangle(cornerRadius: 16)
-                        .stroke(outcome.hit ? Color.green : (outcome.isStung ? Color.red : Color.orange), lineWidth: 2)
+                        .stroke(
+                            outcome.hit ? Color.green : (outcome.isStung ? Color.red : Color.orange),
+                            lineWidth: 2
+                        )
                 )
         )
         .shadow(color: .black.opacity(0.6), radius: 8)
@@ -336,7 +344,6 @@ struct TitleMenuView: View {
             VStack(spacing: 16) {
                 Spacer()
                 
-                // Animated Title & Logo
                 VStack(spacing: 4) {
                     Text("CLAPTRAP")
                         .font(.system(size: 44, weight: .black, design: .rounded))
@@ -368,20 +375,15 @@ struct TitleMenuView: View {
                 
                 Spacer()
                 
-                // Pulsing Start Prompt
                 Button(action: onStartGame) {
                     VStack(spacing: 6) {
                         HStack(spacing: 8) {
-                            Image(systemName: "iphone.gen3")
-                            Text("OPEN PHONE FLAT TO START")
-                            Image(systemName: "iphone.gen3")
+                            Image(systemName: "hand.tap.fill")
+                            Text("TAP TO START HUNTING")
+                            Image(systemName: "hand.tap.fill")
                         }
                         .font(.system(size: 14, weight: .black, design: .monospaced))
                         .foregroundColor(.black)
-                        
-                        Text("(OR TAP HERE TO PLAY)")
-                            .font(.system(size: 10, weight: .bold, design: .monospaced))
-                            .foregroundColor(.black.opacity(0.7))
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 16)
@@ -399,7 +401,6 @@ struct TitleMenuView: View {
                     }
                 }
                 
-                // High Score Badge
                 if ClapTrapGameEngine.shared.highScore > 0 {
                     Text("ALL-TIME HIGH SCORE: \(ClapTrapGameEngine.shared.highScore)")
                         .font(.system(size: 11, weight: .heavy, design: .monospaced))
@@ -480,7 +481,6 @@ struct GameOverBragView: View {
                 .background(Color.white.opacity(0.06))
                 .cornerRadius(16)
                 
-                // Viral Brag Card Button
                 Button(action: {
                     UIPasteboard.general.string = bragText
                     withAnimation { copied = true }
@@ -500,7 +500,6 @@ struct GameOverBragView: View {
                     .cornerRadius(10)
                 }
                 
-                // Play Again Button
                 Button(action: onRetry) {
                     Text("PLAY AGAIN")
                         .font(.system(size: 16, weight: .black, design: .monospaced))
