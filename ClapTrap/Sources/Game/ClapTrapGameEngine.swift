@@ -213,7 +213,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     
     // MARK: - Frame Update (Physics & State Transitions)
     
-    private func updateFrame(dt: Double) {
+    public func updateFrame(dt: Double) {
         guard var insect = activeInsect else { return }
         let currentInsectId = insect.id
         
@@ -415,16 +415,39 @@ public final class ClapTrapGameEngine: ObservableObject {
             self.score += patienceBonus
             self.streak += 1
             self.patienceSuccessBanner = true
+            self.gameState = .hunting
             
             // Wasp starts flying away! updateEscapingInsect will smoothly fly it up
             // and off the screen, then automatically advanceToNextWave()!
         } else {
             // Normal insect escaped because player was too slow to fold!
-            insect.state = .escaped
-            soundEngine.playWhiffSound()
+            self.lives -= 1
             self.streak = 0
+            soundEngine.playWhiffSound()
             
-            // Fly takes off and updateEscapingInsect flies it away, then starts next wave!
+            if self.lives <= 0 {
+                // Out of lives: GAME OVER!
+                self.lives = 0
+                self.gameState = .gameOver
+                soundEngine.stopBuzz()
+                self.lastOutcome = SwatOutcome(
+                    hit: false,
+                    insectType: insect.type,
+                    reactionTimeMs: 0,
+                    slamVelocity: 0.0,
+                    isMach2: false,
+                    pointsEarned: 0,
+                    praiseText: "GAME OVER",
+                    mockingText: "Too slow! The fly escaped into the wild.",
+                    isStung: false,
+                    isBossDamagedOnly: false
+                )
+                return
+            }
+            
+            // Still has lives: fly escapes and game continues to next wave
+            insect.state = .escaped
+            self.gameState = .hunting
         }
     }
     
@@ -455,8 +478,12 @@ public final class ClapTrapGameEngine: ObservableObject {
             soundEngine.stopBuzz()
             self.patienceSuccessBanner = false
             
-            // Fly is gone! Automatically advance to the next wave!
-            self.advanceToNextWave()
+            if self.lives <= 0 {
+                self.gameState = .gameOver
+            } else {
+                // Fly is gone! Automatically advance to the next wave!
+                self.advanceToNextWave()
+            }
         }
     }
     
@@ -717,6 +744,10 @@ public final class ClapTrapGameEngine: ObservableObject {
     }
     
     public func advanceToNextWave() {
+        guard self.lives > 0 else {
+            self.gameState = .gameOver
+            return
+        }
         self.lastOutcome = nil
         self.currentWave += 1
         self.gameState = .hunting

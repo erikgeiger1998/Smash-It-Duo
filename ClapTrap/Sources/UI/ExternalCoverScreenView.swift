@@ -60,12 +60,14 @@ public struct ExternalCoverScreenView: View {
                 if isLandscape {
                     // LANDSCAPE COVER SCREEN (Side-by-Side Cartoon Layout)
                     HStack(spacing: 20) {
-                        // Left Column: Logo + Cartoon Fly / Outcome
-                        VStack(spacing: 6) {
+                        // Left Column: Top Bar + Logo + Cartoon Fly / Outcome
+                        VStack(spacing: 8) {
+                            topUtilityButtonsBar
+                            
                             Spacer()
                             
                             CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
-                                .scaleEffect(0.8)
+                                .scaleEffect(0.78)
                             
                             Spacer()
                             
@@ -109,9 +111,6 @@ public struct ExternalCoverScreenView: View {
                                 FoldSensorManager.shared.reopenFlat()
                             }
                             
-                            safetyDisclaimerView
-                                .padding(.top, 2)
-                            
                             Spacer()
                         }
                         .frame(maxWidth: size.width * 0.46)
@@ -120,12 +119,14 @@ public struct ExternalCoverScreenView: View {
                     .padding(.vertical, 8)
                 } else {
                     // PORTRAIT COVER SCREEN (Vertical Cartoon Layout)
-                    VStack(spacing: 12) {
-                        Spacer().frame(height: 14)
+                    VStack(spacing: 10) {
+                        // 1. TOP UTILITY BAR (Settings + Bestiary, clean from top-right camera)
+                        topUtilityButtonsBar
                         
-                        // 2. BOUNCY 3D CARTOON LOGO
+                        // 2. BOUNCY 3D CARTOON LOGO (Cleanly placed BELOW buttons, never overlapping!)
                         CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
                             .scaleEffect(bouncePulse ? 1.02 : 0.98)
+                            .padding(.top, 4)
                         
                         Spacer()
                         
@@ -166,57 +167,9 @@ public struct ExternalCoverScreenView: View {
                             FoldSensorManager.shared.reopenFlat()
                         }
                         
-                        // 6. GENTLE FOLD SAFETY NOTICE
-                        safetyDisclaimerView
-                            .padding(.top, 2)
-                        
-                        Spacer().frame(height: 18)
+                        Spacer().frame(height: 14)
                     }
                     .padding(.horizontal, 18)
-                }
-                
-                // Top Left Settings & Legenda Buttons (Cover Screen - safe from right camera cutout)
-                VStack {
-                    HStack(spacing: 8) {
-                        Button(action: {
-                            gameEngine.openMenu(tab: 0)
-                        }) {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                                .padding(8)
-                                .background(
-                                    Circle()
-                                        .fill(Color.white.opacity(0.88))
-                                        .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                                )
-                        }
-                        
-                        Button(action: {
-                            gameEngine.openMenu(tab: 2)
-                        }) {
-                            HStack(spacing: 4) {
-                                Image(systemName: "scope")
-                                    .font(.system(size: 13, weight: .bold))
-                                Text("LEGENDA")
-                                    .font(.system(size: 10, weight: .black, design: .monospaced))
-                            }
-                            .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                            .padding(.horizontal, 9)
-                            .padding(.vertical, 7)
-                            .background(
-                                Capsule()
-                                    .fill(Color.white.opacity(0.88))
-                                    .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                            )
-                        }
-                        
-                        Spacer()
-                    }
-                    .padding(.horizontal, 18)
-                    .padding(.top, isLandscape ? 10 : 16)
-                    
-                    Spacer()
                 }
             }
             .onAppear {
@@ -229,6 +182,47 @@ public struct ExternalCoverScreenView: View {
         }
     }
     
+    // MARK: - Top Utility Buttons Bar (Settings & Bestiary)
+    private var topUtilityButtonsBar: some View {
+        HStack(spacing: 8) {
+            Button(action: {
+                gameEngine.openMenu(tab: 0)
+            }) {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                    .padding(8)
+                    .background(
+                        Circle()
+                            .fill(Color.white.opacity(0.88))
+                            .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                    )
+            }
+            
+            Button(action: {
+                gameEngine.openMenu(tab: 2)
+            }) {
+                HStack(spacing: 4) {
+                    Image(systemName: "scope")
+                        .font(.system(size: 12, weight: .bold))
+                    Text("BESTIARY")
+                        .font(.system(size: 10, weight: .black, design: .monospaced))
+                }
+                .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                .padding(.horizontal, 9)
+                .padding(.vertical, 7)
+                .background(
+                    Capsule()
+                        .fill(Color.white.opacity(0.88))
+                        .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                )
+            }
+            
+            Spacer()
+        }
+        .padding(.top, 4)
+    }
+    
     // MARK: - State Queries
     
     private var isTrapped: Bool {
@@ -237,29 +231,6 @@ public struct ExternalCoverScreenView: View {
     
     private var isGameOver: Bool {
         gameEngine.gameState == .gameOver || (gameEngine.lastOutcome != nil && gameEngine.lastOutcome?.hit == false)
-    }
-    
-    // MARK: - Safety Disclaimer Badge
-    private var safetyDisclaimerView: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.system(size: 9, weight: .bold))
-                .foregroundColor(Color(red: 0.55, green: 0.28, blue: 0.12))
-            Text("SAFETY NOTICE: Fold phone gently.")
-                .font(.system(size: 9, weight: .heavy, design: .rounded))
-                .foregroundColor(Color(red: 0.45, green: 0.20, blue: 0.08))
-                .multilineTextAlignment(.center)
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 5)
-        .background(
-            Capsule()
-                .fill(Color.white.opacity(0.70))
-                .overlay(
-                    Capsule()
-                        .stroke(Color(red: 0.55, green: 0.28, blue: 0.12).opacity(0.35), lineWidth: 1)
-                )
-        )
     }
     
     // MARK: - Animation Timers

@@ -57,40 +57,7 @@ public struct PicnicTableView: View {
                         .position(x: 40, y: size.height / 2)
                 }
                 
-                // 3. Central Fold Hinge Shadow & Crease Zone
-                // Visual crease line with depth shadow that deepens as the device folds
-                let foldProgress = (180.0 - hingeAngle) / 180.0 // 0.0 (flat) to 1.0 (closed)
-                let creaseShadowWidth: CGFloat = 16.0 + CGFloat(foldProgress * 24.0)
-                
-                HStack(spacing: 0) {
-                    // Left crease shadow
-                    LinearGradient(
-                        colors: [Color.black.opacity(0.0), Color.black.opacity(0.18 + foldProgress * 0.45)],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                    .frame(width: creaseShadowWidth)
-                    
-                    // Central physical hinge crease line
-                    Rectangle()
-                        .fill(Color.black.opacity(0.40 + foldProgress * 0.45))
-                        .frame(width: 2.0)
-                        .overlay(
-                            Rectangle()
-                                .stroke(Color.white.opacity(0.15), lineWidth: 0.5)
-                        )
-                    
-                    // Right crease shadow
-                    LinearGradient(
-                        colors: [Color.black.opacity(0.18 + foldProgress * 0.45), Color.black.opacity(0.0)],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                    .frame(width: creaseShadowWidth)
-                }
-                .position(x: midX, y: size.height / 2.0)
-                
-                // 4. Ambient Vignette Lighting Overlay
+                // 3. Ambient Vignette Lighting Overlay
                 themeVignette(theme: theme, size: size)
             }
         }

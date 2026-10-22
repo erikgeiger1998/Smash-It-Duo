@@ -419,10 +419,10 @@ struct TitleMenuView: View {
                         }
                         
                         HStack(spacing: 6) {
-                            BestiaryPill(name: "HÁZI LÉGY", desc: "LECSAPNI", color: .green)
-                            BestiaryPill(name: "SZÚNYOG", desc: "GYORSABB", color: .cyan)
-                            BestiaryPill(name: "BÖGÖLY", desc: "2x CSAPÁS", color: .purple)
-                            BestiaryPill(name: "DARÁZS", desc: "TILOS!", color: .red)
+                            BestiaryPill(name: "HOUSEFLY", desc: "SWAT", color: .green)
+                            BestiaryPill(name: "MOSQUITO", desc: "FASTER", color: .cyan)
+                            BestiaryPill(name: "HORSEFLY", desc: "2x FOLD", color: .purple)
+                            BestiaryPill(name: "WASP", desc: "FORBIDDEN", color: .red)
                         }
                     }
                     .padding(.horizontal, 14)
@@ -466,7 +466,7 @@ struct TitleMenuView: View {
                     }
                 }
                 
-                // Action Buttons: Legenda Guide & Settings
+                // Action Buttons: Bestiary Guide & Settings
                 HStack(spacing: 10) {
                     Button(action: {
                         ClapTrapGameEngine.shared.openMenu(tab: 2)
@@ -474,7 +474,7 @@ struct TitleMenuView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "book.pages.fill")
                                 .foregroundColor(.yellow)
-                            Text("LEGENDA")
+                            Text("BESTIARY")
                         }
                         .font(.system(size: 11, weight: .black, design: .monospaced))
                         .foregroundColor(.white)
@@ -519,22 +519,6 @@ struct TitleMenuView: View {
                         .font(.system(size: 11, weight: .heavy, design: .monospaced))
                         .foregroundColor(.yellow.opacity(0.9))
                 }
-                
-                // Safety Notice Badge
-                HStack(spacing: 6) {
-                    Image(systemName: "exclamationmark.triangle")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(.yellow)
-                    Text("SAFETY NOTICE: Fold phone gently.")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(.white.opacity(0.85))
-                }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 6)
-                .background(
-                    Capsule()
-                        .fill(Color.white.opacity(0.10))
-                )
                 
                 Spacer().frame(height: 40)
             }

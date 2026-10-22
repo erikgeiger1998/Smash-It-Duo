@@ -29,11 +29,17 @@ public struct GameMenuView: View {
                 .ignoresSafeArea()
             
             VStack(spacing: 0) {
-                // MARK: - Header
-                HStack {
+                // MARK: - Header (Close button on the LEFT - safe from top-right camera hole)
+                HStack(spacing: 14) {
+                    Button(action: onDismiss) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 28, weight: .bold))
+                            .foregroundColor(.white.opacity(0.85))
+                    }
+                    
                     VStack(alignment: .leading, spacing: 2) {
                         Text("CLAPTRAP")
-                            .font(.system(size: 24, weight: .black, design: .rounded))
+                            .font(.system(size: 22, weight: .black, design: .rounded))
                             .foregroundStyle(
                                 LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
                             )
@@ -45,14 +51,8 @@ public struct GameMenuView: View {
                     }
                     
                     Spacer()
-                    
-                    Button(action: onDismiss) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundColor(.white.opacity(0.75))
-                    }
                 }
-                .padding(.horizontal, 22)
+                .padding(.horizontal, 20)
                 .padding(.top, 24)
                 .padding(.bottom, 14)
                 
@@ -60,7 +60,7 @@ public struct GameMenuView: View {
                 HStack(spacing: 6) {
                     menuTabButton(title: "SETTINGS", icon: "gearshape.fill", index: 0)
                     menuTabButton(title: "THEMES", icon: "paintpalette.fill", index: 1)
-                    menuTabButton(title: "LEGENDA", icon: "scope", index: 2)
+                    menuTabButton(title: "BESTIARY", icon: "scope", index: 2)
                     menuTabButton(title: "TUTORIAL", icon: "book.fill", index: 3)
                 }
                 .padding(.horizontal, 16)
@@ -546,7 +546,7 @@ public struct GameMenuView: View {
                     Image(systemName: "scope")
                         .font(.system(size: 15, weight: .bold))
                         .foregroundColor(.yellow)
-                    Text("ROVAR LEGENDA ÉS SZABÁLYOK")
+                    Text("INSECT BESTIARY & RULES")
                         .font(.system(size: 13, weight: .black, design: .monospaced))
                         .foregroundColor(.white)
                     Spacer()
@@ -558,16 +558,16 @@ public struct GameMenuView: View {
                         .background(Capsule().fill(Color.yellow.opacity(0.18)))
                 }
                 
-                Text("Nézd meg alaposan mindegyik rovar fotóját! Egyeseket le kell csapni a pontokért, a Boss 2 hajtást igényel, a darazsat viszont szigorúan TILOS bántani!")
+                Text("Study each insect species carefully! Swat targets for high scores, defeat the Boss with 2 folds, but the wasp is strictly FORBIDDEN to swat!")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundColor(.white.opacity(0.85))
                     .lineSpacing(2)
                 
                 // Quick Rule Indicator Strip
                 HStack(spacing: 6) {
-                    legendSummaryPill(title: "LECSAPNI!", icon: "checkmark.circle.fill", color: Color(red: 0.25, green: 0.88, blue: 0.45))
-                    legendSummaryPill(title: "2x CSAPÁS", icon: "bolt.shield.fill", color: Color(red: 0.80, green: 0.40, blue: 1.0))
-                    legendSummaryPill(title: "TILOS CSAPNI!", icon: "exclamationmark.octagon.fill", color: Color(red: 1.0, green: 0.25, blue: 0.25))
+                    legendSummaryPill(title: "SWAT TARGET", icon: "checkmark.circle.fill", color: Color(red: 0.25, green: 0.88, blue: 0.45))
+                    legendSummaryPill(title: "2x FOLD BOSS", icon: "bolt.shield.fill", color: Color(red: 0.80, green: 0.40, blue: 1.0))
+                    legendSummaryPill(title: "DO NOT SWAT!", icon: "exclamationmark.octagon.fill", color: Color(red: 1.0, green: 0.25, blue: 0.25))
                 }
                 .padding(.top, 2)
             }
@@ -581,85 +581,70 @@ public struct GameMenuView: View {
                     )
             )
             
-            // 1. HÁZI LÉGY (HOUSEFLY)
+            // 1. COMMON HOUSEFLY
             insectLegendaCard(
                 type: .housefly,
-                huName: "HÁZI LÉGY",
-                enName: "Common Housefly",
+                speciesName: "Common Housefly",
                 ruleType: .swat,
-                actionTitle: "LE SZABAD CSAPNI!",
-                actionSubtitle: "SWAT TARGET",
+                actionTitle: "SWAT TARGET",
                 color: Color(red: 0.25, green: 0.88, blue: 0.45),
-                keyTrait: "Hullámonként gyorsuló célpont",
+                keyTrait: "Accelerates each wave",
                 timeRange: "3.6s -> 0.95s",
                 points: "100 PTS",
-                huDesc: "A leggyakoribb célpont. Amikor leszáll a görögdinnyére és elkezdi dörzsölni az elülső lábait, finoman csukd össze a telefont! Az 1. szinten 3.6 másodperced van, ami a magasabb hullámokon fokozatosan 0.95 másodpercre gyorsul.",
-                enDesc: "Standard target. When it lands on the bait and rubs its legs, fold phone gently to trap it! Landing window starts at 3.6s and accelerates down to 0.95s on higher waves."
+                description: "Standard target. When it lands on the bait and rubs its front legs, smoothly fold the phone to trap it! The landing window starts at 3.6s and accelerates down to 0.95s on higher waves."
             )
             
-            // 2. SZÚNYOG (MOSQUITO)
+            // 2. STEALTH MOSQUITO
             insectLegendaCard(
                 type: .mosquito,
-                huName: "SZÚNYOG",
-                enName: "Stealth Mosquito",
+                speciesName: "Stealth Mosquito",
                 ruleType: .swat,
-                actionTitle: "LE SZABAD CSAPNI!",
-                actionSubtitle: "SWAT TARGET",
+                actionTitle: "SWAT TARGET",
                 color: Color(red: 0.20, green: 0.85, blue: 1.0),
-                keyTrait: "Természeténél fogva még gyorsabb!",
+                keyTrait: "Naturally faster reaction window",
                 timeRange: "2.6s -> 0.85s",
                 points: "250 PTS",
-                huDesc: "Természeténél fogva még gyorsabb! Apró termetű, ideges röptű és magas 460Hz-es hangon zümmög. Mindössze 2.6 - 0.85 másodpercet tölt a dinnyén – villámgyors reflexek szükségesek a lecsapásához!",
-                enDesc: "Naturally faster! Tiny, erratic with high-frequency 460Hz whine. Stays landed only 2.6s down to 0.85s — requires instant reflex folding before it flees!"
+                description: "Naturally lightning-fast! Small, agile, and buzzing with a high-pitched 460Hz whine. Stays landed only 2.6s down to 0.85s — requires instant reflex folding before it flees!"
             )
             
-            // 3. MUTÁNS BÖGÖLY (BOSS)
+            // 3. MUTANT HORSEFLY (BOSS)
             insectLegendaCard(
                 type: .mutantHorsefly,
-                huName: "MUTÁNS BÖGÖLY (BOSS)",
-                enName: "Mutant Horsefly",
+                speciesName: "Mutant Horsefly (Boss)",
                 ruleType: .doubleClap,
-                actionTitle: "DUPLA CSAPÁS!",
-                actionSubtitle: "2x HAJTÁS KELL A LETERÍTÉSÉHEZ",
+                actionTitle: "2x FOLDS REQUIRED!",
                 color: Color(red: 0.80, green: 0.40, blue: 1.0),
-                keyTrait: "Páncélozott Főellenség (Boss)",
+                keyTrait: "Armored Titan Boss",
                 timeRange: "3.4s -> 1.10s (x2)",
                 points: "750 PTS (BOSS)",
-                huDesc: "Páncélozott óriás boss: az 1. összecsukást kibírja és túléli (HP 2 -> 1)! Amint összecsuktad, azonnal nyisd ki a telefont és csapd le másodszor is mielőtt elrepül!",
-                enDesc: "Armored titan boss: survives the 1st fold (HP 2 -> 1)! As soon as you fold, instantly reopen flat and clap a second time to squash it!"
+                description: "Armored titan boss: survives the first fold (HP 2 -> 1)! As soon as you fold, immediately reopen flat and fold a second time to defeat it before it escapes!"
             )
             
-            // 4. DARÁZS (CSAPDA)
+            // 4. YELLOWJACKET WASP (TRAP)
             insectLegendaCard(
                 type: .wasp,
-                huName: "DARÁZS (CSAPDA)",
-                enName: "Yellowjacket Wasp",
+                speciesName: "Yellowjacket Wasp (Trap)",
                 ruleType: .doNotSwat,
-                actionTitle: "NEM SZABAD LECSAPNI!",
-                actionSubtitle: "ITT A TÜRELMET KELL TARTANI!",
+                actionTitle: "DO NOT SWAT!",
                 color: Color(red: 1.0, green: 0.25, blue: 0.25),
-                keyTrait: "Halálos Csapda (Trap Hazard)",
+                keyTrait: "Lethal Hazard - Hold Patience",
                 timeRange: "3.5s -> 2.20s",
-                points: "+500 PTS (TÜRELEM)",
-                huDesc: "VESZÉLYES CSAPDA! Szigorúan TILOS lecsapni! Ha összecsukod a telefont, a darázs azonnal megcsíp és VÉGE A JÁTÉKNAK (Game Over). Itt a türelmet kell tartani: várd meg békésen a 3.5 - 2.2 másodperces türelemablak végét, míg magától elszáll, és kapj +500 pont bónuszt!",
-                enDesc: "LETHAL TRAP! Strictly DO NOT fold phone! Clapping stings you for an instant Game Over. Hold your patience and let it fly away peacefully to earn +500 PTS!"
+                points: "+500 PTS (PATIENCE)",
+                description: "DEADLY HAZARD! Strictly DO NOT fold phone! Folding stings you for an instant Game Over. Hold your patience: wait peacefully through the 3.5s - 2.2s window until it flies away on its own for a +500 PTS bonus!"
             )
         }
     }
     
     private func insectLegendaCard(
         type: InsectType,
-        huName: String,
-        enName: String,
+        speciesName: String,
         ruleType: LegendaRuleType,
         actionTitle: String,
-        actionSubtitle: String,
         color: Color,
         keyTrait: String,
         timeRange: String,
         points: String,
-        huDesc: String,
-        enDesc: String
+        description: String
     ) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             // TOP SECTION: Specimen Photo & Identity + Swat Pill
@@ -698,14 +683,9 @@ public struct GameMenuView: View {
                     )
                     
                     // Name Header
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text(huName)
-                            .font(.system(size: 14, weight: .black, design: .rounded))
-                            .foregroundColor(.white)
-                        Text(enName)
-                            .font(.system(size: 10, weight: .bold, design: .monospaced))
-                            .foregroundColor(.white.opacity(0.55))
-                    }
+                    Text(speciesName)
+                        .font(.system(size: 14, weight: .black, design: .rounded))
+                        .foregroundColor(.white)
                     
                     // Trait Callout
                     Text(keyTrait)
@@ -724,7 +704,7 @@ public struct GameMenuView: View {
                         .font(.system(size: 11, weight: .bold))
                         .foregroundColor(.yellow)
                     VStack(alignment: .leading, spacing: 1) {
-                        Text(ruleType == .doNotSwat ? "TÜRELEM ABLAK" : "REAKCIÓIDŐ")
+                        Text(ruleType == .doNotSwat ? "PATIENCE WINDOW" : "REACTION WINDOW")
                             .font(.system(size: 7, weight: .black, design: .monospaced))
                             .foregroundColor(.white.opacity(0.6))
                         Text(timeRange)
@@ -747,7 +727,7 @@ public struct GameMenuView: View {
                         .font(.system(size: 11, weight: .bold))
                         .foregroundColor(.yellow)
                     VStack(alignment: .leading, spacing: 1) {
-                        Text("JUTALOM / SCORE")
+                        Text("SCORE REWARD")
                             .font(.system(size: 7, weight: .black, design: .monospaced))
                             .foregroundColor(.white.opacity(0.6))
                         Text(points)
@@ -765,18 +745,11 @@ public struct GameMenuView: View {
                 )
             }
             
-            // DESCRIPTIVE GUIDANCE (Hungarian & English)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(huDesc)
-                    .font(.system(size: 11, weight: .medium, design: .rounded))
-                    .foregroundColor(.white.opacity(0.9))
-                    .lineSpacing(2)
-                
-                Text(enDesc)
-                    .font(.system(size: 9.5, weight: .regular, design: .rounded))
-                    .foregroundColor(.white.opacity(0.55))
-                    .lineSpacing(1.5)
-            }
+            // DESCRIPTIVE GUIDANCE (100% English)
+            Text(description)
+                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .foregroundColor(.white.opacity(0.85))
+                .lineSpacing(2)
         }
         .padding(14)
         .background(

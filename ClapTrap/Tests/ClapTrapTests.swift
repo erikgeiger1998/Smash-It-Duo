@@ -367,4 +367,27 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertFalse(TableTheme.classicPicnic.isGlowInTheDark, "Classic Picnic should not be glow in the dark")
         XCTAssertFalse(TableTheme.cyberpunkNeon.isGlowInTheDark, "Cyberpunk should not be glow in the dark")
     }
+    
+    func testLandingTimeoutDeductsLifeAndTriggersGameOverWhenLivesDepleted() {
+        let engine = ClapTrapGameEngine.shared
+        engine.startGame()
+        XCTAssertEqual(engine.lives, 3)
+        XCTAssertEqual(engine.gameState, .hunting)
+        
+        // Simulate landed housefly with 1 life remaining
+        engine.lives = 1
+        var insect = ActiveInsect(type: .housefly, startPosition: CGPoint(x: 200, y: 300))
+        insect.state = .landed
+        insect.landTimeRemaining = 0.001
+        insect.totalLandDuration = 3.6
+        engine.activeInsect = insect
+        engine.gameState = .landed
+        
+        // Trigger landing timeout
+        engine.updateFrame(dt: 0.05)
+        
+        // Lives must be 0 and game must transition to GameOver!
+        XCTAssertEqual(engine.lives, 0, "Lives should drop to 0 after failing to catch landed fly")
+        XCTAssertEqual(engine.gameState, .gameOver, "Failing to catch fly with 0 lives remaining must trigger Game Over")
+    }
 }
