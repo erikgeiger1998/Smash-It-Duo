@@ -1,0 +1,499 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		35504864CCF26C7A9396F533 /* FoldableDualScreenContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C72873ACC3DAC80B4B6ED0 /* FoldableDualScreenContainer.swift */; };
+		37F54365E59F3BCA1E1915A4 /* GameHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */; };
+		572C68238BD7E3F7B9A47E43 /* FoldSensorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367AB1BB3091EDC3887FF7C0 /* FoldSensorManager.swift */; };
+		6D68B4F86C1D7A8CEE26D813 /* SplatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2811299F602DC75C7E4E4883 /* SplatView.swift */; };
+		6DF46A45EBE30FE5B6CE436A /* ExternalCoverScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */; };
+		765B48D590DC0E97FCFBBBC2 /* CrackedGlassOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */; };
+		83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */; };
+		96B8F07FA8CE3CB1A118EE0F /* InsectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */; };
+		A329F559D1CF1C59A62E38C4 /* InsectSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00AF97AE824E64D191B464E /* InsectSpriteView.swift */; };
+		A6AEBEAD8D7E9D050A2ECD66 /* CleanSpongeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB67D5E17789FC36D055840A /* CleanSpongeView.swift */; };
+		C696C590B8EA8493FFAE297A /* ClapTrapGameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */; };
+		C6E8945C035EFBD4789050AA /* ClapTrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */; };
+		D00B17036A6991415F8C8167 /* ProceduralSoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C26F77A91B4FC2ABB08FD3 /* ProceduralSoundEngine.swift */; };
+		DDBF9C8119DF945349631388 /* ClapTrapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */; };
+		EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		91DF4DF047BD441E0D2F9F28 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1F73BCEBAFFEA887A31C0FB4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BF8B34BCC0D27F2DFBFDD87C;
+			remoteInfo = ClapTrap;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		16C26F77A91B4FC2ABB08FD3 /* ProceduralSoundEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProceduralSoundEngine.swift; sourceTree = "<group>"; };
+		21C72873ACC3DAC80B4B6ED0 /* FoldableDualScreenContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldableDualScreenContainer.swift; sourceTree = "<group>"; };
+		2811299F602DC75C7E4E4883 /* SplatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplatView.swift; sourceTree = "<group>"; };
+		367AB1BB3091EDC3887FF7C0 /* FoldSensorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldSensorManager.swift; sourceTree = "<group>"; };
+		37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapApp.swift; sourceTree = "<group>"; };
+		3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrackedGlassOverlay.swift; sourceTree = "<group>"; };
+		3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalCoverScreenView.swift; sourceTree = "<group>"; };
+		4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatermelonBaitView.swift; sourceTree = "<group>"; };
+		6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapTests.swift; sourceTree = "<group>"; };
+		862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicnicTableView.swift; sourceTree = "<group>"; };
+		9981008E16BE80AA2C545612 /* ClapTrap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClapTrap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A00AF97AE824E64D191B464E /* InsectSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectSpriteView.swift; sourceTree = "<group>"; };
+		AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapGameEngine.swift; sourceTree = "<group>"; };
+		AB67D5E17789FC36D055840A /* CleanSpongeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanSpongeView.swift; sourceTree = "<group>"; };
+		B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHUDView.swift; sourceTree = "<group>"; };
+		D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectModel.swift; sourceTree = "<group>"; };
+		F665D37E67E0E4903D753790 /* ClapTrapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClapTrapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		2830C582A58A322714CAB0A7 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */,
+				D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		43CE2B41B8D7491CBEEE3021 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		6247EE84450FC19E6450E72C /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				16C26F77A91B4FC2ABB08FD3 /* ProceduralSoundEngine.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		6AD02074150C282FF8B8F381 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9981008E16BE80AA2C545612 /* ClapTrap.app */,
+				F665D37E67E0E4903D753790 /* ClapTrapTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		7ADC8F4D8F0EB98A21EE2F27 = {
+			isa = PBXGroup;
+			children = (
+				A667C41355E9109A1F115601 /* Sources */,
+				A65580A6363AD0B19E313F41 /* Tests */,
+				6AD02074150C282FF8B8F381 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9314F6F3B270B9CDA0688447 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */,
+				21C72873ACC3DAC80B4B6ED0 /* FoldableDualScreenContainer.swift */,
+				B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A65580A6363AD0B19E313F41 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */,
+			);
+			name = Tests;
+			path = ClapTrap/Tests;
+			sourceTree = "<group>";
+		};
+		A667C41355E9109A1F115601 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				43CE2B41B8D7491CBEEE3021 /* App */,
+				6247EE84450FC19E6450E72C /* Audio */,
+				2830C582A58A322714CAB0A7 /* Game */,
+				F5A778290F235AD9CD674533 /* Graphics */,
+				B780E4FA3032825E4E44AB99 /* Sensors */,
+				9314F6F3B270B9CDA0688447 /* UI */,
+			);
+			name = Sources;
+			path = ClapTrap/Sources;
+			sourceTree = "<group>";
+		};
+		B780E4FA3032825E4E44AB99 /* Sensors */ = {
+			isa = PBXGroup;
+			children = (
+				367AB1BB3091EDC3887FF7C0 /* FoldSensorManager.swift */,
+			);
+			path = Sensors;
+			sourceTree = "<group>";
+		};
+		F5A778290F235AD9CD674533 /* Graphics */ = {
+			isa = PBXGroup;
+			children = (
+				AB67D5E17789FC36D055840A /* CleanSpongeView.swift */,
+				3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */,
+				A00AF97AE824E64D191B464E /* InsectSpriteView.swift */,
+				862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */,
+				2811299F602DC75C7E4E4883 /* SplatView.swift */,
+				4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */,
+			);
+			path = Graphics;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		AD6EC6CAE757C3FAA0352F9E /* ClapTrapTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 69C78D236709525C0750164B /* Build configuration list for PBXNativeTarget "ClapTrapTests" */;
+			buildPhases = (
+				D5DDFDC4C26A3F41F3B2EAFA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5498A77DAB747D2881C0A8AB /* PBXTargetDependency */,
+			);
+			name = ClapTrapTests;
+			packageProductDependencies = (
+			);
+			productName = ClapTrapTests;
+			productReference = F665D37E67E0E4903D753790 /* ClapTrapTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		BF8B34BCC0D27F2DFBFDD87C /* ClapTrap */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 782CCE80E270FAF39A7C84CC /* Build configuration list for PBXNativeTarget "ClapTrap" */;
+			buildPhases = (
+				F6DE24669C74E81448640FD7 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ClapTrap;
+			packageProductDependencies = (
+			);
+			productName = ClapTrap;
+			productReference = 9981008E16BE80AA2C545612 /* ClapTrap.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1F73BCEBAFFEA887A31C0FB4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 8395A302A0E17789186123F9 /* Build configuration list for PBXProject "ClapTrap" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 7ADC8F4D8F0EB98A21EE2F27;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 6AD02074150C282FF8B8F381 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BF8B34BCC0D27F2DFBFDD87C /* ClapTrap */,
+				AD6EC6CAE757C3FAA0352F9E /* ClapTrapTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D5DDFDC4C26A3F41F3B2EAFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C6E8945C035EFBD4789050AA /* ClapTrapTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6DE24669C74E81448640FD7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DDBF9C8119DF945349631388 /* ClapTrapApp.swift in Sources */,
+				C696C590B8EA8493FFAE297A /* ClapTrapGameEngine.swift in Sources */,
+				A6AEBEAD8D7E9D050A2ECD66 /* CleanSpongeView.swift in Sources */,
+				765B48D590DC0E97FCFBBBC2 /* CrackedGlassOverlay.swift in Sources */,
+				6DF46A45EBE30FE5B6CE436A /* ExternalCoverScreenView.swift in Sources */,
+				572C68238BD7E3F7B9A47E43 /* FoldSensorManager.swift in Sources */,
+				35504864CCF26C7A9396F533 /* FoldableDualScreenContainer.swift in Sources */,
+				37F54365E59F3BCA1E1915A4 /* GameHUDView.swift in Sources */,
+				96B8F07FA8CE3CB1A118EE0F /* InsectModel.swift in Sources */,
+				A329F559D1CF1C59A62E38C4 /* InsectSpriteView.swift in Sources */,
+				83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */,
+				D00B17036A6991415F8C8167 /* ProceduralSoundEngine.swift in Sources */,
+				6D68B4F86C1D7A8CEE26D813 /* SplatView.swift in Sources */,
+				EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5498A77DAB747D2881C0A8AB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BF8B34BCC0D27F2DFBFDD87C /* ClapTrap */;
+			targetProxy = 91DF4DF047BD441E0D2F9F28 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		38BE7FEEDCFA8633964708B8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.erikgeiger.ClapTrapTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ClapTrap.app/ClapTrap";
+			};
+			name = Release;
+		};
+		55345BAF462BC902390B1A16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		7A76876365B6EF45D3694035 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		80BDB21F91F7271E9851D3CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.erikgeiger.ClapTrapTests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ClapTrap.app/ClapTrap";
+			};
+			name = Debug;
+		};
+		D89FC957543FBBFFBA45CE02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMotionUsageDescription = "ClapTrap uses motion sensors to detect folding slams and fast swats.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.erikgeiger.ClapTrap;
+				PRODUCT_NAME = ClapTrap;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		F4378676EA251A55E75964AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSMotionUsageDescription = "ClapTrap uses motion sensors to detect folding slams and fast swats.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.erikgeiger.ClapTrap;
+				PRODUCT_NAME = ClapTrap;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		69C78D236709525C0750164B /* Build configuration list for PBXNativeTarget "ClapTrapTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				80BDB21F91F7271E9851D3CF /* Debug */,
+				38BE7FEEDCFA8633964708B8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		782CCE80E270FAF39A7C84CC /* Build configuration list for PBXNativeTarget "ClapTrap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D89FC957543FBBFFBA45CE02 /* Debug */,
+				F4378676EA251A55E75964AC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		8395A302A0E17789186123F9 /* Build configuration list for PBXProject "ClapTrap" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				55345BAF462BC902390B1A16 /* Debug */,
+				7A76876365B6EF45D3694035 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1F73BCEBAFFEA887A31C0FB4 /* Project object */;
+}
