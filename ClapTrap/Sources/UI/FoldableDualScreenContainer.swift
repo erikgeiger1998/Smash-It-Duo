@@ -17,13 +17,13 @@ public struct FoldableDualScreenContainer: View {
     public var body: some View {
         GeometryReader { proxy in
             let screenSize = proxy.size
-            let isExternalCoverScreen = (screenSize.width / screenSize.height) < 0.70
-            let isClosedOrCover = isExternalCoverScreen || foldSensor.isClosed
+            let isCover = isExternalCoverScreen(size: screenSize)
+            let isClosedOrCover = isCover || foldSensor.isClosed
             
             Group {
                 if isClosedOrCover {
                     // 1. EXTERNAL COVER SCREEN (Phone Closed)
-                    // The game NEVER runs on this cover screen under any circumstance.
+                    // The game NEVER runs on this cover screen under any circumstance (portrait or landscape).
                     // Strictly shows whether the fly was trapped or escaped, and prompts player to unfold.
                     ExternalCoverScreenView()
                         .edgesIgnoringSafeArea(.all)
@@ -43,18 +43,26 @@ public struct FoldableDualScreenContainer: View {
     
     // MARK: - Screen Geometry & Hardware Unfold Handling
     
+    /// Any single phone / external cover screen has its short dimension <= 500pt
+    /// (typically ~380-430pt), whether held in portrait or landscape!
+    /// An unfolded inner dual-screen has BOTH dimensions >= 580pt (typically ~750-950pt).
+    private func isExternalCoverScreen(size: CGSize) -> Bool {
+        let minDimension = min(size.width, size.height)
+        return minDimension < 580.0
+    }
+    
     private func updateScreenConfiguration(size: CGSize) {
         gameEngine.dualScreenSize = size
-        let aspectRatio = size.width / size.height
+        let isCover = isExternalCoverScreen(size: size)
         
-        if aspectRatio >= 0.70 {
+        if !isCover {
             // Unfolded to inner dual-screen!
             if foldSensor.isCoverScreen {
                 foldSensor.isCoverScreen = false
                 gameEngine.handleDeviceUnfolded()
             }
         } else {
-            // Folded closed onto narrow external cover screen!
+            // Folded closed onto external cover screen (portrait OR landscape)!
             if !foldSensor.isCoverScreen {
                 foldSensor.isCoverScreen = true
                 ProceduralSoundEngine.shared.stopBuzz()

@@ -95,21 +95,23 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertNotNil(engine.activeInsect)
     }
     
-    func testFoldableScreenGeometryAspectRatio() {
-        // External narrow cover screen (e.g. 390 x 844) -> ratio 0.46 < 0.70
-        let coverScreenSize = CGSize(width: 390, height: 844)
-        let coverRatio = coverScreenSize.width / coverScreenSize.height
-        XCTAssertLessThan(coverRatio, 0.70, "Cover screen aspect ratio must be less than 0.70")
+    func testFoldableScreenGeometryHardwareDimensions() {
+        // External cover screen in portrait (e.g. 390 x 844): min is 390 < 580
+        let coverPortrait = CGSize(width: 390, height: 844)
+        XCTAssertLessThan(min(coverPortrait.width, coverPortrait.height), 580.0, "Cover screen in portrait must be detected as cover screen")
         
-        // Unfolded inner dual screen (e.g. 800 x 900) -> ratio 0.88 >= 0.70
-        let unfoldedDualScreenSize = CGSize(width: 800, height: 900)
-        let dualRatio = unfoldedDualScreenSize.width / unfoldedDualScreenSize.height
-        XCTAssertGreaterThanOrEqual(dualRatio, 0.70, "Unfolded dual screen aspect ratio must be >= 0.70")
+        // External cover screen in landscape (e.g. 844 x 390): min is 390 < 580
+        // CRITICAL: The game must NOT open when rotating the cover screen into landscape!
+        let coverLandscape = CGSize(width: 844, height: 390)
+        XCTAssertLessThan(min(coverLandscape.width, coverLandscape.height), 580.0, "Cover screen in landscape must still be detected as cover screen")
         
-        // Landscape unfolded dual screen (e.g. 852 x 393) -> ratio 2.16 >= 0.70
-        let landscapeDualScreenSize = CGSize(width: 852, height: 393)
-        let landscapeRatio = landscapeDualScreenSize.width / landscapeDualScreenSize.height
-        XCTAssertGreaterThanOrEqual(landscapeRatio, 0.70, "Landscape dual screen ratio must be >= 0.70")
+        // Unfolded inner dual screen (e.g. 800 x 900): min is 800 >= 580
+        let unfoldedDualScreen = CGSize(width: 800, height: 900)
+        XCTAssertGreaterThanOrEqual(min(unfoldedDualScreen.width, unfoldedDualScreen.height), 580.0, "Unfolded inner dual screen must have both dimensions >= 580")
+        
+        // Unfolded inner screen rotated (e.g. 900 x 800): min is 800 >= 580
+        let unfoldedRotated = CGSize(width: 900, height: 800)
+        XCTAssertGreaterThanOrEqual(min(unfoldedRotated.width, unfoldedRotated.height), 580.0, "Unfolded inner screen in either orientation must have min >= 580")
     }
     
     func testSwatMissCausesGameOverAndOpeningHingeRestarts() {

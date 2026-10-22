@@ -35,6 +35,7 @@ public struct ExternalCoverScreenView: View {
     public var body: some View {
         GeometryReader { proxy in
             let size = proxy.size
+            let isLandscape = size.width > size.height
             
             ZStack {
                 // 1. SUNNY PICNIC TABLE & CHECKERED BLANKET BACKGROUND
@@ -50,56 +51,114 @@ public struct ExternalCoverScreenView: View {
                     ],
                     center: .top,
                     startRadius: 40,
-                    endRadius: size.height * 0.8
+                    endRadius: max(size.width, size.height) * 0.8
                 )
                 .edgesIgnoringSafeArea(.all)
                 
-                VStack(spacing: 14) {
-                    Spacer().frame(height: 18)
-                    
-                    // 2. BOUNCY 3D CARTOON LOGO
-                    CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
-                        .scaleEffect(bouncePulse ? 1.02 : 0.98)
-                    
-                    Spacer()
-                    
-                    // 3. CENTRAL CHARACTER / OUTCOME STAGE
-                    if isGameOver {
-                        // Comic Whiff: Laughing fly zipping away!
-                        CartoonEscapedFlyStage(
-                            mockingText: gameEngine.lastOutcome?.mockingText ?? "Too slow! The fly dodged your clap!"
-                        )
-                    } else if isTrapped, let outcome = gameEngine.lastOutcome {
-                        // Comic Splat: Squished fly with dizziness stars!
-                        CartoonTrappedFlyStage(outcome: outcome)
-                    } else {
-                        // Mischievous Cartoon Fly on a Juicy Watermelon Wedge!
-                        CartoonIdleMischiefFlyStage(
-                            currentQuip: funnyQuips[quipIndex],
-                            eyeOffset: eyeLookOffset,
-                            legRub: legRubPhase,
-                            wingFlap: wingFlapPhase
-                        )
+                if isLandscape {
+                    // LANDSCAPE COVER SCREEN (Side-by-Side Cartoon Layout)
+                    HStack(spacing: 20) {
+                        // Left Column: Logo + Cartoon Fly / Outcome
+                        VStack(spacing: 6) {
+                            Spacer()
+                            
+                            CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
+                                .scaleEffect(0.8)
+                            
+                            Spacer()
+                            
+                            if isGameOver {
+                                CartoonEscapedFlyStage(
+                                    mockingText: gameEngine.lastOutcome?.mockingText ?? "Too slow! The fly dodged your clap!"
+                                )
+                                .scaleEffect(0.76)
+                            } else if isTrapped, let outcome = gameEngine.lastOutcome {
+                                CartoonTrappedFlyStage(outcome: outcome)
+                                    .scaleEffect(0.76)
+                            } else {
+                                CartoonIdleMischiefFlyStage(
+                                    currentQuip: funnyQuips[quipIndex],
+                                    eyeOffset: eyeLookOffset,
+                                    legRub: legRubPhase,
+                                    wingFlap: wingFlapPhase
+                                )
+                                .scaleEffect(0.76)
+                            }
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: size.width * 0.48)
+                        
+                        // Right Column: Stats & Wooden Call-to-Action Sign
+                        VStack(spacing: 12) {
+                            Spacer()
+                            
+                            if isGameOver || isTrapped {
+                                outcomeStatsPill
+                            }
+                            
+                            CartoonWoodenSignPrompt(
+                                isGameOver: isGameOver,
+                                isTrapped: isTrapped,
+                                currentWave: gameEngine.currentWave,
+                                bounce: bouncePulse
+                            )
+                            
+                            Spacer()
+                        }
+                        .frame(maxWidth: size.width * 0.46)
                     }
-                    
-                    Spacer()
-                    
-                    // 4. STATS POD (if game over or trapped)
-                    if isGameOver || isTrapped {
-                        outcomeStatsPill
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 8)
+                } else {
+                    // PORTRAIT COVER SCREEN (Vertical Cartoon Layout)
+                    VStack(spacing: 14) {
+                        Spacer().frame(height: 18)
+                        
+                        // 2. BOUNCY 3D CARTOON LOGO
+                        CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
+                            .scaleEffect(bouncePulse ? 1.02 : 0.98)
+                        
+                        Spacer()
+                        
+                        // 3. CENTRAL CHARACTER / OUTCOME STAGE
+                        if isGameOver {
+                            // Comic Whiff: Laughing fly zipping away!
+                            CartoonEscapedFlyStage(
+                                mockingText: gameEngine.lastOutcome?.mockingText ?? "Too slow! The fly dodged your clap!"
+                            )
+                        } else if isTrapped, let outcome = gameEngine.lastOutcome {
+                            // Comic Splat: Squished fly with dizziness stars!
+                            CartoonTrappedFlyStage(outcome: outcome)
+                        } else {
+                            // Mischievous Cartoon Fly on a Juicy Watermelon Wedge!
+                            CartoonIdleMischiefFlyStage(
+                                currentQuip: funnyQuips[quipIndex],
+                                eyeOffset: eyeLookOffset,
+                                legRub: legRubPhase,
+                                wingFlap: wingFlapPhase
+                            )
+                        }
+                        
+                        Spacer()
+                        
+                        // 4. STATS POD (if game over or trapped)
+                        if isGameOver || isTrapped {
+                            outcomeStatsPill
+                        }
+                        
+                        // 5. CHUNKY CARTOON WOODEN CALL-TO-ACTION SIGN
+                        CartoonWoodenSignPrompt(
+                            isGameOver: isGameOver,
+                            isTrapped: isTrapped,
+                            currentWave: gameEngine.currentWave,
+                            bounce: bouncePulse
+                        )
+                        
+                        Spacer().frame(height: 24)
                     }
-                    
-                    // 5. CHUNKY CARTOON WOODEN CALL-TO-ACTION SIGN
-                    CartoonWoodenSignPrompt(
-                        isGameOver: isGameOver,
-                        isTrapped: isTrapped,
-                        currentWave: gameEngine.currentWave,
-                        bounce: bouncePulse
-                    )
-                    
-                    Spacer().frame(height: 24)
+                    .padding(.horizontal, 18)
                 }
-                .padding(.horizontal, 18)
             }
             .onAppear {
                 startCartoonAnimations()
