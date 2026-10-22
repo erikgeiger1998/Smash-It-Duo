@@ -24,6 +24,8 @@
 		D6ADCBDCF06818031EFF879B /* TableTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7604DF7C4D6F8DA223389F /* TableTheme.swift */; };
 		DDBF9C8119DF945349631388 /* ClapTrapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */; };
 		EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */; };
+		FBD400022830C58214CAB0A2 /* FoodBaitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD400012830C58214CAB0A1 /* FoodBaitModel.swift */; };
+		FBD40004F5A77829CD674534 /* FoodBaitPlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD40003F5A77829CD674533 /* FoodBaitPlateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,8 @@
 		B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHUDView.swift; sourceTree = "<group>"; };
 		D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectModel.swift; sourceTree = "<group>"; };
 		F665D37E67E0E4903D753790 /* ClapTrapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClapTrapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FBD400012830C58214CAB0A1 /* FoodBaitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBaitModel.swift; sourceTree = "<group>"; };
+		FBD40003F5A77829CD674533 /* FoodBaitPlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBaitPlateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -63,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */,
+				FBD400012830C58214CAB0A1 /* FoodBaitModel.swift */,
 				D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */,
 				3C7604DF7C4D6F8DA223389F /* TableTheme.swift */,
 			);
@@ -150,6 +155,7 @@
 			children = (
 				AB67D5E17789FC36D055840A /* CleanSpongeView.swift */,
 				3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */,
+				FBD40003F5A77829CD674533 /* FoodBaitPlateView.swift */,
 				A00AF97AE824E64D191B464E /* InsectSpriteView.swift */,
 				862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */,
 				2811299F602DC75C7E4E4883 /* SplatView.swift */,
@@ -256,6 +262,8 @@
 				6D68B4F86C1D7A8CEE26D813 /* SplatView.swift in Sources */,
 				D6ADCBDCF06818031EFF879B /* TableTheme.swift in Sources */,
 				EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */,
+				FBD400022830C58214CAB0A2 /* FoodBaitModel.swift in Sources */,
+				FBD40004F5A77829CD674534 /* FoodBaitPlateView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

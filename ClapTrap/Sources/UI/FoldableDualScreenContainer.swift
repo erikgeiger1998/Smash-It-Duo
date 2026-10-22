@@ -119,7 +119,7 @@ public struct FoldableDualScreenContainer: View {
                         .offset(x: midX * 0.5)
                     
                     // Centered Bait Prop (Left Half)
-                    WatermelonBaitView()
+                    FoodBaitPlateView(bait: gameEngine.currentBait)
                         .position(x: midX - 8, y: screenSize.height * 0.52)
                     
                     // Persistent Splatters on Left Half
@@ -153,7 +153,7 @@ public struct FoldableDualScreenContainer: View {
                         .offset(x: -midX * 0.5)
                     
                     // Centered Bait Prop (Right Half across hinge fold)
-                    WatermelonBaitView()
+                    FoodBaitPlateView(bait: gameEngine.currentBait)
                         .position(x: -8, y: screenSize.height * 0.52)
                     
                     // Persistent Splatters on Right Half

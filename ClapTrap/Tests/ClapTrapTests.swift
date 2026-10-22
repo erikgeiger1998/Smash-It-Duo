@@ -575,4 +575,55 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertEqual(engine.lastOutcome?.isBossDamagedOnly, false, "Horsefly must not require a 2nd fold")
         XCTAssertEqual(engine.score, initialScore + 750 + 250, "Full 750 base PTS + safety bonus must be awarded on 1st fold")
     }
+    
+    func testFoodBaitModelsAndThermalEffects() {
+        let allBaits = FoodBaitType.allCases
+        XCTAssertEqual(allBaits.count, 10, "There should be exactly 10 distinct food bait varieties")
+        
+        let hotBaits = allBaits.filter { $0.thermalEffect == .hot }
+        let coldBaits = allBaits.filter { $0.thermalEffect == .cold }
+        let freshBaits = allBaits.filter { $0.thermalEffect == .fresh }
+        
+        XCTAssertEqual(coldBaits.count, 3, "Should have 3 chilled fruit baits with frosty mist")
+        XCTAssertEqual(hotBaits.count, 6, "Should have 6 hot fast food and pasta baits with rising steam wisps")
+        XCTAssertEqual(freshBaits.count, 1, "Should have 1 glazed treat with sparkling sheen")
+        
+        // Ensure every bait has valid metadata
+        for bait in allBaits {
+            XCTAssertFalse(bait.displayName.isEmpty)
+            XCTAssertFalse(bait.subtitle.isEmpty)
+            XCTAssertFalse(bait.thermalEffect.icon.isEmpty)
+            XCTAssertFalse(bait.category.icon.isEmpty)
+        }
+        
+        // Category verification
+        let fruits = allBaits.filter { $0.category == .fruit }
+        let fastFoods = allBaits.filter { $0.category == .fastFood }
+        let pastas = allBaits.filter { $0.category == .pasta }
+        
+        XCTAssertEqual(fruits.count, 3)
+        XCTAssertEqual(fastFoods.count, 5)
+        XCTAssertEqual(pastas.count, 2)
+    }
+    
+    func testFoodBaitRandomRotationAcrossWaves() {
+        let engine = ClapTrapGameEngine.shared
+        
+        var observedBaits = Set<FoodBaitType>()
+        var changesCount = 0
+        var previousBait = engine.currentBait
+        
+        for _ in 1...25 {
+            engine.selectRandomBait()
+            observedBaits.insert(engine.currentBait)
+            if engine.currentBait != previousBait {
+                changesCount += 1
+            }
+            previousBait = engine.currentBait
+        }
+        
+        // Over 25 random picks, multiple distinct baits should be selected and change frequently
+        XCTAssertGreaterThan(observedBaits.count, 3, "Random bait selection should explore multiple food types across waves")
+        XCTAssertGreaterThan(changesCount, 15, "Random bait selection should frequently change away from the previous bait")
+    }
 }

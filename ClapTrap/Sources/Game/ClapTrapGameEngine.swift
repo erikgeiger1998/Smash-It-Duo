@@ -140,6 +140,14 @@ public final class ClapTrapGameEngine: ObservableObject {
         }
     }
     
+    // MARK: - Dynamic Food Bait Prop (Fruits, Fast Food & Italian Pasta with Hot/Cold Thermal Effects)
+    @Published public var currentBait: FoodBaitType = .chilledWatermelon
+    
+    public func selectRandomBait() {
+        let candidates = FoodBaitType.allCases.filter { $0 != currentBait }
+        self.currentBait = candidates.randomElement() ?? .chilledWatermelon
+    }
+    
     private init() {
         self.highScore = UserDefaults.standard.integer(forKey: highScoreKey)
         if let savedThemeRaw = UserDefaults.standard.string(forKey: themeKey),
@@ -189,6 +197,7 @@ public final class ClapTrapGameEngine: ObservableObject {
         self.showCrackedScreenOverlay = false
         self.gameState = .hunting
         
+        selectRandomBait()
         startWave()
         startGameLoop()
     }
@@ -790,6 +799,7 @@ public final class ClapTrapGameEngine: ObservableObject {
         self.lastOutcome = nil
         self.currentWave += 1
         self.gameState = .hunting
+        selectRandomBait()
         startWave()
     }
     
