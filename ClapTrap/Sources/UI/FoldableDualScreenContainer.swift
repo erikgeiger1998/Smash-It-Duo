@@ -110,6 +110,7 @@ public struct FoldableDualScreenContainer: View {
             // 1. DUAL-SCREEN BOOK FOLD PLAYFIELD
             // Splits cleanly into Left Screen and Right Screen, folding inward
             // symmetrically toward the central hinge seam!
+            // The whole background is strictly underneath the fly and food bait!
             HStack(spacing: 0) {
                 // LEFT SCREEN HALF
                 ZStack {
@@ -118,21 +119,9 @@ public struct FoldableDualScreenContainer: View {
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: midX * 0.5)
                     
-                    // Centered Bait Prop (Left Half)
-                    FoodBaitPlateView(bait: gameEngine.currentBait)
-                        .position(x: midX - 8, y: screenSize.height * 0.52)
-                    
                     // Persistent Splatters on Left Half
                     ForEach(gameEngine.persistentSplatters) { splatter in
                         SplatView(splatter: splatter)
-                    }
-                    
-                    // Active Insect (Left Screen Half)
-                    if let insect = gameEngine.activeInsect, insect.state != .swatted {
-                        if insect.position.x < midX + 90.0 {
-                            InsectSpriteView(insect: insect)
-                                .position(insect.position)
-                        }
                     }
                 }
                 .frame(width: midX, height: screenSize.height)
@@ -152,22 +141,10 @@ public struct FoldableDualScreenContainer: View {
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: -midX * 0.5)
                     
-                    // Centered Bait Prop (Right Half across hinge fold)
-                    FoodBaitPlateView(bait: gameEngine.currentBait)
-                        .position(x: -8, y: screenSize.height * 0.52)
-                    
                     // Persistent Splatters on Right Half
                     ForEach(gameEngine.persistentSplatters) { splatter in
                         SplatView(splatter: splatter)
                             .offset(x: -midX)
-                    }
-                    
-                    // Active Insect (Right Screen Half)
-                    if let insect = gameEngine.activeInsect, insect.state != .swatted {
-                        if insect.position.x > midX - 90.0 {
-                            InsectSpriteView(insect: insect)
-                                .position(x: insect.position.x - midX, y: insect.position.y)
-                        }
                     }
                 }
                 .frame(width: midX, height: screenSize.height)
@@ -191,6 +168,20 @@ public struct FoldableDualScreenContainer: View {
                         handleInwardDragEnded(value: value, midX: midX)
                     }
             )
+            
+            // 2. CENTERED FOOD BAIT PROP (On Table Surface)
+            FoodBaitPlateView(bait: gameEngine.currentBait)
+                .position(x: midX, y: screenSize.height * 0.52)
+                .scaleEffect(max(0.1, 1.0 - foldProgress * 0.6))
+            
+            // 3. ACTIVE INSECT LAYER
+            // Always rendered ON TOP of the entire background (both left and right screen halves)
+            // and above the food bait, ensuring the fly, its wings, and its flight shadow never
+            // get clipped by the center crease or fly behind the table!
+            if let insect = gameEngine.activeInsect, insect.state != .swatted {
+                InsectSpriteView(insect: insect)
+                    .position(insect.position)
+            }
             
             // 2. HUD LAYER (Score, Wave, Streak, Lives, Clean Screen Sponge)
             if gameEngine.gameState != .menu && gameEngine.gameState != .gameOver {
