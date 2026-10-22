@@ -86,21 +86,25 @@ public struct GameHUDView: View {
                         let isWasp = insect.type == .wasp
                         let isBoss = insect.type == .mutantHorsefly
                         
-                        HStack(spacing: 4) {
-                            Image(systemName: isWasp ? "exclamationmark.shield.fill" : (isBoss ? "crown.fill" : "target"))
-                                .font(.system(size: 9))
-                                .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .cyan))
-                            
-                            Text(insect.type.displayName.uppercased())
-                                .font(.system(size: 8, weight: .black, design: .monospaced))
-                                .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .white))
+                        Button(action: {
+                            gameEngine.openMenu(tab: 2)
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: isWasp ? "exclamationmark.shield.fill" : (isBoss ? "crown.fill" : "target"))
+                                    .font(.system(size: 9))
+                                    .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .cyan))
+                                
+                                Text(insect.type.displayName.uppercased())
+                                    .font(.system(size: 8, weight: .black, design: .monospaced))
+                                    .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .white))
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(
+                                Capsule()
+                                    .fill(isWasp ? Color.red.opacity(0.85) : Color.white.opacity(0.14))
+                            )
                         }
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(
-                            Capsule()
-                                .fill(isWasp ? Color.red.opacity(0.85) : Color.white.opacity(0.14))
-                        )
                     }
                 }
                 

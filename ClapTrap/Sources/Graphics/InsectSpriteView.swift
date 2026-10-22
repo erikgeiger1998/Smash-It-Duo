@@ -8,10 +8,12 @@ import SwiftUI
 public struct InsectSpriteView: View {
     public let insect: ActiveInsect
     public var globalScale: CGFloat = 1.0
+    public var showBossHealthBar: Bool = true
     
-    public init(insect: ActiveInsect, globalScale: CGFloat = 1.0) {
+    public init(insect: ActiveInsect, globalScale: CGFloat = 1.0, showBossHealthBar: Bool = true) {
         self.insect = insect
         self.globalScale = globalScale
+        self.showBossHealthBar = showBossHealthBar
     }
     
     public var body: some View {
@@ -61,7 +63,7 @@ public struct InsectSpriteView: View {
             .rotationEffect(.radians(insect.headingAngle))
             
             // Boss Health Bar for Mutant Horsefly
-            if insect.type == .mutantHorsefly && insect.health > 0 {
+            if showBossHealthBar && insect.type == .mutantHorsefly && insect.health > 0 {
                 VStack(spacing: 2) {
                     Text("BOSS: 2 CLAPS NEEDED")
                         .font(.system(size: 9, weight: .black, design: .monospaced))
@@ -515,5 +517,114 @@ public struct InsectSpriteView: View {
         rightVeins.move(to: CGPoint(x: wingWidth * 0.2, y: wingLength * 0.35))
         rightVeins.addLine(to: CGPoint(x: wingWidth * 0.7, y: wingLength * 0.55))
         rightContext.stroke(rightVeins, with: .color(Color.black.opacity(0.2)), lineWidth: 0.6)
+    }
+}
+
+// MARK: - PROCEDURAL SPECIMEN PREVIEW THUMBNAIL
+/// High-tech procedural specimen thumbnail / photo preview for each insect species.
+/// Used in the Bestiary & Target Intel Legenda.
+/// Features an illuminated circular bio-specimen aperture, target reticle lines,
+/// subtle ambient glow, and animated procedural specimen.
+public struct InsectPreviewThumbnailView: View {
+    public let type: InsectType
+    public var size: CGFloat = 74
+    
+    @State private var flutterPhase: Double = 0.0
+    @State private var legRubPhase: Double = 0.0
+    
+    public init(type: InsectType, size: CGFloat = 74) {
+        self.type = type
+        self.size = size
+    }
+    
+    private var speciesColor: Color {
+        switch type {
+        case .housefly:
+            return Color(red: 0.25, green: 0.88, blue: 0.45)
+        case .mosquito:
+            return Color(red: 0.20, green: 0.85, blue: 1.0)
+        case .mutantHorsefly:
+            return Color(red: 0.80, green: 0.40, blue: 1.0)
+        case .wasp:
+            return Color(red: 1.0, green: 0.30, blue: 0.30)
+        }
+    }
+    
+    private var previewScale: CGFloat {
+        switch type {
+        case .housefly: return 0.82
+        case .mosquito: return 1.08
+        case .mutantHorsefly: return 0.54
+        case .wasp: return 0.68
+        }
+    }
+    
+    public var body: some View {
+        ZStack {
+            // Bio-Scanner Specimen Aperture Background
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            speciesColor.opacity(0.18),
+                            Color(red: 0.08, green: 0.10, blue: 0.14),
+                            Color(red: 0.04, green: 0.05, blue: 0.08)
+                        ],
+                        center: .center,
+                        startRadius: 2,
+                        endRadius: size / 2
+                    )
+                )
+                .frame(width: size, height: size)
+                .overlay(
+                    Circle()
+                        .stroke(
+                            LinearGradient(
+                                colors: [speciesColor.opacity(0.85), speciesColor.opacity(0.25)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            lineWidth: 1.5
+                        )
+                )
+                .shadow(color: speciesColor.opacity(0.35), radius: 6)
+            
+            // Specimen Scanner Crosshair Reticle & Grid
+            ZStack {
+                Circle()
+                    .stroke(speciesColor.opacity(0.14), lineWidth: 0.8)
+                    .frame(width: size * 0.70, height: size * 0.70)
+                
+                Rectangle()
+                    .fill(speciesColor.opacity(0.12))
+                    .frame(width: size * 0.82, height: 0.8)
+                
+                Rectangle()
+                    .fill(speciesColor.opacity(0.12))
+                    .frame(width: 0.8, height: size * 0.82)
+            }
+            
+            // Live Procedural Insect Model (Facing North / Upwards)
+            let insect = specimenInsect
+            InsectSpriteView(insect: insect, globalScale: previewScale, showBossHealthBar: false)
+                .frame(width: size, height: size)
+        }
+        .frame(width: size, height: size)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                flutterPhase = .pi * 0.5
+                legRubPhase = .pi * 2
+            }
+        }
+    }
+    
+    private var specimenInsect: ActiveInsect {
+        var insect = ActiveInsect(type: type, startPosition: CGPoint(x: size / 2, y: size / 2))
+        insect.state = .landed
+        insect.altitude = 0.0
+        insect.headingAngle = 0.0
+        insect.wingFlutterPhase = flutterPhase
+        insect.legRubPhase = legRubPhase
+        return insect
     }
 }

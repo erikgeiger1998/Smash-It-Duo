@@ -247,4 +247,34 @@ final class ClapTrapTests: XCTestCase {
         let wave50Time = engine.calculateLandingWindow(for: .housefly, wave: 50)
         XCTAssertEqual(wave50Time, 0.95, accuracy: 0.01)
     }
+    
+    func testAllSpeciesReactionWindowFloorsMatchUserSpecification() {
+        let engine = ClapTrapGameEngine.shared
+        
+        // 1. Házi légy (Housefly): 3.6s ➔ 0.95s
+        XCTAssertEqual(engine.calculateLandingWindow(for: .housefly, wave: 1), 3.60, accuracy: 0.01)
+        XCTAssertEqual(engine.calculateLandingWindow(for: .housefly, wave: 100), 0.95, accuracy: 0.01)
+        
+        // 2. Szúnyog (Mosquito): 2.6s ➔ 0.85s
+        XCTAssertEqual(engine.calculateLandingWindow(for: .mosquito, wave: 1), 2.60, accuracy: 0.01)
+        XCTAssertEqual(engine.calculateLandingWindow(for: .mosquito, wave: 100), 0.85, accuracy: 0.01)
+        
+        // 3. Mutáns bögöly (Mutant Horsefly Boss): 3.4s ➔ 1.10s
+        XCTAssertEqual(engine.calculateLandingWindow(for: .mutantHorsefly, wave: 1), 3.40, accuracy: 0.01)
+        XCTAssertEqual(engine.calculateLandingWindow(for: .mutantHorsefly, wave: 100), 1.10, accuracy: 0.01)
+        
+        // 4. Darázs (Yellowjacket Wasp Trap): 3.5s ➔ 2.20s
+        XCTAssertEqual(engine.calculateLandingWindow(for: .wasp, wave: 1), 3.50, accuracy: 0.01)
+        XCTAssertEqual(engine.calculateLandingWindow(for: .wasp, wave: 100), 2.20, accuracy: 0.01)
+    }
+    
+    func testMenuOpeningWithInitialTab() {
+        let engine = ClapTrapGameEngine.shared
+        engine.isGameMenuPresented = false
+        engine.menuInitialTab = 0
+        
+        engine.openMenu(tab: 2)
+        XCTAssertTrue(engine.isGameMenuPresented, "openMenu should present game menu")
+        XCTAssertEqual(engine.menuInitialTab, 2, "openMenu(tab: 2) should set initial tab to 2 (Legenda)")
+    }
 }

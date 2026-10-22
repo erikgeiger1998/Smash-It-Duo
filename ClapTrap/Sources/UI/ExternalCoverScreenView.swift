@@ -175,12 +175,32 @@ public struct ExternalCoverScreenView: View {
                     .padding(.horizontal, 18)
                 }
                 
-                // Top Right Settings Button (Cover Screen)
+                // Top Right Settings & Legenda Buttons (Cover Screen)
                 VStack {
-                    HStack {
+                    HStack(spacing: 8) {
                         Spacer()
+                        
                         Button(action: {
-                            gameEngine.isGameMenuPresented = true
+                            gameEngine.openMenu(tab: 2)
+                        }) {
+                            HStack(spacing: 4) {
+                                Image(systemName: "scope")
+                                    .font(.system(size: 13, weight: .bold))
+                                Text("LEGENDA")
+                                    .font(.system(size: 10, weight: .black, design: .monospaced))
+                            }
+                            .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                            .padding(.horizontal, 9)
+                            .padding(.vertical, 7)
+                            .background(
+                                Capsule()
+                                    .fill(Color.white.opacity(0.85))
+                                    .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                            )
+                        }
+                        
+                        Button(action: {
+                            gameEngine.openMenu(tab: 0)
                         }) {
                             Image(systemName: "gearshape.fill")
                                 .font(.system(size: 15, weight: .bold))
@@ -188,7 +208,7 @@ public struct ExternalCoverScreenView: View {
                                 .padding(8)
                                 .background(
                                     Circle()
-                                        .fill(Color.white.opacity(0.78))
+                                        .fill(Color.white.opacity(0.85))
                                         .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
                                 )
                         }

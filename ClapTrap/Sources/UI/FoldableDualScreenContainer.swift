@@ -399,17 +399,43 @@ struct TitleMenuView: View {
                 }
                 
                 // Bestiary Showcase Cards
-                VStack(spacing: 6) {
-                    Text("TARGET INTEL")
-                        .font(.system(size: 10, weight: .black, design: .monospaced))
-                        .foregroundColor(.white.opacity(0.6))
-                    
-                    HStack(spacing: 8) {
-                        BestiaryPill(name: "HOUSEFLY", desc: "Clap on land", color: .green)
-                        BestiaryPill(name: "MOSQUITO", desc: "460Hz Fast", color: .cyan)
-                        BestiaryPill(name: "HORSEFLY", desc: "2x Clap Boss", color: .purple)
-                        BestiaryPill(name: "WASP", desc: "DO NOT CLAP!", color: .red)
+                Button(action: {
+                    ClapTrapGameEngine.shared.openMenu(tab: 2)
+                }) {
+                    VStack(spacing: 6) {
+                        HStack {
+                            Image(systemName: "scope")
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundColor(.yellow)
+                            Text("TARGET INTEL & LEGENDA")
+                                .font(.system(size: 10, weight: .black, design: .monospaced))
+                                .foregroundColor(.white.opacity(0.75))
+                            Spacer()
+                            Text("DETAILS")
+                                .font(.system(size: 8, weight: .black, design: .monospaced))
+                                .foregroundColor(.yellow)
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 8, weight: .bold))
+                                .foregroundColor(.yellow)
+                        }
+                        
+                        HStack(spacing: 6) {
+                            BestiaryPill(name: "HÁZI LÉGY", desc: "LECSAPNI", color: .green)
+                            BestiaryPill(name: "SZÚNYOG", desc: "GYORSABB", color: .cyan)
+                            BestiaryPill(name: "BÖGÖLY", desc: "2x CSAPÁS", color: .purple)
+                            BestiaryPill(name: "DARÁZS", desc: "TILOS!", color: .red)
+                        }
                     }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(Color.white.opacity(0.08))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color.white.opacity(0.15), lineWidth: 1)
+                            )
+                    )
                 }
                 .padding(.horizontal, 16)
                 
@@ -441,26 +467,51 @@ struct TitleMenuView: View {
                     }
                 }
                 
-                // Settings & Target Intel Menu Button
-                Button(action: {
-                    ClapTrapGameEngine.shared.isGameMenuPresented = true
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "gearshape.fill")
-                        Text("SETTINGS & INTEL")
+                // Action Buttons: Legenda Guide & Settings
+                HStack(spacing: 10) {
+                    Button(action: {
+                        ClapTrapGameEngine.shared.openMenu(tab: 2)
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "book.pages.fill")
+                                .foregroundColor(.yellow)
+                            Text("LEGENDA")
+                        }
+                        .font(.system(size: 11, weight: .black, design: .monospaced))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14)
+                                .fill(Color.white.opacity(0.12))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(Color.yellow.opacity(0.4), lineWidth: 1)
+                                )
+                        )
                     }
-                    .font(.system(size: 12, weight: .black, design: .monospaced))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
-                    .background(
-                        RoundedRectangle(cornerRadius: 14)
-                            .fill(Color.white.opacity(0.12))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14)
-                                    .stroke(Color.white.opacity(0.20), lineWidth: 1)
-                            )
-                    )
+                    
+                    Button(action: {
+                        ClapTrapGameEngine.shared.openMenu(tab: 0)
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(.cyan)
+                            Text("SETTINGS")
+                        }
+                        .font(.system(size: 11, weight: .black, design: .monospaced))
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 14)
+                                .fill(Color.white.opacity(0.12))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(Color.white.opacity(0.20), lineWidth: 1)
+                                )
+                        )
+                    }
                 }
                 .padding(.horizontal, 24)
                 

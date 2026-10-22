@@ -43,6 +43,12 @@ public final class ClapTrapGameEngine: ObservableObject {
     @Published public var crackedScreenImpactPoint: CGPoint = .zero
     @Published public var isSpongeWiping: Bool = false
     @Published public var isGameMenuPresented: Bool = false
+    @Published public var menuInitialTab: Int = 0
+    
+    public func openMenu(tab: Int = 0) {
+        self.menuInitialTab = tab
+        self.isGameMenuPresented = true
+    }
     
     // Reaction timer progress for HUD (1.0 = full time remaining, 0.0 = time's up)
     @Published public var reactionProgress: Double = 1.0
