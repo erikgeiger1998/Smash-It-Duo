@@ -1,4 +1,5 @@
 import XCTest
+import SwiftUI
 @testable import ClapTrap
 
 final class ClapTrapTests: XCTestCase {
@@ -389,5 +390,22 @@ final class ClapTrapTests: XCTestCase {
         // Lives must be 0 and game must transition to GameOver!
         XCTAssertEqual(engine.lives, 0, "Lives should drop to 0 after failing to catch landed fly")
         XCTAssertEqual(engine.gameState, .gameOver, "Failing to catch fly with 0 lives remaining must trigger Game Over")
+    }
+    
+    func testExternalCoverScreenReflectsSelectedTheme() {
+        let engine = ClapTrapGameEngine.shared
+        
+        // When theme changes to midnightGlow, engine reflects it
+        engine.currentTheme = .midnightGlow
+        XCTAssertEqual(engine.currentTheme, .midnightGlow)
+        XCTAssertEqual(engine.currentTheme.baseBackgroundColor, Color(red: 0.04, green: 0.05, blue: 0.09))
+        
+        // When theme changes to cyberpunkNeon, engine reflects it
+        engine.currentTheme = .cyberpunkNeon
+        XCTAssertEqual(engine.currentTheme, .cyberpunkNeon)
+        
+        // Reset to classicPicnic
+        engine.currentTheme = .classicPicnic
+        XCTAssertEqual(engine.currentTheme, .classicPicnic)
     }
 }

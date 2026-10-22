@@ -40,22 +40,37 @@ public struct ExternalCoverScreenView: View {
             let isLandscape = size.width > size.height
             
             ZStack {
-                // 1. SUNNY PICNIC TABLE & CHECKERED BLANKET BACKGROUND
-                CartoonPicnicTableBackground()
+                // 1. DYNAMIC PROCEDURAL ENVIRONMENT BACKGROUND (Matches Selected Theme)
+                gameEngine.currentTheme.baseBackgroundColor
                     .edgesIgnoringSafeArea(.all)
                 
-                // Sunny Warm Light Beam Overlay
-                RadialGradient(
-                    colors: [
-                        Color.yellow.opacity(0.18),
-                        Color.orange.opacity(0.08),
-                        Color.clear
-                    ],
-                    center: .top,
-                    startRadius: 40,
-                    endRadius: max(size.width, size.height) * 0.8
-                )
-                .edgesIgnoringSafeArea(.all)
+                PicnicTableView(hingeAngle: 180.0, theme: gameEngine.currentTheme)
+                    .edgesIgnoringSafeArea(.all)
+                
+                // Theme Ambient Lighting Overlay
+                if gameEngine.currentTheme.isGlowInTheDark {
+                    RadialGradient(
+                        colors: [
+                            Color(red: 0.20, green: 1.0, blue: 0.60).opacity(0.12),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 50,
+                        endRadius: max(size.width, size.height) * 0.75
+                    )
+                    .edgesIgnoringSafeArea(.all)
+                } else {
+                    RadialGradient(
+                        colors: [
+                            gameEngine.currentTheme.themeAccentColor.opacity(0.18),
+                            Color.clear
+                        ],
+                        center: .top,
+                        startRadius: 40,
+                        endRadius: max(size.width, size.height) * 0.8
+                    )
+                    .edgesIgnoringSafeArea(.all)
+                }
                 
                 if isLandscape {
                     // LANDSCAPE COVER SCREEN (Side-by-Side Cartoon Layout)
@@ -313,95 +328,6 @@ public struct ExternalCoverScreenView: View {
                 .background(Color.black.opacity(0.55))
                 .cornerRadius(12)
             }
-        }
-    }
-}
-
-// MARK: - 1. Cartoon Picnic Table & Checkered Blanket Background
-struct CartoonPicnicTableBackground: View {
-    var body: some View {
-        Canvas { context, size in
-            // Warm Oak Wood Planks
-            let plankColors = [
-                Color(red: 0.82, green: 0.58, blue: 0.36),
-                Color(red: 0.88, green: 0.64, blue: 0.40),
-                Color(red: 0.78, green: 0.54, blue: 0.32),
-                Color(red: 0.85, green: 0.60, blue: 0.38)
-            ]
-            
-            let plankHeight: CGFloat = 85
-            let totalPlanks = Int(ceil(size.height / plankHeight)) + 1
-            
-            for i in 0..<totalPlanks {
-                let y = CGFloat(i) * plankHeight
-                let rect = CGRect(x: 0, y: y, width: size.width, height: plankHeight - 3)
-                let color = plankColors[i % plankColors.count]
-                
-                // Base Plank
-                context.fill(Path(rect), with: .color(color))
-                
-                // Subtle Wood Grain Path
-                var grain = Path()
-                let midY = y + plankHeight * 0.45
-                grain.move(to: CGPoint(x: 0, y: midY))
-                grain.addCurve(
-                    to: CGPoint(x: size.width, y: midY - 6),
-                    control1: CGPoint(x: size.width * 0.35, y: midY + 12),
-                    control2: CGPoint(x: size.width * 0.65, y: midY - 14)
-                )
-                context.stroke(grain, with: .color(Color(red: 0.68, green: 0.45, blue: 0.25).opacity(0.35)), lineWidth: 2)
-                
-                // Plank Seam Shadow
-                let seamRect = CGRect(x: 0, y: y + plankHeight - 3, width: size.width, height: 3)
-                context.fill(Path(seamRect), with: .color(Color(red: 0.40, green: 0.25, blue: 0.15)))
-            }
-            
-            // Red-and-White Checkered Picnic Gingham Cloth (Draped diagonally across table)
-            let clothW = size.width * 0.88
-            let clothH = size.height * 0.48
-            let clothOrigin = CGPoint(x: (size.width - clothW) / 2.0, y: size.height * 0.22)
-            let clothRect = CGRect(origin: clothOrigin, size: CGSize(width: clothW, height: clothH))
-            
-            // Cloth Drop Shadow
-            var clothPath = Path()
-            clothPath.addRoundedRect(in: clothRect.insetBy(dx: -4, dy: -4), cornerSize: CGSize(width: 22, height: 22))
-            context.fill(clothPath, with: .color(Color.black.opacity(0.28)))
-            
-            // White Cloth Base
-            var innerCloth = Path()
-            innerCloth.addRoundedRect(in: clothRect, cornerSize: CGSize(width: 20, height: 20))
-            context.fill(innerCloth, with: .color(Color(red: 0.98, green: 0.98, blue: 0.96)))
-            
-            // Checkered Red Squares inside cloth
-            let gridSize: CGFloat = 34
-            let cols = Int(clothW / gridSize) + 1
-            let rows = Int(clothH / gridSize) + 1
-            
-            var clippedContext = context
-            clippedContext.clip(to: innerCloth)
-            
-            for r in 0..<rows {
-                for c in 0..<cols {
-                    let rx = clothOrigin.x + CGFloat(c) * gridSize
-                    let ry = clothOrigin.y + CGFloat(r) * gridSize
-                    let sq = CGRect(x: rx, y: ry, width: gridSize, height: gridSize)
-                    
-                    if (r + c) % 2 == 0 {
-                        // Light Red Check
-                        clippedContext.fill(Path(sq), with: .color(Color(red: 0.92, green: 0.28, blue: 0.32).opacity(0.75)))
-                    } else if r % 2 == 0 {
-                        // Deep Intersection Red Check
-                        clippedContext.fill(Path(sq), with: .color(Color(red: 0.82, green: 0.18, blue: 0.22).opacity(0.92)))
-                    }
-                }
-            }
-            
-            // Stitching Border on Cloth
-            context.stroke(
-                innerCloth,
-                with: .color(Color(red: 0.75, green: 0.15, blue: 0.20)),
-                style: StrokeStyle(lineWidth: 3, dash: [8, 5])
-            )
         }
     }
 }
@@ -1190,9 +1116,9 @@ struct CartoonWoodenSignPrompt: View {
         if isGameOver {
             return "UNFOLD FLAT (180°) TO START NEW GAME"
         } else if isTrapped {
-            return "UNFOLD FLAT TO CONTINUE PICNIC TABLE"
+            return "UNFOLD FLAT (180°) TO CONTINUE"
         } else {
-            return "UNFOLD FLAT (180°) TO ENTER PICNIC TABLE"
+            return "UNFOLD FLAT (180°) TO HUNT FLIES"
         }
     }
     
