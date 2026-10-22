@@ -24,10 +24,12 @@ public struct ExternalCoverScreenView: View {
     private let funnyQuips = [
         "Mmm... tasty phone screen! 🍉",
         "Bet you can't squish me! 😜",
-        "Nice $2,000 swatter! 📱",
+        "Fold gently! Don't break your screen! 📱",
         "Open the phone if you dare! 🪰",
         "Free crumbs! Don't mind if I do! 🍰",
-        "Too slow for my 360° vision! 👀"
+        "Close smoothly — no need to slam! 🍉",
+        "Too slow for my 360° vision! 👀",
+        "Save your hinges, fold calmly! ⚠️"
     ]
     
     public init() {}
@@ -107,6 +109,9 @@ public struct ExternalCoverScreenView: View {
                                 FoldSensorManager.shared.reopenFlat()
                             }
                             
+                            safetyDisclaimerView
+                                .padding(.top, 2)
+                            
                             Spacer()
                         }
                         .frame(maxWidth: size.width * 0.46)
@@ -115,8 +120,8 @@ public struct ExternalCoverScreenView: View {
                     .padding(.vertical, 8)
                 } else {
                     // PORTRAIT COVER SCREEN (Vertical Cartoon Layout)
-                    VStack(spacing: 14) {
-                        Spacer().frame(height: 18)
+                    VStack(spacing: 12) {
+                        Spacer().frame(height: 14)
                         
                         // 2. BOUNCY 3D CARTOON LOGO
                         CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
@@ -161,7 +166,11 @@ public struct ExternalCoverScreenView: View {
                             FoldSensorManager.shared.reopenFlat()
                         }
                         
-                        Spacer().frame(height: 24)
+                        // 6. GENTLE FOLD SAFETY NOTICE
+                        safetyDisclaimerView
+                            .padding(.top, 2)
+                        
+                        Spacer().frame(height: 18)
                     }
                     .padding(.horizontal, 18)
                 }
@@ -184,6 +193,28 @@ public struct ExternalCoverScreenView: View {
     
     private var isGameOver: Bool {
         gameEngine.gameState == .gameOver || (gameEngine.lastOutcome != nil && gameEngine.lastOutcome?.hit == false)
+    }
+    
+    // MARK: - Safety Disclaimer Badge
+    private var safetyDisclaimerView: some View {
+        HStack(spacing: 5) {
+            Text("⚠️")
+                .font(.system(size: 9))
+            Text("SAFETY NOTICE: Close phone gently! Developer assumes no liability for screen or hinge damages.")
+                .font(.system(size: 8.5, weight: .bold, design: .rounded))
+                .foregroundColor(Color(red: 0.45, green: 0.20, blue: 0.08).opacity(0.88))
+                .multilineTextAlignment(.center)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 4)
+        .background(
+            Capsule()
+                .fill(Color.white.opacity(0.65))
+                .overlay(
+                    Capsule()
+                        .stroke(Color(red: 0.55, green: 0.28, blue: 0.12).opacity(0.3), lineWidth: 1)
+                )
+        )
     }
     
     // MARK: - Animation Timers

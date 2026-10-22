@@ -126,22 +126,24 @@ public struct CrackedGlassOverlay: View {
                         )
                         .transition(.scale.combined(with: .opacity))
                     } else {
-                        // Relief banner: Just Kidding!
+                        // Relief banner & Safety warning: Just Kidding!
                         VStack(spacing: 8) {
                             Text("😅 JUST KIDDING! 😅")
                                 .font(.system(size: 24, weight: .black, design: .rounded))
                                 .foregroundColor(.green)
                             
-                            Text("YOUR $2,000 FOLDABLE SCREEN IS INTACT")
+                            Text("YOUR SCREEN IS INTACT, BUT PLEASE FOLD GENTLY!")
                                 .font(.system(size: 11, weight: .heavy, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.9))
+                                .foregroundColor(.white.opacity(0.95))
+                                .multilineTextAlignment(.center)
                             
-                            HStack(spacing: 6) {
-                                Text("+500")
-                                    .font(.system(size: 22, weight: .black, design: .monospaced))
+                            VStack(spacing: 3) {
+                                Text("⚠️ NO NEED TO SLAM!")
+                                    .font(.system(size: 13, weight: .black, design: .rounded))
                                     .foregroundColor(.yellow)
-                                Text("BRUTALITY BONUS!")
-                                    .font(.system(size: 14, weight: .black, design: .rounded))
+                                
+                                Text("Disclaimer: Developer is not liable for device damages.")
+                                    .font(.system(size: 9, weight: .medium, design: .monospaced))
                                     .foregroundColor(.orange)
                             }
                         }

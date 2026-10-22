@@ -285,9 +285,9 @@ public final class ClapTrapGameEngine: ObservableObject {
             insect.state = .landed
             self.gameState = .landed
             
-            // Scaled reaction window
-            let waveSpeedup = min(0.35, Double(currentWave) * 0.015)
-            let window = max(0.32, insect.type.baseReactionWindow - waveSpeedup)
+            // Scaled reaction window with a safe minimum floor so users never panic-slam
+            let waveSpeedup = min(1.0, Double(max(0, currentWave - 1)) * 0.04)
+            let window = max(1.8, insect.type.baseReactionWindow - waveSpeedup)
             insect.totalLandDuration = window
             insect.landTimeRemaining = window
             insect.timeElapsedSinceLanding = 0.0
@@ -462,12 +462,12 @@ public final class ClapTrapGameEngine: ObservableObject {
         )
         persistentSplatters.append(splatter)
         
-        // Scoring & Combos
+        // Scoring & Combos (Bonus awarded for safe, smooth folding rather than phone-breaking slams)
         streak += 1
         let streakMultiplier = min(5, 1 + (streak / 3))
-        let velocityBonus = impactData.isMach2 ? 500 : (impactData.velocityDegPerSec > 600 ? 200 : 0)
+        let safetyBonus = impactData.isMach2 ? 50 : 250 // Reward gentle closing!
         let basePts = insect.type.baseScore
-        let totalPts = (basePts * streakMultiplier) + velocityBonus
+        let totalPts = (basePts * streakMultiplier) + safetyBonus
         
         score += totalPts
         if score > highScore {
@@ -477,15 +477,17 @@ public final class ClapTrapGameEngine: ObservableObject {
         
         // Praise badge evaluation
         let praise: String
-        if reactionMs < 200 {
-            praise = "⚡️ GODLIKE REFLEX!"
-            soundEngine.playGodlikeFanfare()
-        } else if reactionMs < 350 {
-            praise = "🔥 LIGHTNING CLAP!"
+        if impactData.isMach2 {
+            praise = "⚠️ TOO HARD! FOLD GENTLY!"
         } else if reactionMs < 500 {
-            praise = "🎯 NICE SWAT!"
+            praise = "⚡️ LIGHTNING REFLEX!"
+            soundEngine.playGodlikeFanfare()
+        } else if reactionMs < 1200 {
+            praise = "✨ SMOOTH & SAFE SWAT!"
+        } else if reactionMs < 2200 {
+            praise = "🎯 NICE & GENTLE SWAT!"
         } else {
-            praise = "👍 BARELY GOT IT!"
+            praise = "👍 GOT IT IN TIME!"
         }
         
         self.lastOutcome = SwatOutcome(

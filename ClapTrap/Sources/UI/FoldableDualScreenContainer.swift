@@ -284,7 +284,7 @@ struct SwatAftermathBanner: View {
                     }
                     
                     if outcome.isMach2 {
-                        Text("🚀 MACH 2 CLAP! (+500 BONUS)")
+                        Text("⚠️ HARD CLAP! FOLD GENTLY TO PROTECT HINGES")
                             .font(.system(size: 10, weight: .black, design: .monospaced))
                             .foregroundColor(.orange)
                     }
@@ -425,7 +425,23 @@ struct TitleMenuView: View {
                         .foregroundColor(.yellow.opacity(0.9))
                 }
                 
-                Spacer().frame(height: 50)
+                // Gentle Play Safety Notice & Legal Disclaimer
+                HStack(spacing: 5) {
+                    Text("⚠️")
+                        .font(.system(size: 10))
+                    Text("SAFETY NOTICE: Fold phone gently. Developer assumes zero liability for device damages.")
+                        .font(.system(size: 9, weight: .bold, design: .rounded))
+                        .foregroundColor(.white.opacity(0.70))
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 4)
+                .background(
+                    Capsule()
+                        .fill(Color.white.opacity(0.10))
+                )
+                
+                Spacer().frame(height: 40)
             }
         }
     }

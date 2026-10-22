@@ -29,10 +29,10 @@ public enum InsectType: String, CaseIterable, Identifiable {
     
     public var baseReactionWindow: Double {
         switch self {
-        case .housefly: return 0.75
-        case .mosquito: return 0.48
-        case .mutantHorsefly: return 0.70
-        case .wasp: return 1.20 // You have time to realize you must NOT clap
+        case .housefly: return 3.20 // Generous 3.2s landing window: fold smoothly without smashing!
+        case .mosquito: return 2.20 // Agile but provides plenty of time (2.2s)
+        case .mutantHorsefly: return 3.00 // Armored boss (3.0s)
+        case .wasp: return 3.80 // Long warning window (3.8s) so player clearly identifies it and stays calm
         }
     }
     

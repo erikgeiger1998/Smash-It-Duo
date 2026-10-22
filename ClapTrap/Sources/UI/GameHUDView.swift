@@ -170,17 +170,26 @@ public struct GameHUDView: View {
             .frame(maxWidth: 540)
             .padding(.top, 40) // Prominently clear dynamic islands, camera notches, and top edges
             
-            // Urgent Reaction Countdown Meter (Drops down under console when insect lands!)
+            // Gentle Fold Reaction Countdown Meter (Drops down under console when insect lands!)
             if gameEngine.gameState == .landed {
                 VStack(spacing: 5) {
                     HStack(spacing: 8) {
-                        Text("🚨 CLAP PHONE SHUT NOW! 🚨")
-                            .font(.system(size: 12, weight: .black, design: .monospaced))
-                            .foregroundColor(.red)
+                        Text("⚡️ FOLD PHONE GENTLY TO SWAT! ⚡️")
+                            .font(.system(size: 11, weight: .black, design: .monospaced))
+                            .foregroundColor(.green)
                         
-                        Text(String(format: "%.2fs", (gameEngine.activeInsect?.landTimeRemaining ?? 0)))
+                        Text(String(format: "%.1fs", (gameEngine.activeInsect?.landTimeRemaining ?? 0)))
                             .font(.system(size: 12, weight: .black, design: .monospaced))
                             .foregroundColor(.yellow)
+                    }
+                    
+                    // Safety subtext reminder
+                    HStack(spacing: 4) {
+                        Text("⚠️")
+                            .font(.system(size: 8))
+                        Text("Close smoothly — do not slam device!")
+                            .font(.system(size: 9, weight: .heavy, design: .rounded))
+                            .foregroundColor(.white.opacity(0.85))
                     }
                     
                     // Animated Neon Laser Countdown Bar
@@ -199,7 +208,7 @@ public struct GameHUDView: View {
                                     )
                                 )
                                 .frame(width: max(0, geo.size.width * CGFloat(gameEngine.reactionProgress)), height: 8)
-                                .shadow(color: .red.opacity(0.85), radius: 5)
+                                .shadow(color: .green.opacity(0.85), radius: 5)
                         }
                     }
                     .frame(height: 8)
@@ -212,10 +221,10 @@ public struct GameHUDView: View {
                         .fill(Color.black.opacity(0.88))
                         .overlay(
                             RoundedRectangle(cornerRadius: 14)
-                                .stroke(Color.red.opacity(0.85), lineWidth: 1.5)
+                                .stroke(Color.green.opacity(0.85), lineWidth: 1.5)
                         )
                 )
-                .shadow(color: .red.opacity(0.55), radius: 10)
+                .shadow(color: .black.opacity(0.55), radius: 10)
                 .transition(.scale.combined(with: .opacity))
             }
         }
