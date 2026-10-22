@@ -149,6 +149,10 @@ public final class ClapTrapGameEngine: ObservableObject {
         insect.state = .flying
         insect.altitude = 1.0
         
+        // Flight time before landing gets slightly snappier at higher waves
+        let waveWaitReduction = min(1.8, Double(max(0, currentWave - 1)) * 0.08)
+        insect.flightTimeBeforeLanding = max(1.7, 3.6 - waveWaitReduction)
+        
         self.activeInsect = insect
         self.flightPathBezierT = 0.0
         generateNextBezierFlightSegment(from: startPos)
@@ -196,8 +200,9 @@ public final class ClapTrapGameEngine: ObservableObject {
         let flutterRate = insect.type == .mosquito ? 90.0 : 55.0
         insect.wingFlutterPhase += dt * flutterRate
         
-        // Step along Bezier path
-        flightPathBezierT += dt * 0.45
+        // Step along Bezier path (subtle acceleration as waves progress)
+        let waveFlightSpeed = min(0.35, Double(max(0, currentWave - 1)) * 0.018)
+        flightPathBezierT += dt * (0.45 + waveFlightSpeed)
         
         if flightPathBezierT >= 1.0 {
             flightPathBezierT = 0.0
@@ -286,9 +291,8 @@ public final class ClapTrapGameEngine: ObservableObject {
             insect.state = .landed
             self.gameState = .landed
             
-            // Scaled reaction window with a safe minimum floor so users never panic-slam
-            let waveSpeedup = min(1.0, Double(max(0, currentWave - 1)) * 0.04)
-            let window = max(1.8, insect.type.baseReactionWindow - waveSpeedup)
+            // Progressive reaction window: speeds up as waves progress!
+            let window = calculateLandingWindow(for: insect.type, wave: currentWave)
             insect.totalLandDuration = window
             insect.landTimeRemaining = window
             insect.timeElapsedSinceLanding = 0.0
@@ -297,6 +301,23 @@ public final class ClapTrapGameEngine: ObservableObject {
             
             soundEngine.triggerInsectLandingHaptic()
         }
+    }
+    
+    // MARK: - Progressive Wave Escalation Logic
+    
+    /// Calculates the landing reaction window for a given wave.
+    /// Time ticks down faster on higher waves, demanding quicker reflexes to advance!
+    public func calculateLandingWindow(for insectType: InsectType, wave: Int) -> Double {
+        let waveFactor = Double(max(0, wave - 1))
+        let speedup = min(2.65, waveFactor * 0.12)
+        let minFloor: Double
+        switch insectType {
+        case .mosquito: minFloor = 0.85
+        case .housefly: minFloor = 0.95
+        case .mutantHorsefly: minFloor = 1.10
+        case .wasp: minFloor = 2.20
+        }
+        return max(minFloor, insectType.baseReactionWindow - speedup)
     }
     
     private func updateLandedInsect(_ insect: inout ActiveInsect, dt: Double) {

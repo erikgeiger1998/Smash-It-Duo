@@ -191,13 +191,13 @@ public struct GameHUDView: View {
             if gameEngine.gameState == .landed {
                 VStack(spacing: 5) {
                     HStack(spacing: 8) {
-                        Text("FOLD PHONE GENTLY TO SWAT")
+                        Text(gameEngine.activeInsect?.type == .wasp ? "WAIT! DO NOT FOLD!" : "FOLD GENTLY TO SWAT")
                             .font(.system(size: 11, weight: .black, design: .monospaced))
-                            .foregroundColor(.green)
+                            .foregroundColor(gameEngine.activeInsect?.type == .wasp ? .red : (gameEngine.reactionProgress < 0.3 ? .orange : .green))
                         
                         Text(String(format: "%.1fs", (gameEngine.activeInsect?.landTimeRemaining ?? 0)))
                             .font(.system(size: 12, weight: .black, design: .monospaced))
-                            .foregroundColor(.yellow)
+                            .foregroundColor(gameEngine.reactionProgress < 0.3 ? .red : .yellow)
                     }
                     
                     // Safety subtext reminder
@@ -210,7 +210,7 @@ public struct GameHUDView: View {
                             .foregroundColor(.white.opacity(0.85))
                     }
                     
-                    // Animated Neon Laser Countdown Bar
+                    // Animated Neon Laser Countdown Bar (Color transitions from Green -> Yellow -> Red!)
                     GeometryReader { geo in
                         ZStack(alignment: .leading) {
                             RoundedRectangle(cornerRadius: 4)
@@ -226,7 +226,10 @@ public struct GameHUDView: View {
                                     )
                                 )
                                 .frame(width: max(0, geo.size.width * CGFloat(gameEngine.reactionProgress)), height: 8)
-                                .shadow(color: .green.opacity(0.85), radius: 5)
+                                .shadow(
+                                    color: gameEngine.reactionProgress < 0.3 ? .red.opacity(0.9) : (gameEngine.reactionProgress < 0.6 ? .yellow.opacity(0.85) : .green.opacity(0.85)),
+                                    radius: 6
+                                )
                         }
                     }
                     .frame(height: 8)
@@ -239,7 +242,7 @@ public struct GameHUDView: View {
                         .fill(Color.black.opacity(0.88))
                         .overlay(
                             RoundedRectangle(cornerRadius: 14)
-                                .stroke(Color.green.opacity(0.85), lineWidth: 1.5)
+                                .stroke(gameEngine.reactionProgress < 0.3 ? Color.red : Color.green.opacity(0.85), lineWidth: 1.5)
                         )
                 )
                 .shadow(color: .black.opacity(0.55), radius: 10)

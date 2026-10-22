@@ -226,4 +226,25 @@ final class ClapTrapTests: XCTestCase {
         
         wait(for: [expectation], timeout: 1.5)
     }
+    
+    func testReactionWindowSpeedsUpWithWaveProgression() {
+        let engine = ClapTrapGameEngine.shared
+        
+        let wave1Time = engine.calculateLandingWindow(for: .housefly, wave: 1)
+        let wave5Time = engine.calculateLandingWindow(for: .housefly, wave: 5)
+        let wave10Time = engine.calculateLandingWindow(for: .housefly, wave: 10)
+        let wave20Time = engine.calculateLandingWindow(for: .housefly, wave: 20)
+        
+        // Time must strictly decrease as waves advance!
+        XCTAssertGreaterThan(wave1Time, wave5Time, "Wave 1 should have longer reaction window than Wave 5")
+        XCTAssertGreaterThan(wave5Time, wave10Time, "Wave 5 should have longer reaction window than Wave 10")
+        XCTAssertGreaterThan(wave10Time, wave20Time, "Wave 10 should have longer reaction window than Wave 20")
+        
+        // At wave 1, housefly gives 3.6s
+        XCTAssertEqual(wave1Time, 3.60, accuracy: 0.01)
+        
+        // Never drops below floor of 0.95s
+        let wave50Time = engine.calculateLandingWindow(for: .housefly, wave: 50)
+        XCTAssertEqual(wave50Time, 0.95, accuracy: 0.01)
+    }
 }

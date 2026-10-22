@@ -395,25 +395,25 @@ public struct GameMenuView: View {
                 name: "COMMON HOUSEFLY",
                 badge: "STANDARD TARGET",
                 color: .green,
-                time: "3.2 SECONDS",
+                time: "3.6s ➔ 0.95s",
                 points: "100 PTS",
-                desc: "Buzzes casually before landing on the juicy bait. Clean, smooth folding easily traps it."
+                desc: "Starts at 3.6s on Wave 1. Gets progressively faster with each wave survived!"
             )
             
             insectIntelCard(
                 name: "STEALTH MOSQUITO",
                 badge: "AGILE & TINY",
                 color: .cyan,
-                time: "2.2 SECONDS",
+                time: "2.6s ➔ 0.85s",
                 points: "250 PTS",
-                desc: "High-frequency 460Hz flight whine. Smaller target requiring focused reflexes."
+                desc: "High-frequency 460Hz flight whine. Tighter reaction window requiring quick reflexes."
             )
             
             insectIntelCard(
                 name: "MUTANT HORSEFLY",
                 badge: "BOSS TARGET",
                 color: .purple,
-                time: "3.0 SECONDS",
+                time: "3.4s ➔ 1.10s",
                 points: "750 PTS",
                 desc: "Armored giant pest! Survives the 1st fold. Requires a double-fold to squash."
             )
@@ -422,7 +422,7 @@ public struct GameMenuView: View {
                 name: "YELLOWJACKET WASP",
                 badge: "HAZARD - DO NOT FOLD",
                 color: .red,
-                time: "3.8 SECONDS",
+                time: "3.5s ➔ 2.20s",
                 points: "500 PTS (PATIENCE)",
                 desc: "DANGER! Do not fold your phone! Let it fly away in peace to earn the 500pt Patience Bonus."
             )
