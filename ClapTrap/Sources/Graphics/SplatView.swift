@@ -10,15 +10,18 @@ public struct SplatterRecord: Identifiable {
     public let scale: CGFloat
     public let seed: Int
     public let timestamp: Date
+    public let normalizedX: CGFloat
+    public let normalizedY: CGFloat
     
     public init(
         primaryPosition: CGPoint,
         hingeX: CGFloat,
         insectType: InsectType,
-        scale: CGFloat = 1.0
+        scale: CGFloat = 1.0,
+        referenceScreenSize: CGSize? = nil
     ) {
         self.primaryPosition = primaryPosition
-        // Calculate the symmetrical mirrored X coordinate across the vertical hinge!
+        // Calculate mirrored coordinate for geometry reference
         let mirroredX = 2.0 * hingeX - primaryPosition.x
         self.mirroredPosition = CGPoint(x: mirroredX, y: primaryPosition.y)
         self.insectType = insectType
@@ -26,10 +29,32 @@ public struct SplatterRecord: Identifiable {
         self.scale = scale * insectType.baseScale
         self.seed = Int.random(in: 1...99999)
         self.timestamp = Date()
+        
+        let size = referenceScreenSize ?? ClapTrapGameEngine.shared.dualScreenSize
+        let screenW = max(100.0, size.width)
+        let screenH = max(100.0, size.height)
+        self.normalizedX = primaryPosition.x / screenW
+        self.normalizedY = primaryPosition.y / screenH
+    }
+    
+    /// Returns the exact, stable position on the playfield table.
+    /// Preserves exact coordinates, and smoothly maintains relative table position if orientation changes.
+    public func position(for screenSize: CGSize) -> CGPoint {
+        if screenSize.width <= 0 || screenSize.height <= 0 {
+            return primaryPosition
+        }
+        let originalW = normalizedX > 0.001 ? (primaryPosition.x / normalizedX) : screenSize.width
+        if abs(screenSize.width - originalW) < 2.0 {
+            return primaryPosition
+        }
+        return CGPoint(
+            x: normalizedX * screenSize.width,
+            y: normalizedY * screenSize.height
+        )
     }
 }
 
-/// Renders both the primary visceral splat AND its symmetrical mirrored inkblot decal across the hinge!
+/// Renders exactly ONE single dead fly splat decal per kill — realistic, authentic, and stationary.
 public struct SplatView: View {
     public let splatter: SplatterRecord
     
@@ -38,30 +63,13 @@ public struct SplatView: View {
     }
     
     public var body: some View {
-        ZStack {
-            // 1. Primary Visceral Splat (Original Impact Half)
-            SingleSplatDecal(
-                insectType: splatter.insectType,
-                scale: splatter.scale,
-                seed: splatter.seed,
-                isMirroredDecal: false
-            )
-            .rotationEffect(.radians(splatter.rotationAngle))
-            .position(splatter.primaryPosition)
-            
-            // 2. Symmetrical Mirrored Inkblot Splat (Opposite Screen Half)
-            // Perfectly reflected across the hinge axis with inkblot stamp effect!
-            SingleSplatDecal(
-                insectType: splatter.insectType,
-                scale: splatter.scale,
-                seed: splatter.seed,
-                isMirroredDecal: true
-            )
-            .scaleEffect(x: -1.0, y: 1.0) // Horizontal reflection!
-            .rotationEffect(.radians(splatter.rotationAngle))
-            .position(splatter.mirroredPosition)
-            .opacity(0.82) // Slightly lighter inkblot transfer impression
-        }
+        SingleSplatDecal(
+            insectType: splatter.insectType,
+            scale: splatter.scale,
+            seed: splatter.seed,
+            isMirroredDecal: false
+        )
+        .rotationEffect(.radians(splatter.rotationAngle))
     }
 }
 

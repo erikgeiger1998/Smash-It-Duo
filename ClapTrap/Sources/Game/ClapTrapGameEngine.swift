@@ -641,12 +641,13 @@ public final class ClapTrapGameEngine: ObservableObject {
         // Trigger the signature decaying dying insect vibration inside the closed phone!
         soundEngine.triggerDyingFlyVibration()
         
-        // Register Symmetrical Mirrored Splatter across the hinge!
+        // Register exactly ONE persistent dead fly splat at the exact impact position
         let splatter = SplatterRecord(
             primaryPosition: insect.position,
             hingeX: self.hingeX,
             insectType: insect.type,
-            scale: 1.0
+            scale: 1.0,
+            referenceScreenSize: self.dualScreenSize
         )
         persistentSplatters.append(splatter)
         

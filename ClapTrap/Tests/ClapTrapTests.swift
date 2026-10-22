@@ -626,4 +626,45 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertGreaterThan(observedBaits.count, 3, "Random bait selection should explore multiple food types across waves")
         XCTAssertGreaterThan(changesCount, 15, "Random bait selection should frequently change away from the previous bait")
     }
+    
+    func testSingleDeadFlyPerKillAndStationaryPosition() {
+        let engine = ClapTrapGameEngine.shared
+        engine.persistentSplatters.removeAll()
+        
+        let initialScreen = CGSize(width: 800, height: 600)
+        engine.dualScreenSize = initialScreen
+        
+        // Kill 1: at (250, 320)
+        let kill1Pos = CGPoint(x: 250, y: 320)
+        let splatter1 = SplatterRecord(
+            primaryPosition: kill1Pos,
+            hingeX: 400,
+            insectType: .housefly,
+            referenceScreenSize: initialScreen
+        )
+        engine.persistentSplatters.append(splatter1)
+        
+        // Exactly 1 dead fly registered for 1 kill
+        XCTAssertEqual(engine.persistentSplatters.count, 1)
+        XCTAssertEqual(splatter1.position(for: initialScreen), kill1Pos, "Dead fly must stay at exact impact location")
+        
+        // Kill 2: at (580, 410)
+        let kill2Pos = CGPoint(x: 580, y: 410)
+        let splatter2 = SplatterRecord(
+            primaryPosition: kill2Pos,
+            hingeX: 400,
+            insectType: .mosquito,
+            referenceScreenSize: initialScreen
+        )
+        engine.persistentSplatters.append(splatter2)
+        
+        // Exactly 2 dead flies registered for 2 kills (never 3 or 4!)
+        XCTAssertEqual(engine.persistentSplatters.count, 2, "There must be exactly as many dead flies as kills")
+        XCTAssertEqual(splatter2.position(for: initialScreen), kill2Pos, "Dead fly 2 must stay at exact impact location")
+        
+        // Position remains stationary on the table
+        let reopenScreen = CGSize(width: 800, height: 600)
+        XCTAssertEqual(splatter1.position(for: reopenScreen), kill1Pos)
+        XCTAssertEqual(splatter2.position(for: reopenScreen), kill2Pos)
+    }
 }

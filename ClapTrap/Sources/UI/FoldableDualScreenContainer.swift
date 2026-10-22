@@ -110,7 +110,7 @@ public struct FoldableDualScreenContainer: View {
             // 1. DUAL-SCREEN BOOK FOLD PLAYFIELD
             // Splits cleanly into Left Screen and Right Screen, folding inward
             // symmetrically toward the central hinge seam!
-            // The whole background is strictly underneath the fly and food bait!
+            // The whole background is strictly underneath the dead flies, active insect, and food bait!
             HStack(spacing: 0) {
                 // LEFT SCREEN HALF
                 ZStack {
@@ -118,11 +118,6 @@ public struct FoldableDualScreenContainer: View {
                     PicnicTableView(hingeAngle: foldSensor.hingeAngle, theme: gameEngine.currentTheme)
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: midX * 0.5)
-                    
-                    // Persistent Splatters on Left Half
-                    ForEach(gameEngine.persistentSplatters) { splatter in
-                        SplatView(splatter: splatter)
-                    }
                 }
                 .frame(width: midX, height: screenSize.height)
                 .clipped()
@@ -140,12 +135,6 @@ public struct FoldableDualScreenContainer: View {
                     PicnicTableView(hingeAngle: foldSensor.hingeAngle, theme: gameEngine.currentTheme)
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: -midX * 0.5)
-                    
-                    // Persistent Splatters on Right Half
-                    ForEach(gameEngine.persistentSplatters) { splatter in
-                        SplatView(splatter: splatter)
-                            .offset(x: -midX)
-                    }
                 }
                 .frame(width: midX, height: screenSize.height)
                 .clipped()
@@ -169,12 +158,20 @@ public struct FoldableDualScreenContainer: View {
                     }
             )
             
-            // 2. CENTERED FOOD BAIT PROP (On Table Surface)
+            // 2. PERSISTENT DEAD FLIES SPLATTER LAYER (ON TABLE SURFACE)
+            // Exactly ONE dead fly per kill — realistic, stationary, and never duplicated!
+            // Each dead fly remains fixed on the exact spot where it was killed without shifting.
+            ForEach(gameEngine.persistentSplatters) { splatter in
+                SplatView(splatter: splatter)
+                    .position(splatter.position(for: screenSize))
+            }
+            
+            // 3. CENTERED FOOD BAIT PROP (On Table Surface)
             FoodBaitPlateView(bait: gameEngine.currentBait)
                 .position(x: midX, y: screenSize.height * 0.52)
                 .scaleEffect(max(0.1, 1.0 - foldProgress * 0.6))
             
-            // 3. ACTIVE INSECT LAYER
+            // 4. ACTIVE INSECT LAYER
             // Always rendered ON TOP of the entire background (both left and right screen halves)
             // and above the food bait, ensuring the fly, its wings, and its flight shadow never
             // get clipped by the center crease or fly behind the table!
