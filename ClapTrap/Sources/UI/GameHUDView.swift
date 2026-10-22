@@ -152,9 +152,23 @@ public struct GameHUDView: View {
                         )
                     }
                     
+                    // Pause / Resume Button
+                    Button(action: {
+                        gameEngine.togglePause()
+                    }) {
+                        Image(systemName: gameEngine.isGamePaused ? "play.fill" : "pause.fill")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(gameEngine.isGamePaused ? .yellow : .white.opacity(0.85))
+                            .padding(6)
+                            .background(
+                                Circle()
+                                    .fill(gameEngine.isGamePaused ? Color.yellow.opacity(0.25) : Color.white.opacity(0.12))
+                            )
+                    }
+                    
                     // Menu & Settings Gear Button
                     Button(action: {
-                        gameEngine.isGameMenuPresented = true
+                        gameEngine.openMenu(tab: 0)
                     }) {
                         Image(systemName: "gearshape.fill")
                             .font(.system(size: 13, weight: .bold))

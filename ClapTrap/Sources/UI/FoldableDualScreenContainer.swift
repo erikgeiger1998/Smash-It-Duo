@@ -42,6 +42,9 @@ public struct FoldableDualScreenContainer: View {
                             gameEngine.isGameMenuPresented = false
                         })
                         .transition(.opacity)
+                    } else if gameEngine.isGamePaused {
+                        GamePauseOverlayView()
+                            .transition(.opacity.combined(with: .scale(scale: 0.95)))
                     }
                 }
             )
@@ -146,10 +149,6 @@ public struct FoldableDualScreenContainer: View {
                     PicnicTableView(hingeAngle: foldSensor.hingeAngle, theme: gameEngine.currentTheme)
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: -midX * 0.5)
-                    
-                    // Centered Bait Prop
-                    WatermelonBaitView()
-                        .position(x: -8, y: screenSize.height * 0.52)
                     
                     // Persistent Splatters on Right Half
                     ForEach(gameEngine.persistentSplatters) { splatter in
@@ -632,6 +631,173 @@ struct GameOverBragView: View {
                 .padding(.top, 8)
             }
             .padding(.horizontal, 20)
+        }
+    }
+}
+
+// MARK: - Game Pause Overlay View
+public struct GamePauseOverlayView: View {
+    @ObservedObject var gameEngine = ClapTrapGameEngine.shared
+    
+    public init() {}
+    
+    public var body: some View {
+        ZStack {
+            // Dark Frosted Backdrop
+            Color.black.opacity(0.68)
+                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
+            
+            // Chunky Cartoon Arcade Pause Dialogue Card
+            VStack(spacing: 16) {
+                // Header Banner
+                VStack(spacing: 4) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "pause.circle.fill")
+                            .font(.system(size: 26, weight: .black))
+                            .foregroundColor(.yellow)
+                        
+                        Text("GAME PAUSED")
+                            .font(.system(size: 26, weight: .black, design: .rounded))
+                            .foregroundStyle(
+                                LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
+                            )
+                    }
+                    .shadow(color: .black.opacity(0.4), radius: 4, y: 2)
+                    
+                    Text("TAKE A BREATHER • YOUR REFLEXES ARE WAITING")
+                        .font(.system(size: 9.5, weight: .black, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.65))
+                        .tracking(1.5)
+                }
+                
+                // Stats Card
+                HStack(spacing: 16) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "flag.fill")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(.yellow)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("WAVE")
+                                .font(.system(size: 8, weight: .black, design: .monospaced))
+                                .foregroundColor(.white.opacity(0.6))
+                            Text("\(gameEngine.currentWave)")
+                                .font(.system(size: 16, weight: .black, design: .rounded))
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.08))
+                    .cornerRadius(10)
+                    
+                    HStack(spacing: 6) {
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(.yellow)
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text("SCORE")
+                                .font(.system(size: 8, weight: .black, design: .monospaced))
+                                .foregroundColor(.white.opacity(0.6))
+                            Text("\(gameEngine.score)")
+                                .font(.system(size: 16, weight: .black, design: .monospaced))
+                                .foregroundColor(.yellow)
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Color.white.opacity(0.08))
+                    .cornerRadius(10)
+                }
+                
+                // Action Buttons Stack
+                VStack(spacing: 10) {
+                    // Big Resume Button
+                    Button(action: {
+                        gameEngine.resumeGame()
+                    }) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "play.fill")
+                                .font(.system(size: 14, weight: .black))
+                            Text("RESUME GAME")
+                                .font(.system(size: 13, weight: .black, design: .monospaced))
+                        }
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 14)
+                        .background(
+                            LinearGradient(colors: [.yellow, .orange], startPoint: .topLeading, endPoint: .bottomTrailing)
+                        )
+                        .cornerRadius(12)
+                        .shadow(color: .yellow.opacity(0.4), radius: 8, y: 2)
+                    }
+                    
+                    HStack(spacing: 10) {
+                        // Settings Button
+                        Button(action: {
+                            gameEngine.openMenu(tab: 0)
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "gearshape.fill")
+                                Text("SETTINGS")
+                            }
+                            .font(.system(size: 11, weight: .black, design: .monospaced))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 11)
+                            .background(Color.white.opacity(0.12))
+                            .cornerRadius(10)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.white.opacity(0.2), lineWidth: 1))
+                        }
+                        
+                        // Bestiary / Legend Button
+                        Button(action: {
+                            gameEngine.openMenu(tab: 2)
+                        }) {
+                            HStack(spacing: 6) {
+                                Image(systemName: "scope")
+                                Text("LEGEND")
+                            }
+                            .font(.system(size: 11, weight: .black, design: .monospaced))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 11)
+                            .background(Color.white.opacity(0.12))
+                            .cornerRadius(10)
+                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.white.opacity(0.2), lineWidth: 1))
+                        }
+                    }
+                    
+                    // Quit to Menu
+                    Button(action: {
+                        gameEngine.isGamePaused = false
+                        gameEngine.returnToMenu()
+                    }) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "house.fill")
+                            Text("QUIT TO MENU")
+                        }
+                        .font(.system(size: 11, weight: .black, design: .monospaced))
+                        .foregroundColor(.red.opacity(0.9))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 10)
+                        .background(Color.red.opacity(0.12))
+                        .cornerRadius(10)
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.red.opacity(0.3), lineWidth: 1))
+                    }
+                }
+            }
+            .padding(24)
+            .frame(maxWidth: 360)
+            .background(
+                RoundedRectangle(cornerRadius: 22)
+                    .fill(Color(red: 0.12, green: 0.14, blue: 0.18).opacity(0.96))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 22)
+                            .stroke(Color.yellow.opacity(0.6), lineWidth: 2)
+                    )
+            )
+            .shadow(color: .black.opacity(0.6), radius: 24, y: 8)
         }
     }
 }

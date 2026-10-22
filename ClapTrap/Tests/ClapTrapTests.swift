@@ -472,4 +472,65 @@ final class ClapTrapTests: XCTestCase {
         engine.isGameMenuPresented = false
         XCTAssertFalse(engine.isGameMenuPresented)
     }
+    
+    func testRandomLeftAndRightLandingDistribution() {
+        let engine = ClapTrapGameEngine.shared
+        engine.dualScreenSize = CGSize(width: 800, height: 600)
+        let hinge = engine.hingeX // 400
+        
+        var leftLandings = 0
+        var rightLandings = 0
+        
+        // Simulate 60 landing choices
+        for _ in 0..<60 {
+            var dummyInsect = ActiveInsect(type: .housefly, startPosition: CGPoint(x: 200, y: 300))
+            dummyInsect.flightTimeBeforeLanding = -1.0
+            
+            // Advance frame so landing initiates
+            engine.activeInsect = dummyInsect
+            engine.updateFrame(dt: 0.1)
+            
+            if let updated = engine.activeInsect {
+                if updated.targetPosition.x < hinge {
+                    leftLandings += 1
+                } else {
+                    rightLandings += 1
+                }
+            }
+        }
+        
+        // Both left and right sides must receive multiple landings!
+        XCTAssertGreaterThan(leftLandings, 10, "Left side should receive plenty of landings (got \(leftLandings))")
+        XCTAssertGreaterThan(rightLandings, 10, "Right side should receive plenty of landings (got \(rightLandings))")
+    }
+    
+    func testPauseAndResumeFunctionality() {
+        let engine = ClapTrapGameEngine.shared
+        engine.gameState = .hunting
+        engine.isGamePaused = false
+        
+        var insect = ActiveInsect(type: .housefly, startPosition: CGPoint(x: 200, y: 300))
+        insect.state = .landed
+        insect.landTimeRemaining = 3.0
+        engine.activeInsect = insect
+        
+        // 1. Pause game
+        engine.pauseGame()
+        XCTAssertTrue(engine.isGamePaused, "Game should be paused")
+        
+        // 2. While paused, frame updates should NOT tick down landing time
+        engine.updateFrame(dt: 1.0)
+        XCTAssertEqual(engine.activeInsect?.landTimeRemaining, 3.0, "Landing timer must not tick down while paused")
+        
+        // 3. Toggle pause unpauses
+        engine.togglePause()
+        XCTAssertFalse(engine.isGamePaused, "Game should unpause on toggle")
+        
+        // 4. While unpaused, frame updates advance normally
+        engine.updateFrame(dt: 0.5)
+        XCTAssertLessThan(engine.activeInsect?.landTimeRemaining ?? 3.0, 3.0, "Landing timer should resume counting down")
+        
+        // Reset
+        engine.isGamePaused = false
+    }
 }

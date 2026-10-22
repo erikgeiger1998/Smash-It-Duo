@@ -51,6 +51,32 @@ public final class ClapTrapGameEngine: ObservableObject {
         self.isGameMenuPresented = true
     }
     
+    // MARK: - Game Pause Control
+    @Published public var isGamePaused: Bool = false
+    
+    public func togglePause() {
+        if isGamePaused {
+            resumeGame()
+        } else {
+            pauseGame()
+        }
+    }
+    
+    public func pauseGame() {
+        guard gameState == .hunting || gameState == .landed else { return }
+        self.isGamePaused = true
+        soundEngine.stopBuzz()
+        soundEngine.pauseArcadeMusic()
+    }
+    
+    public func resumeGame() {
+        guard isGamePaused else { return }
+        self.isGamePaused = false
+        if soundEngine.isMusicEnabled {
+            soundEngine.startArcadeMusic()
+        }
+    }
+    
     // Reaction timer progress for HUD (1.0 = full time remaining, 0.0 = time's up)
     @Published public var reactionProgress: Double = 1.0
     
@@ -147,6 +173,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     }
     
     public func startGame() {
+        self.isGamePaused = false
         self.score = 0
         self.streak = 0
         self.lives = 3
@@ -160,6 +187,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     }
     
     public func returnToMenu() {
+        self.isGamePaused = false
         soundEngine.stopBuzz()
         gameLoopTimer?.cancel()
         self.gameState = .menu
@@ -214,6 +242,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     // MARK: - Frame Update (Physics & State Transitions)
     
     public func updateFrame(dt: Double) {
+        guard !isGamePaused else { return }
         guard var insect = activeInsect else { return }
         let currentInsectId = insect.id
         
@@ -296,23 +325,23 @@ public final class ClapTrapGameEngine: ObservableObject {
     private func initiateLandingSequence(_ insect: inout ActiveInsect) {
         insect.state = .descending
         
-        // 60% chance to land right around the watermelon bait near the hinge!
-        let landNearBait = Double.random(in: 0...1) < 0.60
+        // Randomly choose whether the insect lands on the LEFT side or RIGHT side of the opened screen (50% / 50%)
+        let landOnLeft = Bool.random()
         let landX: CGFloat
-        let landY: CGFloat
         
-        if landNearBait {
-            // Clustered around the juicy watermelon bait at (hingeX - 8, height * 0.52)
-            let baitX = hingeX - 8.0
-            let baitY = dualScreenSize.height * 0.52
-            landX = min(safeMaxX, max(safeMinX, baitX + CGFloat.random(in: -65...65)))
-            landY = min(safeMaxY, max(safeMinY, baitY + CGFloat.random(in: -45...45)))
+        if landOnLeft {
+            // Land within safe boundaries of the LEFT screen half
+            let minX = safeMinX + 15.0
+            let maxX = max(minX + 40.0, hingeX - 50.0)
+            landX = CGFloat.random(in: minX...maxX)
         } else {
-            // Or landed safely on the warm wooden table planks on either left or right screen!
-            landX = CGFloat.random(in: safeMinX...safeMaxX)
-            landY = CGFloat.random(in: safeMinY...safeMaxY)
+            // Land within safe boundaries of the RIGHT screen half
+            let minX = min(safeMaxX - 40.0, hingeX + 50.0)
+            let maxX = max(minX + 40.0, safeMaxX - 15.0)
+            landX = CGFloat.random(in: minX...maxX)
         }
         
+        let landY = CGFloat.random(in: safeMinY...safeMaxY)
         insect.targetPosition = CGPoint(x: landX, y: landY)
     }
     
@@ -545,6 +574,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     // MARK: - Fold & Slam Impact Handling
     
     private func handleDeviceSlamShut(impactData: FoldSensorManager.SlamImpactData) {
+        guard !isGamePaused else { return }
         guard gameState == .hunting || gameState == .landed else { return }
         
         self.gameState = .swatted
@@ -744,6 +774,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     }
     
     public func advanceToNextWave() {
+        self.isGamePaused = false
         guard self.lives > 0 else {
             self.gameState = .gameOver
             return
