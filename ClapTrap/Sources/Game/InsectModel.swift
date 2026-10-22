@@ -22,7 +22,7 @@ public enum InsectType: String, CaseIterable, Identifiable {
         switch self {
         case .housefly: return "Clap it when it rubs its legs!"
         case .mosquito: return "Tiny, erratic & lightning fast."
-        case .mutantHorsefly: return "ARMORED! Requires a Double-Clap!"
+        case .mutantHorsefly: return "Massive armored titan boss! 750 PTS reward."
         case .wasp: return "DO NOT CLAP! Clapping stings you!"
         }
     }
@@ -55,10 +55,7 @@ public enum InsectType: String, CaseIterable, Identifiable {
     }
     
     public var initialHealth: Int {
-        switch self {
-        case .mutantHorsefly: return 2
-        default: return 1
-        }
+        return 1
     }
 }
 

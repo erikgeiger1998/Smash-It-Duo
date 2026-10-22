@@ -90,8 +90,8 @@ public struct InsectSpriteView: View {
                 radius: isLanded ? 10 : 6
             )
             
-            // Boss Health Bar for Mutant Horsefly
-            if showBossHealthBar && insect.type == .mutantHorsefly && insect.health > 0 {
+            // Boss Health Bar for Multi-Health Targets
+            if showBossHealthBar && insect.type == .mutantHorsefly && insect.maxHealth > 1 && insect.health > 0 {
                 HStack(spacing: 3) {
                     ForEach(0..<insect.maxHealth, id: \.self) { idx in
                         Rectangle()

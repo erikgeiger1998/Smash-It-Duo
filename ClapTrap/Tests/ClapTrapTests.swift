@@ -36,8 +36,8 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertEqual(InsectType.mosquito.initialHealth, 1)
         XCTAssertEqual(InsectType.mosquito.baseScore, 250)
         
-        // Mutant Horsefly Boss
-        XCTAssertEqual(InsectType.mutantHorsefly.initialHealth, 2)
+        // Mutant Horsefly Boss (Defeated in 1 single fold!)
+        XCTAssertEqual(InsectType.mutantHorsefly.initialHealth, 1)
         XCTAssertEqual(InsectType.mutantHorsefly.baseScore, 750)
         
         // The Wasp (Trap)
@@ -554,5 +554,25 @@ final class ClapTrapTests: XCTestCase {
         
         // Reset
         engine.isGamePaused = false
+    }
+    
+    func testMutantHorseflySingleFoldVictory() {
+        let engine = ClapTrapGameEngine.shared
+        engine.startGame()
+        let initialScore = engine.score
+        
+        var horsefly = ActiveInsect(type: .mutantHorsefly, startPosition: CGPoint(x: 400, y: 300))
+        horsefly.state = .landed
+        engine.activeInsect = horsefly
+        engine.gameState = .landed
+        
+        // Swat via closure
+        FoldSensorManager.shared.triggerHardwareSlamShut(velocity: 800.0)
+        
+        // Horsefly must be immediately defeated in 1 fold!
+        XCTAssertEqual(engine.gameState, .swatted, "Game state should be swatted after 1 fold")
+        XCTAssertEqual(engine.lastOutcome?.hit, true, "1st fold must successfully swat the horsefly")
+        XCTAssertEqual(engine.lastOutcome?.isBossDamagedOnly, false, "Horsefly must not require a 2nd fold")
+        XCTAssertEqual(engine.score, initialScore + 750 + 250, "Full 750 base PTS + safety bonus must be awarded on 1st fold")
     }
 }

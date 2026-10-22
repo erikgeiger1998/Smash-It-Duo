@@ -613,14 +613,7 @@ public final class ClapTrapGameEngine: ObservableObject {
                 return
             }
             
-            // Check for MUTANT HORSEFLY (BOSS)
-            if insect.type == .mutantHorsefly && insect.health > 1 {
-                // Damaged boss, needs 1 more clap!
-                handleBossDamagedOutcome(velocity: impactData.velocityDegPerSec)
-                return
-            }
-            
-            // SUCCESSFUL SWAT!
+            // SUCCESSFUL SWAT! (Mutant Horsefly, Housefly, and Mosquito are defeated in 1 clean fold!)
             handleSuccessfulSwatOutcome(insect: insect, impactData: impactData, reactionMs: reactionMs)
             
         } else {

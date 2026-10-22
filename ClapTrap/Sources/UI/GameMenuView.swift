@@ -558,7 +558,7 @@ public struct GameMenuView: View {
                         .background(Capsule().fill(Color.yellow.opacity(0.18)))
                 }
                 
-                Text("Study each insect species carefully! Swat targets for high scores, defeat the Boss with 2 folds, but the wasp is strictly FORBIDDEN to swat!")
+                Text("Study each insect species carefully! Swat targets for high scores, defeat the giant Boss with accurate timing, but the wasp is strictly FORBIDDEN to swat!")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundColor(.white.opacity(0.85))
                     .lineSpacing(2)
@@ -566,7 +566,7 @@ public struct GameMenuView: View {
                 // Quick Rule Indicator Strip
                 HStack(spacing: 6) {
                     legendSummaryPill(title: "SWAT TARGET", icon: "checkmark.circle.fill", color: Color(red: 0.25, green: 0.88, blue: 0.45))
-                    legendSummaryPill(title: "2x FOLD BOSS", icon: "bolt.shield.fill", color: Color(red: 0.80, green: 0.40, blue: 1.0))
+                    legendSummaryPill(title: "TITAN BOSS", icon: "bolt.shield.fill", color: Color(red: 0.80, green: 0.40, blue: 1.0))
                     legendSummaryPill(title: "DO NOT SWAT!", icon: "exclamationmark.octagon.fill", color: Color(red: 1.0, green: 0.25, blue: 0.25))
                 }
                 .padding(.top, 2)
@@ -611,13 +611,13 @@ public struct GameMenuView: View {
             insectLegendaCard(
                 type: .mutantHorsefly,
                 speciesName: "Mutant Horsefly (Boss)",
-                ruleType: .doubleClap,
-                actionTitle: "2x FOLDS REQUIRED!",
+                ruleType: .swat,
+                actionTitle: "SWAT TARGET (1x FOLD)",
                 color: Color(red: 0.80, green: 0.40, blue: 1.0),
-                keyTrait: "Armored Titan Boss",
-                timeRange: "3.4s -> 1.10s (x2)",
+                keyTrait: "Giant Armored Titan Boss",
+                timeRange: "3.4s -> 1.10s",
                 points: "750 PTS (BOSS)",
-                description: "Armored titan boss: survives the first fold (HP 2 -> 1)! As soon as you fold, immediately reopen and fold a second time to defeat it before it escapes!"
+                description: "Giant armored titan boss! Massive wingspan and heavy buzzing drone. Time your fold accurately when it lands on the bait to swat it in 1 fold for huge 750 PTS!"
             )
             
             // 4. YELLOWJACKET WASP (TRAP)
