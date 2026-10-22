@@ -103,6 +103,9 @@ public struct ExternalCoverScreenView: View {
                                 currentWave: gameEngine.currentWave,
                                 bounce: bouncePulse
                             )
+                            .onTapGesture {
+                                FoldSensorManager.shared.reopenFlat()
+                            }
                             
                             Spacer()
                         }
@@ -154,6 +157,9 @@ public struct ExternalCoverScreenView: View {
                             currentWave: gameEngine.currentWave,
                             bounce: bouncePulse
                         )
+                        .onTapGesture {
+                            FoldSensorManager.shared.reopenFlat()
+                        }
                         
                         Spacer().frame(height: 24)
                     }

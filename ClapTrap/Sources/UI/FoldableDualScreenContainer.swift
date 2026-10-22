@@ -62,15 +62,21 @@ public struct FoldableDualScreenContainer: View {
         
         if !isCover {
             // Unfolded to inner dual-screen!
-            if foldSensor.isCoverScreen {
-                foldSensor.isCoverScreen = false
-                gameEngine.handleDeviceUnfolded()
+            if foldSensor.isCoverScreen || foldSensor.isClosed {
+                foldSensor.reopenFlat()
             }
         } else {
             // Folded closed onto external cover screen (portrait OR landscape)!
             if !foldSensor.isCoverScreen {
                 foldSensor.isCoverScreen = true
-                ProceduralSoundEngine.shared.stopBuzz()
+                
+                // PHYSICAL PHONE / EMULATOR CLOSURE = THE SWAT STRIKE!
+                // The instant the device completely folds shut, this triggers the swat!
+                if gameEngine.gameState == .landed || gameEngine.gameState == .hunting {
+                    foldSensor.triggerHardwareSlamShut(velocity: 1100.0)
+                } else {
+                    ProceduralSoundEngine.shared.stopBuzz()
+                }
             }
         }
     }
@@ -159,7 +165,7 @@ public struct FoldableDualScreenContainer: View {
                 )
             }
             .edgesIgnoringSafeArea(.all)
-            // Natural Inward Fold Gesture & Tap-to-Clap
+            // Natural Inward Fold Gesture (Two-Thumb / Swipe Inward to Fold)
             .gesture(
                 DragGesture(minimumDistance: 10)
                     .onChanged { value in
@@ -169,9 +175,6 @@ public struct FoldableDualScreenContainer: View {
                         handleInwardDragEnded(value: value, midX: midX)
                     }
             )
-            .onTapGesture {
-                handleDirectScreenClapTap()
-            }
             
             // 2. HUD LAYER (Score, Wave, Streak, Lives, Clean Screen Sponge)
             if gameEngine.gameState != .menu && gameEngine.gameState != .gameOver {
@@ -258,12 +261,6 @@ public struct FoldableDualScreenContainer: View {
         let didSnap = foldSensor.hingeAngle < 80.0 || speed > 300.0
         
         foldSensor.handleFoldGestureEnded(didSnapShut: didSnap, velocity: speed * 3.0)
-    }
-    
-    private func handleDirectScreenClapTap() {
-        if gameEngine.gameState == .landed {
-            foldSensor.triggerDirectClapSwat(velocity: 1350.0)
-        }
     }
 }
 

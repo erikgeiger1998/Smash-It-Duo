@@ -165,7 +165,8 @@ public final class FoldSensorManager: ObservableObject {
         }
     }
     
-    private func triggerHardwareSlamShut(velocity: Double) {
+    /// Trigger slam shut impact when device is completely folded shut
+    public func triggerHardwareSlamShut(velocity: Double = 1100.0) {
         guard !isClosed else { return }
         
         reopenTimer?.invalidate()
@@ -178,10 +179,6 @@ public final class FoldSensorManager: ObservableObject {
         self.isClosed = true
         
         slamEventPublisher.send(SlamImpactData(velocityDegPerSec: velocity, isMach2: isMach2, timestamp: Date()))
-        
-        // Automatically schedule smooth reopen after 1.8 seconds to display aftermath
-        // (gives player time to feel the 1.5s dying vibration inside closed phone!)
-        scheduleAutoReopen(after: 1.8)
     }
     
     private func scheduleAutoReopen(after seconds: Double) {
@@ -263,12 +260,12 @@ public final class FoldSensorManager: ObservableObject {
         reopenTimer?.invalidate()
         reopenTimer = nil
         
-        let wasCover = self.isCoverScreen
+        let wasCover = self.isCoverScreen || self.isClosed
         self.isCoverScreen = false
+        self.isClosed = false
         
         withAnimation(.spring(response: 0.35, dampingFraction: 0.82)) {
             self.hingeAngle = 180.0
-            self.isClosed = false
         }
         self.previousHingeAngle = 180.0
         self.lastAngleUpdateTime = Date()

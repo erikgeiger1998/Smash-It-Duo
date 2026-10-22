@@ -164,6 +164,28 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertEqual(engine.currentWave, 2)
     }
     
+    func testPhysicalPhoneClosureTriggersSwat() {
+        let engine = ClapTrapGameEngine.shared
+        let sensor = FoldSensorManager.shared
+        sensor.reopenFlat()
+        
+        engine.startGame()
+        engine.activeInsect?.state = .landed
+        engine.gameState = .landed
+        
+        // Simulating the phone closing shut completely
+        sensor.triggerHardwareSlamShut(velocity: 1100.0)
+        
+        XCTAssertTrue(sensor.isClosed)
+        XCTAssertEqual(engine.lastOutcome?.hit, true)
+        
+        // Simulating reopening the phone
+        sensor.reopenFlat()
+        XCTAssertFalse(sensor.isClosed)
+        XCTAssertEqual(engine.gameState, .hunting)
+        XCTAssertEqual(engine.currentWave, 2)
+    }
+    
     func testProceduralAudioSynthesizerSafety() {
         let soundEngine = ProceduralSoundEngine.shared
         
