@@ -23,8 +23,8 @@ public struct GameMenuView: View {
     
     public var body: some View {
         ZStack {
-            // Dark Frosted Backdrop
-            Color.black.opacity(0.85)
+            // Solid Dark Backdrop
+            Color(red: 0.08, green: 0.09, blue: 0.12)
                 .edgesIgnoringSafeArea(.all)
                 .ignoresSafeArea()
             
@@ -78,18 +78,7 @@ public struct GameMenuView: View {
                         
                         // Safety Notice Card (Present in all tabs)
                         safetyNoticeCard
-                        
-                        // Footer
-                        VStack(spacing: 3) {
-                            Text("CLAPTRAP v1.0 • 100% PROCEDURAL CODE")
-                                .font(.system(size: 9, weight: .heavy, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.4))
-                            Text("DESIGNED FOR DUAL-SCREEN & FOLDABLE HARDWARE")
-                                .font(.system(size: 8, weight: .medium, design: .monospaced))
-                                .foregroundColor(.white.opacity(0.3))
-                        }
-                        .padding(.top, 10)
-                        .padding(.bottom, 30)
+                            .padding(.bottom, 30)
                     }
                     .padding(.horizontal, 20)
                 }
