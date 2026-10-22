@@ -84,29 +84,36 @@ public final class ClapTrapGameEngine: ObservableObject {
     public var dualScreenSize: CGSize = CGSize(width: 800, height: 600) {
         didSet {
             hingeX = dualScreenSize.width / 2.0
+            if var insect = activeInsect {
+                insect.position.x = min(safeMaxX - 20.0, max(safeMinX + 20.0, insect.position.x))
+                insect.position.y = min(safeMaxY - 15.0, max(safeMinY + 15.0, insect.position.y))
+                insect.targetPosition.x = min(safeMaxX - 20.0, max(safeMinX + 20.0, insect.targetPosition.x))
+                insect.targetPosition.y = min(safeMaxY - 15.0, max(safeMinY + 15.0, insect.targetPosition.y))
+                self.activeInsect = insect
+            }
         }
     }
     public var hingeX: CGFloat = 400.0
     
     // MARK: - Safe Playfield Boundaries (Prevents insects from ever leaving or landing outside the screen)
     public var safeMinX: CGFloat {
-        // Safe clearance from left screen bezel and checkered cloth edge (runner ends at x = 80)
-        return 90.0
+        // Safe clearance from left screen bezel and checkered cloth edge (runner ends at x = 80 + margin)
+        return 120.0
     }
     
     public var safeMaxX: CGFloat {
-        // Safe clearance from right screen bezel
-        return max(safeMinX + 120.0, dualScreenSize.width - 90.0)
+        // Safe clearance from right screen bezel (generous margin so large insects and shadows never touch or exit edge)
+        return max(safeMinX + 160.0, dualScreenSize.width - 120.0)
     }
     
     public var safeMinY: CGFloat {
-        // Safe clearance beneath the top cockpit HUD console
-        return 145.0
+        // Safe clearance beneath the top cockpit HUD console and dropdown reaction timer meter
+        return 200.0
     }
     
     public var safeMaxY: CGFloat {
-        // Safe clearance above the bottom screen bezel
-        return max(safeMinY + 120.0, dualScreenSize.height - 110.0)
+        // Safe clearance above the bottom screen bezel and home indicator
+        return max(safeMinY + 160.0, dualScreenSize.height - 140.0)
     }
     
     // MARK: - Dependencies & Subscriptions
@@ -209,8 +216,8 @@ public final class ClapTrapGameEngine: ObservableObject {
         // Pick a spawn point well within the safe screen boundaries
         // Alternating between left screen and right screen!
         let spawnLeft = Bool.random()
-        let startX: CGFloat = spawnLeft ? safeMinX + 15.0 : safeMaxX - 15.0
-        let startY: CGFloat = CGFloat.random(in: safeMinY...safeMaxY)
+        let startX: CGFloat = spawnLeft ? safeMinX + 30.0 : safeMaxX - 30.0
+        let startY: CGFloat = CGFloat.random(in: (safeMinY + 15.0)...(safeMaxY - 15.0))
         let startPos = CGPoint(x: startX, y: startY)
         
         var insect = ActiveInsect(type: insectType, startPosition: startPos)
@@ -331,18 +338,20 @@ public final class ClapTrapGameEngine: ObservableObject {
         
         if landOnLeft {
             // Land within safe boundaries of the LEFT screen half
-            let minX = safeMinX + 15.0
-            let maxX = max(minX + 40.0, hingeX - 50.0)
+            let minX = safeMinX + 25.0
+            let maxX = max(minX + 30.0, hingeX - 70.0)
             landX = CGFloat.random(in: minX...maxX)
         } else {
             // Land within safe boundaries of the RIGHT screen half
-            let minX = min(safeMaxX - 40.0, hingeX + 50.0)
-            let maxX = max(minX + 40.0, safeMaxX - 15.0)
+            let minX = min(safeMaxX - 55.0, hingeX + 70.0)
+            let maxX = max(minX + 30.0, safeMaxX - 25.0)
             landX = CGFloat.random(in: minX...maxX)
         }
         
-        let landY = CGFloat.random(in: safeMinY...safeMaxY)
-        insect.targetPosition = CGPoint(x: landX, y: landY)
+        let landY = CGFloat.random(in: (safeMinY + 15.0)...(safeMaxY - 15.0))
+        let clampedX = min(safeMaxX - 25.0, max(safeMinX + 25.0, landX))
+        let clampedY = min(safeMaxY - 20.0, max(safeMinY + 20.0, landY))
+        insect.targetPosition = CGPoint(x: clampedX, y: clampedY)
     }
     
     private func updateDescendingInsect(_ insect: inout ActiveInsect, dt: Double) {
@@ -370,8 +379,12 @@ public final class ClapTrapGameEngine: ObservableObject {
                 active: true
             )
         } else {
-            // Fully Landed!
-            insect.position = insect.targetPosition
+            // Fully Landed! Strictly clamp landing position to safe bounds
+            insect.position = CGPoint(
+                x: min(safeMaxX - 20.0, max(safeMinX + 20.0, insect.targetPosition.x)),
+                y: min(safeMaxY - 15.0, max(safeMinY + 15.0, insect.targetPosition.y))
+            )
+            insect.targetPosition = insect.position
             insect.altitude = 0.0
             insect.state = .landed
             self.gameState = .landed
@@ -413,8 +426,8 @@ public final class ClapTrapGameEngine: ObservableObject {
         insect.walkStepPhase += dt * 4.0
         let jitterX = cos(insect.walkStepPhase) * 0.3
         let jitterY = sin(insect.walkStepPhase) * 0.3
-        insect.position.x = min(safeMaxX, max(safeMinX, insect.position.x + jitterX))
-        insect.position.y = min(safeMaxY, max(safeMinY, insect.position.y + jitterY))
+        insect.position.x = min(safeMaxX - 20.0, max(safeMinX + 20.0, insect.position.x + jitterX))
+        insect.position.y = min(safeMaxY - 15.0, max(safeMinY + 15.0, insect.position.y + jitterY))
         
         insect.timeElapsedSinceLanding += dt
         insect.landTimeRemaining -= dt
@@ -529,33 +542,35 @@ public final class ClapTrapGameEngine: ObservableObject {
         if shouldCrossHinge {
             if start.x < hingeX {
                 // Fly from Left Screen over to the Right Screen!
-                let rightMin = min(safeMaxX - 20.0, hingeX + 40.0)
-                endX = CGFloat.random(in: rightMin...safeMaxX)
+                let rightMin = min(safeMaxX - 40.0, hingeX + 60.0)
+                let rightMax = max(rightMin + 40.0, safeMaxX - 20.0)
+                endX = CGFloat.random(in: rightMin...rightMax)
             } else {
                 // Fly from Right Screen over to the Left Screen!
-                let leftMax = max(safeMinX + 20.0, hingeX - 40.0)
-                endX = CGFloat.random(in: safeMinX...leftMax)
+                let leftMax = max(safeMinX + 40.0, hingeX - 60.0)
+                let leftMin = min(leftMax - 40.0, safeMinX + 20.0)
+                endX = CGFloat.random(in: leftMin...leftMax)
             }
         } else {
-            // Dynamic wander across the whole safe dual-screen playfield
-            endX = CGFloat.random(in: safeMinX...safeMaxX)
+            // Dynamic wander across the safe dual-screen playfield
+            endX = CGFloat.random(in: (safeMinX + 20.0)...(safeMaxX - 20.0))
         }
         
-        let endY = CGFloat.random(in: safeMinY...safeMaxY)
+        let endY = CGFloat.random(in: (safeMinY + 15.0)...(safeMaxY - 15.0))
         bezierEnd = CGPoint(x: endX, y: endY)
         
         // Organic wandering control points - STRICTLY clamped inside safe bounds!
         let segMidX = (start.x + endX) / 2.0
-        let jitterX: CGFloat = min(120.0, (safeMaxX - safeMinX) * 0.3)
-        let jitterY: CGFloat = 90.0
+        let jitterX: CGFloat = min(100.0, (safeMaxX - safeMinX) * 0.25)
+        let jitterY: CGFloat = 70.0
         
         bezierControl1 = CGPoint(
-            x: min(safeMaxX, max(safeMinX, segMidX + CGFloat.random(in: -jitterX...jitterX))),
-            y: min(safeMaxY, max(safeMinY, start.y + CGFloat.random(in: -jitterY...jitterY)))
+            x: min(safeMaxX - 15.0, max(safeMinX + 15.0, segMidX + CGFloat.random(in: -jitterX...jitterX))),
+            y: min(safeMaxY - 15.0, max(safeMinY + 15.0, start.y + CGFloat.random(in: -jitterY...jitterY)))
         )
         bezierControl2 = CGPoint(
-            x: min(safeMaxX, max(safeMinX, segMidX + CGFloat.random(in: -jitterX...jitterX))),
-            y: min(safeMaxY, max(safeMinY, endY + CGFloat.random(in: -jitterY...jitterY)))
+            x: min(safeMaxX - 15.0, max(safeMinX + 15.0, segMidX + CGFloat.random(in: -jitterX...jitterX))),
+            y: min(safeMaxY - 15.0, max(safeMinY + 15.0, endY + CGFloat.random(in: -jitterY...jitterY)))
         )
     }
     

@@ -504,6 +504,28 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertGreaterThan(rightLandings, 10, "Right side should receive plenty of landings (got \(rightLandings))")
     }
     
+    func testLandingCoordinatesStrictlyInsideSafePlayfield() {
+        let engine = ClapTrapGameEngine.shared
+        engine.dualScreenSize = CGSize(width: 800, height: 600)
+        
+        for _ in 0..<100 {
+            var dummy = ActiveInsect(type: .housefly, startPosition: CGPoint(x: 200, y: 300))
+            dummy.flightTimeBeforeLanding = -1.0
+            engine.activeInsect = dummy
+            engine.updateFrame(dt: 0.1)
+            
+            guard let landed = engine.activeInsect else {
+                XCTFail("Insect must exist")
+                return
+            }
+            
+            XCTAssertGreaterThanOrEqual(landed.targetPosition.x, engine.safeMinX, "Target X must not be less than safeMinX")
+            XCTAssertLessThanOrEqual(landed.targetPosition.x, engine.safeMaxX, "Target X must not exceed safeMaxX")
+            XCTAssertGreaterThanOrEqual(landed.targetPosition.y, engine.safeMinY, "Target Y must not be less than safeMinY")
+            XCTAssertLessThanOrEqual(landed.targetPosition.y, engine.safeMaxY, "Target Y must not exceed safeMaxY")
+        }
+    }
+    
     func testPauseAndResumeFunctionality() {
         let engine = ClapTrapGameEngine.shared
         engine.gameState = .hunting

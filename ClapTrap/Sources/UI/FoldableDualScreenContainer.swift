@@ -70,10 +70,10 @@ public struct FoldableDualScreenContainer: View {
     }
     
     private func updateScreenConfiguration(size: CGSize) {
-        gameEngine.dualScreenSize = size
         let isCover = isExternalCoverScreen(size: size)
         
         if !isCover {
+            gameEngine.dualScreenSize = size
             // Unfolded to inner dual-screen!
             if foldSensor.isCoverScreen || foldSensor.isClosed {
                 foldSensor.reopenFlat()
@@ -118,7 +118,7 @@ public struct FoldableDualScreenContainer: View {
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: midX * 0.5)
                     
-                    // Centered Bait Prop
+                    // Centered Bait Prop (Left Half)
                     WatermelonBaitView()
                         .position(x: midX - 8, y: screenSize.height * 0.52)
                     
@@ -127,10 +127,12 @@ public struct FoldableDualScreenContainer: View {
                         SplatView(splatter: splatter)
                     }
                     
-                    // Active Insect
+                    // Active Insect (Left Screen Half)
                     if let insect = gameEngine.activeInsect, insect.state != .swatted {
-                        InsectSpriteView(insect: insect)
-                            .position(insect.position)
+                        if insect.position.x < midX + 90.0 {
+                            InsectSpriteView(insect: insect)
+                                .position(insect.position)
+                        }
                     }
                 }
                 .frame(width: midX, height: screenSize.height)
@@ -150,6 +152,10 @@ public struct FoldableDualScreenContainer: View {
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: -midX * 0.5)
                     
+                    // Centered Bait Prop (Right Half across hinge fold)
+                    WatermelonBaitView()
+                        .position(x: -8, y: screenSize.height * 0.52)
+                    
                     // Persistent Splatters on Right Half
                     ForEach(gameEngine.persistentSplatters) { splatter in
                         SplatView(splatter: splatter)
@@ -158,8 +164,10 @@ public struct FoldableDualScreenContainer: View {
                     
                     // Active Insect (Right Screen Half)
                     if let insect = gameEngine.activeInsect, insect.state != .swatted {
-                        InsectSpriteView(insect: insect)
-                            .position(x: insect.position.x - midX, y: insect.position.y)
+                        if insect.position.x > midX - 90.0 {
+                            InsectSpriteView(insect: insect)
+                                .position(x: insect.position.x - midX, y: insect.position.y)
+                        }
                     }
                 }
                 .frame(width: midX, height: screenSize.height)
