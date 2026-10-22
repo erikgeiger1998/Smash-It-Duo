@@ -408,4 +408,68 @@ final class ClapTrapTests: XCTestCase {
         engine.currentTheme = .classicPicnic
         XCTAssertEqual(engine.currentTheme, .classicPicnic)
     }
+    
+    func testCartoonComicStarburstTipsNeverClipped() {
+        // Test frame sizes used in the stages
+        let testSizes: [CGSize] = [
+            CGSize(width: 220, height: 180),
+            CGSize(width: 220, height: 160),
+            CGSize(width: 190, height: 150),
+            CGSize(width: 260, height: 185)
+        ]
+        
+        for size in testSizes {
+            let midX = size.width / 2.0
+            let midY = size.height / 2.0
+            let points = 16
+            
+            let maxRx = max((size.width * 0.5) - 12.0, 10.0)
+            let maxRy = max((size.height * 0.5) - 14.0, 10.0)
+            
+            var minY: CGFloat = .infinity
+            var maxY: CGFloat = -.infinity
+            var minX: CGFloat = .infinity
+            var maxX: CGFloat = -.infinity
+            
+            for i in 0..<points {
+                let angle = Double(i) * (.pi * 2.0 / Double(points))
+                let isOuter = (i % 2 == 0)
+                let rx = isOuter ? maxRx : (maxRx * 0.56)
+                let ry = isOuter ? maxRy : (maxRy * 0.56)
+                let x = midX + cos(angle) * rx
+                let y = midY + sin(angle) * ry
+                
+                minX = min(minX, x)
+                maxX = max(maxX, x)
+                minY = min(minY, y)
+                maxY = max(maxY, y)
+            }
+            
+            // Outer points must stay strictly within canvas bounds [0, width] and [0, height]
+            XCTAssertGreaterThanOrEqual(minX, 10.0, "Starburst left tip clipped")
+            XCTAssertLessThanOrEqual(maxX, size.width - 10.0, "Starburst right tip clipped")
+            XCTAssertGreaterThanOrEqual(minY, 10.0, "Starburst top tip clipped: minY is \(minY)")
+            XCTAssertLessThanOrEqual(maxY + 4.0, size.height, "Starburst bottom tip or shadow clipped: maxY is \(maxY)")
+        }
+    }
+    
+    func testCoverScreenVerticalUtilityActions() {
+        let engine = ClapTrapGameEngine.shared
+        
+        // Opening Bestiary / Legend opens tab 2
+        engine.openMenu(tab: 2)
+        XCTAssertTrue(engine.isGameMenuPresented)
+        XCTAssertEqual(engine.menuInitialTab, 2)
+        
+        engine.isGameMenuPresented = false
+        XCTAssertFalse(engine.isGameMenuPresented)
+        
+        // Opening Settings opens tab 0
+        engine.openMenu(tab: 0)
+        XCTAssertTrue(engine.isGameMenuPresented)
+        XCTAssertEqual(engine.menuInitialTab, 0)
+        
+        engine.isGameMenuPresented = false
+        XCTAssertFalse(engine.isGameMenuPresented)
+    }
 }

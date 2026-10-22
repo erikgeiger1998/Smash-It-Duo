@@ -406,7 +406,7 @@ struct TitleMenuView: View {
                             Image(systemName: "scope")
                                 .font(.system(size: 10, weight: .bold))
                                 .foregroundColor(.yellow)
-                            Text("TARGET INTEL & LEGENDA")
+                            Text("TARGET INTEL & LEGEND")
                                 .font(.system(size: 10, weight: .black, design: .monospaced))
                                 .foregroundColor(.white.opacity(0.75))
                             Spacer()

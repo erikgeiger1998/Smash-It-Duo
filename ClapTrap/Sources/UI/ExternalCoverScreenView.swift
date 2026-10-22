@@ -75,10 +75,8 @@ public struct ExternalCoverScreenView: View {
                 if isLandscape {
                     // LANDSCAPE COVER SCREEN (Side-by-Side Cartoon Layout)
                     HStack(spacing: 20) {
-                        // Left Column: Top Bar + Logo + Cartoon Fly / Outcome
+                        // Left Column: Logo + Cartoon Fly / Outcome
                         VStack(spacing: 8) {
-                            topUtilityButtonsBar
-                            
                             Spacer()
                             
                             CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
@@ -135,17 +133,14 @@ public struct ExternalCoverScreenView: View {
                 } else {
                     // PORTRAIT COVER SCREEN (Vertical Cartoon Layout)
                     VStack(spacing: 10) {
-                        // 1. TOP UTILITY BAR (Settings + Bestiary, clean from top-right camera)
-                        topUtilityButtonsBar
-                        
-                        // 2. BOUNCY 3D CARTOON LOGO (Cleanly placed BELOW buttons, never overlapping!)
+                        // 1. BOUNCY 3D CARTOON LOGO (Cleanly centered with safe margin from right buttons)
                         CartoonGameLogoView(isGameOver: isGameOver, isTrapped: isTrapped)
-                            .scaleEffect(bouncePulse ? 1.02 : 0.98)
-                            .padding(.top, 4)
+                            .scaleEffect(bouncePulse ? 0.96 : 0.92)
+                            .padding(.top, 14)
                         
                         Spacer()
                         
-                        // 3. CENTRAL CHARACTER / OUTCOME STAGE
+                        // 2. CENTRAL CHARACTER / OUTCOME STAGE
                         if isGameOver {
                             // Comic Whiff: Laughing fly zipping away!
                             CartoonEscapedFlyStage(
@@ -166,12 +161,12 @@ public struct ExternalCoverScreenView: View {
                         
                         Spacer()
                         
-                        // 4. STATS POD (if game over or trapped)
+                        // 3. STATS POD (if game over or trapped)
                         if isGameOver || isTrapped {
                             outcomeStatsPill
                         }
                         
-                        // 5. CHUNKY CARTOON WOODEN CALL-TO-ACTION SIGN
+                        // 4. CHUNKY CARTOON WOODEN CALL-TO-ACTION SIGN
                         CartoonWoodenSignPrompt(
                             isGameOver: isGameOver,
                             isTrapped: isTrapped,
@@ -186,6 +181,52 @@ public struct ExternalCoverScreenView: View {
                     }
                     .padding(.horizontal, 18)
                 }
+                
+                // 3. VERTICAL UTILITY BUTTONS (Directly under the top-right camera icon)
+                VStack(alignment: .trailing, spacing: 8) {
+                    // 1. LEGEND / BESTIARY GUIDE BUTTON
+                    Button(action: {
+                        gameEngine.openMenu(tab: 2)
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "scope")
+                                .font(.system(size: 11, weight: .bold))
+                            Text("LEGEND")
+                                .font(.system(size: 8.5, weight: .black, design: .monospaced))
+                        }
+                        .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.88))
+                                .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                        )
+                    }
+                    
+                    // 2. SETTINGS BUTTON
+                    Button(action: {
+                        gameEngine.openMenu(tab: 0)
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 11, weight: .bold))
+                            Text("SETTINGS")
+                                .font(.system(size: 8.5, weight: .black, design: .monospaced))
+                        }
+                        .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 6)
+                        .background(
+                            Capsule()
+                                .fill(Color.white.opacity(0.88))
+                                .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                        )
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding(.trailing, 12)
+                .padding(.top, isLandscape ? 16 : 48)
             }
             .onAppear {
                 startCartoonAnimations()
@@ -195,47 +236,6 @@ public struct ExternalCoverScreenView: View {
                 quipTimer = nil
             }
         }
-    }
-    
-    // MARK: - Top Utility Buttons Bar (Settings & Bestiary)
-    private var topUtilityButtonsBar: some View {
-        HStack(spacing: 8) {
-            Button(action: {
-                gameEngine.openMenu(tab: 0)
-            }) {
-                Image(systemName: "gearshape.fill")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                    .padding(8)
-                    .background(
-                        Circle()
-                            .fill(Color.white.opacity(0.88))
-                            .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                    )
-            }
-            
-            Button(action: {
-                gameEngine.openMenu(tab: 2)
-            }) {
-                HStack(spacing: 4) {
-                    Image(systemName: "scope")
-                        .font(.system(size: 12, weight: .bold))
-                    Text("BESTIARY")
-                        .font(.system(size: 10, weight: .black, design: .monospaced))
-                }
-                .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                .padding(.horizontal, 9)
-                .padding(.vertical, 7)
-                .background(
-                    Capsule()
-                        .fill(Color.white.opacity(0.88))
-                        .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                )
-            }
-            
-            Spacer()
-        }
-        .padding(.top, 4)
     }
     
     // MARK: - State Queries
@@ -806,10 +806,10 @@ struct CartoonTrappedFlyStage: View {
     
     var body: some View {
         ZStack {
-            // Starburst Cartoon Explosion in Background
+            // Starburst Cartoon Explosion in Background (Full headroom - never cuts off tips)
             CartoonComicStarburst(color: .yellow)
-                .frame(width: 220, height: 160)
-                .scaleEffect(legWiggle ? 1.05 : 0.96)
+                .frame(width: 220, height: 180)
+                .scaleEffect(legWiggle ? 1.04 : 0.96)
             
             // Big Neon Bug Juice Splat
             CartoonJuiceSplatterView(color: Color(red: 0.25, green: 0.85, blue: 0.25))
@@ -872,7 +872,7 @@ struct CartoonTrappedFlyStage: View {
                 .shadow(color: .black.opacity(0.3), radius: 4, y: 2)
                 .offset(y: 65)
         }
-        .frame(width: 260, height: 170)
+        .frame(width: 260, height: 185)
         .onAppear {
             withAnimation(.easeInOut(duration: 0.15).repeatForever(autoreverses: true)) {
                 legWiggle = true
@@ -935,7 +935,7 @@ struct CartoonEscapedFlyStage: View {
                 .padding(.horizontal, 16)
                 .offset(y: 68)
         }
-        .frame(width: 260, height: 170)
+        .frame(width: 260, height: 185)
         .onAppear {
             withAnimation(.easeInOut(duration: 0.25).repeatForever(autoreverses: true)) {
                 laughBob = true
@@ -957,12 +957,18 @@ struct CartoonComicStarburst: View {
             let midY = size.height / 2.0
             let points = 16
             
+            // Safe radii ensuring all outer star tips, 3pt stroke, and dy: 4 shadow never clip outside the canvas
+            let maxRx = max((size.width * 0.5) - 12.0, 10.0)
+            let maxRy = max((size.height * 0.5) - 14.0, 10.0)
+            
             var path = Path()
             for i in 0..<points {
                 let angle = Double(i) * (.pi * 2.0 / Double(points))
-                let r: CGFloat = (i % 2 == 0) ? size.width * 0.46 : size.width * 0.28
-                let x = midX + cos(angle) * r
-                let y = midY + sin(angle) * r
+                let isOuter = (i % 2 == 0)
+                let rx = isOuter ? maxRx : (maxRx * 0.56)
+                let ry = isOuter ? maxRy : (maxRy * 0.56)
+                let x = midX + cos(angle) * rx
+                let y = midY + sin(angle) * ry
                 
                 if i == 0 {
                     path.move(to: CGPoint(x: x, y: y))
