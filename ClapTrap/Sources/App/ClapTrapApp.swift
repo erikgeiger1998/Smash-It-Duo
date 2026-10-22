@@ -14,6 +14,8 @@ struct ClapTrapApp: App {
             FoldableDualScreenContainer()
                 .preferredColorScheme(.dark)
                 .statusBar(hidden: true)
+                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
         }
     }
 }

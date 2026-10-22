@@ -27,9 +27,12 @@ public struct FoldableDualScreenContainer: View {
                     // Strictly shows whether the fly was trapped or escaped, and prompts player to unfold.
                     ExternalCoverScreenView()
                         .edgesIgnoringSafeArea(.all)
+                        .ignoresSafeArea()
                 } else {
                     // 2. UNFOLDED INNER DUAL-SCREEN PLAYFIELD
                     dualScreenPlayfield(screenSize: screenSize)
+                        .edgesIgnoringSafeArea(.all)
+                        .ignoresSafeArea()
                 }
             }
             .onAppear {
@@ -39,6 +42,8 @@ public struct FoldableDualScreenContainer: View {
                 updateScreenConfiguration(size: newSize)
             }
         }
+        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
     }
     
     // MARK: - Screen Geometry & Hardware Unfold Handling
@@ -78,6 +83,11 @@ public struct FoldableDualScreenContainer: View {
         let foldProgress = (180.0 - foldSensor.hingeAngle) / 180.0
         
         ZStack {
+            // Full Edge-to-Edge Wooden Table Base to prevent any black bars
+            Color(red: 0.55, green: 0.33, blue: 0.16)
+                .edgesIgnoringSafeArea(.all)
+                .ignoresSafeArea()
+            
             // 1. DUAL-SCREEN BOOK FOLD PLAYFIELD
             // Splits cleanly into Left Screen and Right Screen, folding inward
             // symmetrically toward the central hinge seam!
@@ -214,6 +224,8 @@ public struct FoldableDualScreenContainer: View {
                 SpongeWipeAnimationOverlay {}
             }
         }
+        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
     }
     
     // MARK: - Natural Gesture Controls

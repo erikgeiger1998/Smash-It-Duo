@@ -148,6 +148,8 @@ public struct PicnicTableView: View {
                 .blendMode(.multiply)
             }
         }
+        .edgesIgnoringSafeArea(.all)
+        .ignoresSafeArea()
     }
 }
 
