@@ -20,8 +20,32 @@ public struct InsectSpriteView: View {
         let isLanded = insect.state == .landed
         let altitude = insect.altitude // 1.0 (high) to 0.0 (landed)
         let speciesScale = insect.type.baseScale * globalScale
+        let isGlowTheme = ClapTrapGameEngine.shared.currentTheme.isGlowInTheDark
+        let glowColor = bioluminescentColor(for: insect.type)
         
         ZStack {
+            // 0. BIOLUMINESCENT LIGHTNING FLY AURA (Midnight Glow in the Dark Mode)
+            if isGlowTheme {
+                let pulse = 0.82 + 0.18 * sin(insect.wingFlutterPhase * 1.5)
+                let glowRadius: CGFloat = (isLanded ? 48 : 36) * speciesScale * CGFloat(pulse)
+                
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [
+                                glowColor.opacity(isLanded ? 0.85 : 0.60),
+                                glowColor.opacity(isLanded ? 0.35 : 0.20),
+                                Color.clear
+                            ],
+                            center: .center,
+                            startRadius: 2,
+                            endRadius: glowRadius
+                        )
+                    )
+                    .frame(width: glowRadius * 2, height: glowRadius * 2)
+                    .blur(radius: isLanded ? 5 : 3)
+            }
+            
             // 1. FLIGHT SHADOW (3D Depth Illusion & Landing Cue)
             // When high: offset by 40pt, larger (1.35x), lighter (opacity 0.22), blurred.
             // When landed: snaps directly underneath body (offset 0), smaller (1.0x), dark & crisp (opacity 0.70)!
@@ -61,6 +85,10 @@ public struct InsectSpriteView: View {
             }
             .frame(width: 80 * speciesScale, height: 90 * speciesScale)
             .rotationEffect(.radians(insect.headingAngle))
+            .shadow(
+                color: isGlowTheme ? glowColor.opacity(isLanded ? 0.95 : 0.70) : .clear,
+                radius: isLanded ? 10 : 6
+            )
             
             // Boss Health Bar for Mutant Horsefly
             if showBossHealthBar && insect.type == .mutantHorsefly && insect.health > 0 {
@@ -78,6 +106,19 @@ public struct InsectSpriteView: View {
                 }
                 .offset(y: -50 * speciesScale)
             }
+        }
+    }
+    
+    private func bioluminescentColor(for type: InsectType) -> Color {
+        switch type {
+        case .housefly:
+            return Color(red: 0.35, green: 1.0, blue: 0.45) // Neon lime spark
+        case .mosquito:
+            return Color(red: 0.20, green: 0.95, blue: 1.0) // Electric cyan arc
+        case .mutantHorsefly:
+            return Color(red: 0.85, green: 0.35, blue: 1.0) // Radioactive magenta plasma
+        case .wasp:
+            return Color(red: 1.0, green: 0.75, blue: 0.15) // Warning golden amber flare
         }
     }
     

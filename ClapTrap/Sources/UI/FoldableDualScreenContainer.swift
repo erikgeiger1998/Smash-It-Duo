@@ -99,8 +99,8 @@ public struct FoldableDualScreenContainer: View {
         let foldProgress = (180.0 - foldSensor.hingeAngle) / 180.0
         
         ZStack {
-            // Full Edge-to-Edge Wooden Table Base to prevent any black bars
-            Color(red: 0.55, green: 0.33, blue: 0.16)
+            // Full Edge-to-Edge Theme Background Base to prevent any black bars
+            gameEngine.currentTheme.baseBackgroundColor
                 .edgesIgnoringSafeArea(.all)
                 .ignoresSafeArea()
             
@@ -111,7 +111,7 @@ public struct FoldableDualScreenContainer: View {
                 // LEFT SCREEN HALF
                 ZStack {
                     // Picnic Table & Left Content
-                    PicnicTableView(hingeAngle: foldSensor.hingeAngle)
+                    PicnicTableView(hingeAngle: foldSensor.hingeAngle, theme: gameEngine.currentTheme)
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: midX * 0.5)
                     
@@ -143,7 +143,7 @@ public struct FoldableDualScreenContainer: View {
                 // RIGHT SCREEN HALF
                 ZStack {
                     // Picnic Table & Right Content
-                    PicnicTableView(hingeAngle: foldSensor.hingeAngle)
+                    PicnicTableView(hingeAngle: foldSensor.hingeAngle, theme: gameEngine.currentTheme)
                         .frame(width: screenSize.width, height: screenSize.height)
                         .offset(x: -midX * 0.5)
                     

@@ -251,19 +251,19 @@ final class ClapTrapTests: XCTestCase {
     func testAllSpeciesReactionWindowFloorsMatchUserSpecification() {
         let engine = ClapTrapGameEngine.shared
         
-        // 1. Házi légy (Housefly): 3.6s ➔ 0.95s
+        // 1. Házi légy (Housefly): 3.6s -> 0.95s
         XCTAssertEqual(engine.calculateLandingWindow(for: .housefly, wave: 1), 3.60, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .housefly, wave: 100), 0.95, accuracy: 0.01)
         
-        // 2. Szúnyog (Mosquito): 2.6s ➔ 0.85s
+        // 2. Szúnyog (Mosquito): 2.6s -> 0.85s
         XCTAssertEqual(engine.calculateLandingWindow(for: .mosquito, wave: 1), 2.60, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .mosquito, wave: 100), 0.85, accuracy: 0.01)
         
-        // 3. Mutáns bögöly (Mutant Horsefly Boss): 3.4s ➔ 1.10s
+        // 3. Mutáns bögöly (Mutant Horsefly Boss): 3.4s -> 1.10s
         XCTAssertEqual(engine.calculateLandingWindow(for: .mutantHorsefly, wave: 1), 3.40, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .mutantHorsefly, wave: 100), 1.10, accuracy: 0.01)
         
-        // 4. Darázs (Yellowjacket Wasp Trap): 3.5s ➔ 2.20s
+        // 4. Darázs (Yellowjacket Wasp Trap): 3.5s -> 2.20s
         XCTAssertEqual(engine.calculateLandingWindow(for: .wasp, wave: 1), 3.50, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .wasp, wave: 100), 2.20, accuracy: 0.01)
     }
@@ -334,5 +334,37 @@ final class ClapTrapTests: XCTestCase {
         // When wasp timer expires:
         // Score must award +500 PTS patience bonus!
         XCTAssertEqual(InsectType.wasp.displayName, "Yellowjacket Wasp", "DisplayName should not contain (TRAP!)")
+    }
+    
+    func testAll11ThemesAreAvailableWithValidProperties() {
+        let allThemes = TableTheme.allCases
+        XCTAssertEqual(allThemes.count, 11, "Must have exactly 11 environment themes")
+        
+        for theme in allThemes {
+            XCTAssertFalse(theme.displayName.isEmpty, "\(theme) must have a non-empty display name")
+            XCTAssertFalse(theme.subtitle.isEmpty, "\(theme) must have a non-empty subtitle")
+            XCTAssertFalse(theme.icon.isEmpty, "\(theme) must have an SF Symbol icon")
+        }
+    }
+    
+    func testThemeSelectionAndPersistence() {
+        let engine = ClapTrapGameEngine.shared
+        
+        // Select Cyberpunk
+        engine.currentTheme = .cyberpunkNeon
+        XCTAssertEqual(engine.currentTheme, .cyberpunkNeon)
+        
+        let savedRaw = UserDefaults.standard.string(forKey: "ClapTrap_SelectedTheme_Key")
+        XCTAssertEqual(savedRaw, TableTheme.cyberpunkNeon.rawValue)
+        
+        // Reset to Classic Picnic
+        engine.currentTheme = .classicPicnic
+        XCTAssertEqual(engine.currentTheme, .classicPicnic)
+    }
+    
+    func testMidnightGlowEnablesBioluminescentLightningFlies() {
+        XCTAssertTrue(TableTheme.midnightGlow.isGlowInTheDark, "Midnight Glow must enable bioluminescent lightning bugs")
+        XCTAssertFalse(TableTheme.classicPicnic.isGlowInTheDark, "Classic Picnic should not be glow in the dark")
+        XCTAssertFalse(TableTheme.cyberpunkNeon.isGlowInTheDark, "Cyberpunk should not be glow in the dark")
     }
 }

@@ -175,10 +175,22 @@ public struct ExternalCoverScreenView: View {
                     .padding(.horizontal, 18)
                 }
                 
-                // Top Right Settings & Legenda Buttons (Cover Screen)
+                // Top Left Settings & Legenda Buttons (Cover Screen - safe from right camera cutout)
                 VStack {
                     HStack(spacing: 8) {
-                        Spacer()
+                        Button(action: {
+                            gameEngine.openMenu(tab: 0)
+                        }) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                                .padding(8)
+                                .background(
+                                    Circle()
+                                        .fill(Color.white.opacity(0.88))
+                                        .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                                )
+                        }
                         
                         Button(action: {
                             gameEngine.openMenu(tab: 2)
@@ -194,27 +206,15 @@ public struct ExternalCoverScreenView: View {
                             .padding(.vertical, 7)
                             .background(
                                 Capsule()
-                                    .fill(Color.white.opacity(0.85))
+                                    .fill(Color.white.opacity(0.88))
                                     .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
                             )
                         }
                         
-                        Button(action: {
-                            gameEngine.openMenu(tab: 0)
-                        }) {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                                .padding(8)
-                                .background(
-                                    Circle()
-                                        .fill(Color.white.opacity(0.85))
-                                        .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                                )
-                        }
+                        Spacer()
                     }
-                    .padding(.horizontal, 16)
-                    .padding(.top, isLandscape ? 8 : 14)
+                    .padding(.horizontal, 18)
+                    .padding(.top, isLandscape ? 10 : 16)
                     
                     Spacer()
                 }

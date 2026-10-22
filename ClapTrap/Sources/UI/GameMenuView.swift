@@ -12,7 +12,7 @@ public struct GameMenuView: View {
     
     let onDismiss: () -> Void
     
-    @State private var selectedTab: Int = 0 // 0: Settings, 1: How To Play, 2: Target Intel
+    @State private var selectedTab: Int = 0 // 0: Settings, 1: Themes, 2: Legenda, 3: Tutorial
     @State private var showResetScoreConfirm: Bool = false
     
     public init(initialTab: Int? = nil, onDismiss: @escaping () -> Void) {
@@ -57,12 +57,13 @@ public struct GameMenuView: View {
                 .padding(.bottom, 14)
                 
                 // MARK: - Segmented Navigation Bar
-                HStack(spacing: 8) {
+                HStack(spacing: 6) {
                     menuTabButton(title: "SETTINGS", icon: "gearshape.fill", index: 0)
-                    menuTabButton(title: "TUTORIAL", icon: "book.fill", index: 1)
+                    menuTabButton(title: "THEMES", icon: "paintpalette.fill", index: 1)
                     menuTabButton(title: "LEGENDA", icon: "scope", index: 2)
+                    menuTabButton(title: "TUTORIAL", icon: "book.fill", index: 3)
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
                 .padding(.bottom, 16)
                 
                 // MARK: - Tab Content
@@ -71,9 +72,11 @@ public struct GameMenuView: View {
                         if selectedTab == 0 {
                             settingsTabContent
                         } else if selectedTab == 1 {
-                            howToPlayTabContent
-                        } else {
+                            themesTabContent
+                        } else if selectedTab == 2 {
                             targetIntelTabContent
+                        } else {
+                            howToPlayTabContent
                         }
                         
                         // Safety Notice Card (Present in all tabs)
@@ -107,17 +110,19 @@ public struct GameMenuView: View {
             selectedTab = index
             soundEngine.triggerInsectLandingHaptic()
         }) {
-            HStack(spacing: 6) {
+            HStack(spacing: 4) {
                 Image(systemName: icon)
-                    .font(.system(size: 11, weight: .bold))
+                    .font(.system(size: 10, weight: .bold))
                 Text(title)
-                    .font(.system(size: 11, weight: .black, design: .monospaced))
+                    .font(.system(size: 9.5, weight: .black, design: .monospaced))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
             .foregroundColor(selectedTab == index ? .black : .white.opacity(0.75))
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 10)
+            .padding(.vertical, 8)
             .background(
-                RoundedRectangle(cornerRadius: 10)
+                RoundedRectangle(cornerRadius: 8)
                     .fill(selectedTab == index ? Color.yellow : Color.white.opacity(0.10))
             )
         }
@@ -302,7 +307,151 @@ public struct GameMenuView: View {
         }
     }
     
-    // MARK: - Tab 2: How To Play
+    // MARK: - Tab 1: Themes (Dynamic Environments)
+    private var themesTabContent: some View {
+        VStack(spacing: 14) {
+            // Header Info Card
+            HStack(spacing: 12) {
+                Image(systemName: "paintpalette.fill")
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(.yellow)
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("PLAYFIELD ENVIRONMENTS")
+                        .font(.system(size: 12, weight: .black, design: .monospaced))
+                        .foregroundColor(.white)
+                    
+                    Text("Choose between 11 procedural catching surfaces. Includes Glow-In-The-Dark with nocturnal lightning flies!")
+                        .font(.system(size: 10, weight: .regular, design: .rounded))
+                        .foregroundColor(.white.opacity(0.65))
+                }
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color.white.opacity(0.06))
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(Color.white.opacity(0.12), lineWidth: 1))
+            )
+            
+            // 11 Themes List
+            ForEach(TableTheme.allCases) { theme in
+                themeSelectionCard(theme: theme)
+            }
+        }
+    }
+    
+    private func themeSelectionCard(theme: TableTheme) -> some View {
+        let isEquipped = gameEngine.currentTheme == theme
+        let accent = theme.themeAccentColor
+        
+        return VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 12) {
+                // Theme Icon Badge
+                ZStack {
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(accent.opacity(0.2))
+                        .frame(width: 40, height: 40)
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(accent.opacity(0.6), lineWidth: 1))
+                    
+                    Image(systemName: theme.icon)
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(accent)
+                }
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 8) {
+                        Text(theme.displayName)
+                            .font(.system(size: 14, weight: .black, design: .rounded))
+                            .foregroundColor(.white)
+                        
+                        if theme.isGlowInTheDark {
+                            HStack(spacing: 3) {
+                                Image(systemName: "sparkles")
+                                    .font(.system(size: 8, weight: .bold))
+                                Text("LIGHTNING FLIES")
+                                    .font(.system(size: 8, weight: .black, design: .monospaced))
+                            }
+                            .foregroundColor(Color(red: 0.20, green: 1.0, blue: 0.60))
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 3)
+                            .background(
+                                Capsule()
+                                    .fill(Color(red: 0.20, green: 1.0, blue: 0.60).opacity(0.18))
+                                    .overlay(Capsule().stroke(Color(red: 0.20, green: 1.0, blue: 0.60).opacity(0.6), lineWidth: 0.8))
+                            )
+                        }
+                    }
+                    
+                    Text(theme.subtitle)
+                        .font(.system(size: 11, weight: .regular, design: .rounded))
+                        .foregroundColor(.white.opacity(0.65))
+                        .lineLimit(2)
+                }
+                
+                Spacer()
+            }
+            
+            // Live Procedural Canvas Preview Strip
+            PicnicTableView(hingeAngle: 180.0, theme: theme)
+                .frame(height: 52)
+                .cornerRadius(8)
+                .clipped()
+                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.18), lineWidth: 1))
+                .allowsHitTesting(false)
+            
+            // Equip Action Button
+            themeEquipButton(theme: theme, isEquipped: isEquipped, accent: accent)
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color(red: 0.11, green: 0.13, blue: 0.17).opacity(0.95))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            isEquipped ? accent.opacity(0.85) : Color.white.opacity(0.10),
+                            lineWidth: isEquipped ? 1.5 : 1
+                        )
+                )
+                .shadow(color: isEquipped ? accent.opacity(0.25) : .clear, radius: 8)
+        )
+    }
+    
+    private func themeEquipButton(theme: TableTheme, isEquipped: Bool, accent: Color) -> some View {
+        let btnBg = isEquipped ? accent : Color.white.opacity(0.10)
+        let btnBorder = isEquipped ? accent : Color.white.opacity(0.20)
+        let btnText = isEquipped ? "EQUIPPED" : "EQUIP SURFACE"
+        let btnIcon = isEquipped ? "checkmark.seal.fill" : "hand.tap.fill"
+        let btnColor: Color = isEquipped ? .black : .white
+        
+        return Button(action: {
+            guard !isEquipped else { return }
+            gameEngine.currentTheme = theme
+            soundEngine.triggerInsectLandingHaptic()
+            soundEngine.playUnfoldHingeSound()
+        }) {
+            HStack(spacing: 6) {
+                Image(systemName: btnIcon)
+                    .font(.system(size: 12, weight: .bold))
+                Text(btnText)
+                    .font(.system(size: 11, weight: .black, design: .monospaced))
+            }
+            .foregroundColor(btnColor)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 9)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(btnBg)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(btnBorder, lineWidth: 1)
+            )
+        }
+    }
+    
+    // MARK: - Tab 3: How To Play
     private var howToPlayTabContent: some View {
         VStack(spacing: 12) {
             instructionStepRow(

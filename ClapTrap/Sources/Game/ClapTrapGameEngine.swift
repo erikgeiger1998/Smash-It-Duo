@@ -97,11 +97,22 @@ public final class ClapTrapGameEngine: ObservableObject {
     private var bezierControl2: CGPoint = .zero
     private var bezierEnd: CGPoint = .zero
     
-    // Persistence Key
+    // Persistence Keys
     private let highScoreKey = "ClapTrap_HighScore_Key"
+    private let themeKey = "ClapTrap_SelectedTheme_Key"
+    
+    @Published public var currentTheme: TableTheme = .classicPicnic {
+        didSet {
+            UserDefaults.standard.set(currentTheme.rawValue, forKey: themeKey)
+        }
+    }
     
     private init() {
         self.highScore = UserDefaults.standard.integer(forKey: highScoreKey)
+        if let savedThemeRaw = UserDefaults.standard.string(forKey: themeKey),
+           let theme = TableTheme(rawValue: savedThemeRaw) {
+            self.currentTheme = theme
+        }
         setupSubscriptions()
     }
     

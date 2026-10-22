@@ -21,6 +21,7 @@
 		C696C590B8EA8493FFAE297A /* ClapTrapGameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */; };
 		C6E8945C035EFBD4789050AA /* ClapTrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */; };
 		D00B17036A6991415F8C8167 /* ProceduralSoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C26F77A91B4FC2ABB08FD3 /* ProceduralSoundEngine.swift */; };
+		D6ADCBDCF06818031EFF879B /* TableTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7604DF7C4D6F8DA223389F /* TableTheme.swift */; };
 		DDBF9C8119DF945349631388 /* ClapTrapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */; };
 		EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */; };
 /* End PBXBuildFile section */
@@ -42,6 +43,7 @@
 		367AB1BB3091EDC3887FF7C0 /* FoldSensorManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldSensorManager.swift; sourceTree = "<group>"; };
 		37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapApp.swift; sourceTree = "<group>"; };
 		3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrackedGlassOverlay.swift; sourceTree = "<group>"; };
+		3C7604DF7C4D6F8DA223389F /* TableTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTheme.swift; sourceTree = "<group>"; };
 		3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalCoverScreenView.swift; sourceTree = "<group>"; };
 		4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatermelonBaitView.swift; sourceTree = "<group>"; };
 		6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapTests.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			children = (
 				AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */,
 				D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */,
+				3C7604DF7C4D6F8DA223389F /* TableTheme.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */,
 				D00B17036A6991415F8C8167 /* ProceduralSoundEngine.swift in Sources */,
 				6D68B4F86C1D7A8CEE26D813 /* SplatView.swift in Sources */,
+				D6ADCBDCF06818031EFF879B /* TableTheme.swift in Sources */,
 				EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
