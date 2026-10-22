@@ -182,51 +182,41 @@ public struct ExternalCoverScreenView: View {
                     .padding(.horizontal, 18)
                 }
                 
-                // 3. VERTICAL UTILITY BUTTONS (Directly under the top-right camera icon)
-                VStack(alignment: .trailing, spacing: 8) {
+                // 3. VERTICAL UTILITY BUTTONS (Directly under the top-right camera icon - clean circular arcade icons)
+                VStack(spacing: 10) {
                     // 1. LEGEND / BESTIARY GUIDE BUTTON
                     Button(action: {
                         gameEngine.openMenu(tab: 2)
                     }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "scope")
-                                .font(.system(size: 11, weight: .bold))
-                            Text("LEGEND")
-                                .font(.system(size: 8.5, weight: .black, design: .monospaced))
-                        }
-                        .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 6)
-                        .background(
-                            Capsule()
-                                .fill(Color.white.opacity(0.88))
-                                .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                        )
+                        Image(systemName: "scope")
+                            .font(.system(size: 19, weight: .bold))
+                            .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                            .frame(width: 42, height: 42)
+                            .background(
+                                Circle()
+                                    .fill(Color.white.opacity(0.92))
+                                    .shadow(color: .black.opacity(0.20), radius: 5, y: 1.5)
+                            )
                     }
                     
                     // 2. SETTINGS BUTTON
                     Button(action: {
                         gameEngine.openMenu(tab: 0)
                     }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "gearshape.fill")
-                                .font(.system(size: 11, weight: .bold))
-                            Text("SETTINGS")
-                                .font(.system(size: 8.5, weight: .black, design: .monospaced))
-                        }
-                        .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 6)
-                        .background(
-                            Capsule()
-                                .fill(Color.white.opacity(0.88))
-                                .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
-                        )
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 19, weight: .bold))
+                            .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                            .frame(width: 42, height: 42)
+                            .background(
+                                Circle()
+                                    .fill(Color.white.opacity(0.92))
+                                    .shadow(color: .black.opacity(0.20), radius: 5, y: 1.5)
+                            )
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
-                .padding(.trailing, 12)
-                .padding(.top, isLandscape ? 16 : 48)
+                .padding(.trailing, 14)
+                .padding(.top, isLandscape ? 24 : 76)
             }
             .onAppear {
                 startCartoonAnimations()
