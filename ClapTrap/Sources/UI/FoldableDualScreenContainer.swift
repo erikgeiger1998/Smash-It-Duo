@@ -18,12 +18,13 @@ public struct FoldableDualScreenContainer: View {
         GeometryReader { proxy in
             let screenSize = proxy.size
             let isExternalCoverScreen = (screenSize.width / screenSize.height) < 0.70
+            let isClosedOrCover = isExternalCoverScreen || foldSensor.isClosed
             
             Group {
-                if isExternalCoverScreen {
+                if isClosedOrCover {
                     // 1. EXTERNAL COVER SCREEN (Phone Closed)
                     // The game NEVER runs on this cover screen under any circumstance.
-                    // Strictly shows the trapped buzzing fly and prompts player to unfold.
+                    // Strictly shows whether the fly was trapped or escaped, and prompts player to unfold.
                     ExternalCoverScreenView()
                         .edgesIgnoringSafeArea(.all)
                 } else {

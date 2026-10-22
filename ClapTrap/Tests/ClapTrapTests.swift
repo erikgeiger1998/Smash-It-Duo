@@ -112,6 +112,56 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(landscapeRatio, 0.70, "Landscape dual screen ratio must be >= 0.70")
     }
     
+    func testSwatMissCausesGameOverAndOpeningHingeRestarts() {
+        let engine = ClapTrapGameEngine.shared
+        let sensor = FoldSensorManager.shared
+        sensor.reopenFlat()
+        
+        engine.startGame()
+        XCTAssertEqual(engine.gameState, .hunting)
+        
+        // Ensure active insect is flying (not landed)
+        engine.activeInsect?.state = .flying
+        
+        // User claps phone shut while insect is flying (whiff / missed!)
+        sensor.simulateSlamShut(velocity: 800.0)
+        
+        // Did not trap fly -> GAME OVER!
+        XCTAssertEqual(engine.gameState, .gameOver)
+        XCTAssertEqual(engine.lastOutcome?.hit, false)
+        
+        // Opening hinge starts new game!
+        engine.handleDeviceUnfolded()
+        XCTAssertEqual(engine.gameState, .hunting)
+        XCTAssertEqual(engine.currentWave, 1)
+        XCTAssertEqual(engine.score, 0)
+    }
+    
+    func testSwatHitTrapsFlyAndOpeningHingeAdvancesWave() {
+        let engine = ClapTrapGameEngine.shared
+        let sensor = FoldSensorManager.shared
+        sensor.reopenFlat()
+        
+        engine.startGame()
+        XCTAssertEqual(engine.currentWave, 1)
+        
+        // Insect lands
+        engine.activeInsect?.state = .landed
+        engine.gameState = .landed
+        
+        // User claps phone shut -> SUCCESSFUL SWAT!
+        sensor.simulateSlamShut(velocity: 950.0)
+        
+        // Trapped the fly!
+        XCTAssertEqual(engine.lastOutcome?.hit, true)
+        XCTAssertGreaterThan(engine.score, 0)
+        
+        // Opening hinge advances to next wave!
+        engine.handleDeviceUnfolded()
+        XCTAssertEqual(engine.gameState, .hunting)
+        XCTAssertEqual(engine.currentWave, 2)
+    }
+    
     func testProceduralAudioSynthesizerSafety() {
         let soundEngine = ProceduralSoundEngine.shared
         

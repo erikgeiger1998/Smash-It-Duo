@@ -185,6 +185,7 @@ public final class FoldSensorManager: ObservableObject {
     }
     
     private func scheduleAutoReopen(after seconds: Double) {
+        guard ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] == nil else { return }
         reopenTimer?.invalidate()
         reopenTimer = Timer.scheduledTimer(withTimeInterval: seconds, repeats: false) { [weak self] _ in
             self?.reopenFlat()
@@ -253,6 +254,7 @@ public final class FoldSensorManager: ObservableObject {
     
     /// Trigger slam shut with specified velocity (for unit tests and sensors)
     public func simulateSlamShut(velocity: Double = 1450.0) {
+        self.isClosed = false
         triggerHardwareSlamShut(velocity: velocity)
     }
     

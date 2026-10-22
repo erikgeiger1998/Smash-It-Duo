@@ -97,7 +97,11 @@ public final class ClapTrapGameEngine: ObservableObject {
     /// Triggered automatically when the physical foldable phone is opened from the cover screen
     public func handleDeviceUnfolded() {
         soundEngine.playUnfoldHingeSound()
-        if gameState == .menu || gameState == .gameOver {
+        if gameState == .gameOver {
+            startGame()
+        } else if let outcome = lastOutcome, outcome.hit {
+            advanceToNextWave()
+        } else if gameState == .menu {
             startGame()
         }
     }
@@ -509,8 +513,9 @@ public final class ClapTrapGameEngine: ObservableObject {
     
     private func handleWaspStungOutcome(velocity: Double, reactionMs: Int) {
         soundEngine.playStingSound()
-        self.lives -= 1
+        self.lives = 0
         self.streak = 0
+        self.gameState = .gameOver
         
         self.lastOutcome = SwatOutcome(
             hit: false,
@@ -524,10 +529,6 @@ public final class ClapTrapGameEngine: ObservableObject {
             isStung: true,
             isBossDamagedOnly: false
         )
-        
-        if lives <= 0 {
-            self.gameState = .gameOver
-        }
     }
     
     private func handleBossDamagedOutcome(velocity: Double) {
@@ -555,6 +556,8 @@ public final class ClapTrapGameEngine: ObservableObject {
     private func handleAirWhiffOutcome(velocity: Double) {
         soundEngine.playWhiffSound()
         self.streak = 0
+        self.lives = 0
+        self.gameState = .gameOver
         
         let mockingMessages = [
             "Too slow! You just clapped your $2,000 phone for nothing.",
@@ -598,6 +601,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     }
     
     public func advanceToNextWave() {
+        self.lastOutcome = nil
         self.currentWave += 1
         self.gameState = .hunting
         startWave()
