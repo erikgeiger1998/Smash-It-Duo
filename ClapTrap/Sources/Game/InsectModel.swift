@@ -13,8 +13,8 @@ public enum InsectType: String, CaseIterable, Identifiable {
         switch self {
         case .housefly: return "Common Housefly"
         case .mosquito: return "Stealth Mosquito"
-        case .mutantHorsefly: return "Mutant Horsefly (BOSS)"
-        case .wasp: return "Yellowjacket Wasp (TRAP!)"
+        case .mutantHorsefly: return "Mutant Horsefly"
+        case .wasp: return "Yellowjacket Wasp"
         }
     }
     

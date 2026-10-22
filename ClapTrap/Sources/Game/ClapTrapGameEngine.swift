@@ -44,6 +44,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     @Published public var isSpongeWiping: Bool = false
     @Published public var isGameMenuPresented: Bool = false
     @Published public var menuInitialTab: Int = 0
+    @Published public var patienceSuccessBanner: Bool = false
     
     public func openMenu(tab: Int = 0) {
         self.menuInitialTab = tab
@@ -203,6 +204,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     
     private func updateFrame(dt: Double) {
         guard var insect = activeInsect else { return }
+        let currentInsectId = insect.id
         
         switch insect.state {
         case .flying:
@@ -214,11 +216,17 @@ public final class ClapTrapGameEngine: ObservableObject {
         case .landed:
             updateLandedInsect(&insect, dt: dt)
             
-        case .escaped, .swatted:
+        case .escaped:
+            updateEscapingInsect(&insect, dt: dt)
+            
+        case .swatted:
             break
         }
         
-        self.activeInsect = insect
+        // Only update activeInsect if it hasn't been replaced by an advanceToNextWave / new wave spawn
+        if self.activeInsect?.id == currentInsectId {
+            self.activeInsect = insect
+        }
     }
     
     // MARK: - Flight Physics & Bezier Navigation across Dual Screen
@@ -395,32 +403,49 @@ public final class ClapTrapGameEngine: ObservableObject {
             let patienceBonus = 500
             self.score += patienceBonus
             self.streak += 1
+            self.patienceSuccessBanner = true
             
-            self.lastOutcome = SwatOutcome(
-                hit: true,
-                insectType: .wasp,
-                reactionTimeMs: 0,
-                slamVelocity: 0,
-                isMach2: false,
-                pointsEarned: patienceBonus,
-                praiseText: "PATIENCE MASTER!",
-                mockingText: "You wisely avoided the wasp stinger!",
-                isStung: false,
-                isBossDamagedOnly: false
-            )
-            advanceToNextWave()
+            // Wasp starts flying away! updateEscapingInsect will smoothly fly it up
+            // and off the screen, then automatically advanceToNextWave()!
         } else {
-            // Normal insect escaped!
+            // Normal insect escaped because player was too slow to fold!
             insect.state = .escaped
             soundEngine.playWhiffSound()
             self.streak = 0
             
-            // Fly takes off again!
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
-                guard let self = self, self.gameState == .landed else { return }
-                self.gameState = .hunting
-                self.startWave()
-            }
+            // Fly takes off and updateEscapingInsect flies it away, then starts next wave!
+        }
+    }
+    
+    private func updateEscapingInsect(_ insect: inout ActiveInsect, dt: Double) {
+        // Wings flutter rapidly as insect flees
+        insect.wingFlutterPhase += dt * 65.0
+        
+        // Lift off into the air
+        insect.altitude = min(1.0, insect.altitude + dt * 2.5)
+        
+        // Fly swiftly up and away off the top of the screen
+        insect.position.y -= CGFloat(dt * 420.0)
+        insect.headingAngle = 0.0 // Facing North / upward
+        
+        // Spatial audio buzzing fades away as it escapes
+        if insect.position.y > -40.0 {
+            let normX = Float((insect.position.x - hingeX) / (dualScreenSize.width / 2.0))
+            soundEngine.updateInsectSpatialBuzz(
+                normalizedX: normX,
+                altitude: Float(insect.altitude),
+                insectType: insect.type,
+                active: true
+            )
+        }
+        
+        // When completely off the top of the screen:
+        if insect.position.y < -60.0 {
+            soundEngine.stopBuzz()
+            self.patienceSuccessBanner = false
+            
+            // Fly is gone! Automatically advance to the next wave!
+            self.advanceToNextWave()
         }
     }
     

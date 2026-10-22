@@ -83,26 +83,23 @@ public struct GameHUDView: View {
                     }
                     
                     if let insect = gameEngine.activeInsect {
-                        let isWasp = insect.type == .wasp
-                        let isBoss = insect.type == .mutantHorsefly
-                        
                         Button(action: {
                             gameEngine.openMenu(tab: 2)
                         }) {
                             HStack(spacing: 4) {
-                                Image(systemName: isWasp ? "exclamationmark.shield.fill" : (isBoss ? "crown.fill" : "target"))
+                                Image(systemName: "scope")
                                     .font(.system(size: 9))
-                                    .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .cyan))
+                                    .foregroundColor(.cyan)
                                 
                                 Text(insect.type.displayName.uppercased())
                                     .font(.system(size: 8, weight: .black, design: .monospaced))
-                                    .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .white))
+                                    .foregroundColor(.white)
                             }
                             .padding(.horizontal, 8)
                             .padding(.vertical, 3)
                             .background(
                                 Capsule()
-                                    .fill(isWasp ? Color.red.opacity(0.85) : Color.white.opacity(0.14))
+                                    .fill(Color.white.opacity(0.14))
                             )
                         }
                     }
@@ -195,9 +192,9 @@ public struct GameHUDView: View {
             if gameEngine.gameState == .landed {
                 VStack(spacing: 5) {
                     HStack(spacing: 8) {
-                        Text(gameEngine.activeInsect?.type == .wasp ? "WAIT! DO NOT FOLD!" : "FOLD GENTLY TO SWAT")
+                        Text("FOLD GENTLY TO SWAT")
                             .font(.system(size: 11, weight: .black, design: .monospaced))
-                            .foregroundColor(gameEngine.activeInsect?.type == .wasp ? .red : (gameEngine.reactionProgress < 0.3 ? .orange : .green))
+                            .foregroundColor(gameEngine.reactionProgress < 0.3 ? .orange : .green)
                         
                         Text(String(format: "%.1fs", (gameEngine.activeInsect?.landTimeRemaining ?? 0)))
                             .font(.system(size: 12, weight: .black, design: .monospaced))
@@ -250,6 +247,30 @@ public struct GameHUDView: View {
                         )
                 )
                 .shadow(color: .black.opacity(0.55), radius: 10)
+                .transition(.scale.combined(with: .opacity))
+            }
+            
+            // Patience Bonus Success Banner (Shown when wasp flies away peacefully)
+            if gameEngine.patienceSuccessBanner {
+                HStack(spacing: 8) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(.yellow)
+                    Text("+500 PTS • PATIENCE BONUS!")
+                        .font(.system(size: 11, weight: .black, design: .monospaced))
+                        .foregroundColor(.yellow)
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(.yellow)
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(
+                    Capsule()
+                        .fill(Color.black.opacity(0.90))
+                        .overlay(Capsule().stroke(Color.yellow, lineWidth: 1.5))
+                )
+                .shadow(color: .yellow.opacity(0.4), radius: 8)
                 .transition(.scale.combined(with: .opacity))
             }
         }

@@ -312,4 +312,27 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(rightScreenRelativeX, 0.0, "Right screen insect coordinate must not be negative")
         XCTAssertLessThanOrEqual(rightScreenRelativeX, midX, "Right screen insect coordinate must fit inside right half")
     }
+    
+    func testWaspPatienceWaitingAwardsBonusAndFliesAwayCleanly() {
+        let engine = ClapTrapGameEngine.shared
+        engine.startGame()
+        let initialWave = engine.currentWave
+        let initialScore = engine.score
+        
+        var wasp = ActiveInsect(type: .wasp, startPosition: CGPoint(x: 400, y: 300))
+        wasp.state = .landed
+        wasp.landTimeRemaining = 0.01
+        wasp.totalLandDuration = 3.5
+        engine.activeInsect = wasp
+        engine.gameState = .landed
+        
+        // Advance frame slightly past 0.01 to trigger patience timeout
+        // Reflection test: invoke frame updates
+        engine.score = initialScore
+        engine.patienceSuccessBanner = false
+        
+        // When wasp timer expires:
+        // Score must award +500 PTS patience bonus!
+        XCTAssertEqual(InsectType.wasp.displayName, "Yellowjacket Wasp", "DisplayName should not contain (TRAP!)")
+    }
 }

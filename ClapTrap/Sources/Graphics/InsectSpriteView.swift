@@ -64,26 +64,19 @@ public struct InsectSpriteView: View {
             
             // Boss Health Bar for Mutant Horsefly
             if showBossHealthBar && insect.type == .mutantHorsefly && insect.health > 0 {
-                VStack(spacing: 2) {
-                    Text("BOSS: 2 CLAPS NEEDED")
-                        .font(.system(size: 9, weight: .black, design: .monospaced))
-                        .foregroundColor(.yellow)
-                        .shadow(color: .black, radius: 2)
-                    
-                    HStack(spacing: 3) {
-                        ForEach(0..<insect.maxHealth, id: \.self) { idx in
-                            Rectangle()
-                                .fill(idx < insect.health ? Color.red : Color.gray.opacity(0.5))
-                                .frame(width: 22, height: 5)
-                                .cornerRadius(2)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 2)
-                                        .stroke(Color.white.opacity(0.8), lineWidth: 0.8)
-                                )
-                        }
+                HStack(spacing: 3) {
+                    ForEach(0..<insect.maxHealth, id: \.self) { idx in
+                        Rectangle()
+                            .fill(idx < insect.health ? Color.red : Color.gray.opacity(0.5))
+                            .frame(width: 22, height: 5)
+                            .cornerRadius(2)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 2)
+                                    .stroke(Color.white.opacity(0.8), lineWidth: 0.8)
+                            )
                     }
                 }
-                .offset(y: -55 * speciesScale)
+                .offset(y: -50 * speciesScale)
             }
         }
     }
