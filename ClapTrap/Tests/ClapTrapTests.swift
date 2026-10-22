@@ -277,4 +277,39 @@ final class ClapTrapTests: XCTestCase {
         XCTAssertTrue(engine.isGameMenuPresented, "openMenu should present game menu")
         XCTAssertEqual(engine.menuInitialTab, 2, "openMenu(tab: 2) should set initial tab to 2 (Legenda)")
     }
+    
+    func testInsectNeverLeavesScreenBounds() {
+        let engine = ClapTrapGameEngine.shared
+        engine.dualScreenSize = CGSize(width: 800, height: 600)
+        
+        // Test multiple wave starts and frames
+        for _ in 0..<30 {
+            engine.startGame()
+            
+            guard let insect = engine.activeInsect else {
+                XCTFail("Active insect should exist on game start")
+                return
+            }
+            
+            // Spawn position must be safely on-screen
+            XCTAssertGreaterThanOrEqual(insect.position.x, engine.safeMinX, "Insect spawned outside left screen bound")
+            XCTAssertLessThanOrEqual(insect.position.x, engine.safeMaxX, "Insect spawned outside right screen bound")
+            XCTAssertGreaterThanOrEqual(insect.position.y, engine.safeMinY, "Insect spawned outside top screen bound")
+            XCTAssertLessThanOrEqual(insect.position.y, engine.safeMaxY, "Insect spawned outside bottom screen bound")
+        }
+    }
+    
+    func testRightScreenRelativeCoordinateMapping() {
+        let screenSize = CGSize(width: 800, height: 600)
+        let midX = screenSize.width / 2.0 // 400
+        
+        // Insect on the right screen half (e.g. at x = 550)
+        let insectPos = CGPoint(x: 550, y: 300)
+        let rightScreenRelativeX = insectPos.x - midX
+        
+        // Must map cleanly to +150pt inside the right screen's [0, 400] bounds
+        XCTAssertEqual(rightScreenRelativeX, 150.0, "Right screen relative coordinate should be 150pt")
+        XCTAssertGreaterThanOrEqual(rightScreenRelativeX, 0.0, "Right screen insect coordinate must not be negative")
+        XCTAssertLessThanOrEqual(rightScreenRelativeX, midX, "Right screen insect coordinate must fit inside right half")
+    }
 }

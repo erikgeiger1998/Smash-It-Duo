@@ -54,12 +54,33 @@ public final class ClapTrapGameEngine: ObservableObject {
     @Published public var reactionProgress: Double = 1.0
     
     // Screen geometry cache
-    public var dualScreenSize: CGSize = CGSize(width: 390, height: 844) {
+    public var dualScreenSize: CGSize = CGSize(width: 800, height: 600) {
         didSet {
             hingeX = dualScreenSize.width / 2.0
         }
     }
-    public var hingeX: CGFloat = 195.0
+    public var hingeX: CGFloat = 400.0
+    
+    // MARK: - Safe Playfield Boundaries (Prevents insects from ever leaving or landing outside the screen)
+    public var safeMinX: CGFloat {
+        // Safe clearance from left screen bezel and checkered cloth edge (runner ends at x = 80)
+        return 90.0
+    }
+    
+    public var safeMaxX: CGFloat {
+        // Safe clearance from right screen bezel
+        return max(safeMinX + 120.0, dualScreenSize.width - 90.0)
+    }
+    
+    public var safeMinY: CGFloat {
+        // Safe clearance beneath the top cockpit HUD console
+        return 145.0
+    }
+    
+    public var safeMaxY: CGFloat {
+        // Safe clearance above the bottom screen bezel
+        return max(safeMinY + 120.0, dualScreenSize.height - 110.0)
+    }
     
     // MARK: - Dependencies & Subscriptions
     private let soundEngine = ProceduralSoundEngine.shared
@@ -145,10 +166,11 @@ public final class ClapTrapGameEngine: ObservableObject {
     private func startWave() {
         let insectType = determineInsectForWave(currentWave)
         
-        // Pick a spawn point near screen boundary
+        // Pick a spawn point well within the safe screen boundaries
+        // Alternating between left screen and right screen!
         let spawnLeft = Bool.random()
-        let startX: CGFloat = spawnLeft ? 30.0 : dualScreenSize.width - 30.0
-        let startY: CGFloat = CGFloat.random(in: 120.0...(dualScreenSize.height - 180.0))
+        let startX: CGFloat = spawnLeft ? safeMinX + 15.0 : safeMaxX - 15.0
+        let startY: CGFloat = CGFloat.random(in: safeMinY...safeMaxY)
         let startPos = CGPoint(x: startX, y: startY)
         
         var insect = ActiveInsect(type: insectType, startPosition: startPos)
@@ -230,7 +252,9 @@ public final class ClapTrapGameEngine: ObservableObject {
             insect.headingAngle = atan2(dy, dx) + .pi / 2.0
         }
         
-        insect.position = newPos
+        // Strict boundary clamp so the insect NEVER leaves or extends outside the screen
+        insect.position.x = min(safeMaxX, max(safeMinX, newPos.x))
+        insect.position.y = min(safeMaxY, max(safeMinY, newPos.y))
         insect.altitude = 1.0
         
         // Spatial 3D Stereo Audio Buzzing update
@@ -254,16 +278,20 @@ public final class ClapTrapGameEngine: ObservableObject {
         insect.state = .descending
         
         // 60% chance to land right around the watermelon bait near the hinge!
-        let landNearBait = Double.random(in: 0...1) < 0.65
+        let landNearBait = Double.random(in: 0...1) < 0.60
         let landX: CGFloat
         let landY: CGFloat
         
         if landNearBait {
-            landX = hingeX + CGFloat.random(in: -70...70)
-            landY = (dualScreenSize.height * 0.55) + CGFloat.random(in: -60...60)
+            // Clustered around the juicy watermelon bait at (hingeX - 8, height * 0.52)
+            let baitX = hingeX - 8.0
+            let baitY = dualScreenSize.height * 0.52
+            landX = min(safeMaxX, max(safeMinX, baitX + CGFloat.random(in: -65...65)))
+            landY = min(safeMaxY, max(safeMinY, baitY + CGFloat.random(in: -45...45)))
         } else {
-            landX = CGFloat.random(in: 60...(dualScreenSize.width - 60))
-            landY = CGFloat.random(in: 150...(dualScreenSize.height - 200))
+            // Or landed safely on the warm wooden table planks on either left or right screen!
+            landX = CGFloat.random(in: safeMinX...safeMaxX)
+            landY = CGFloat.random(in: safeMinY...safeMaxY)
         }
         
         insect.targetPosition = CGPoint(x: landX, y: landY)
@@ -281,6 +309,9 @@ public final class ClapTrapGameEngine: ObservableObject {
         if dist > 3.0 {
             insect.position.x += dx * CGFloat(dt * 3.5)
             insect.position.y += dy * CGFloat(dt * 3.5)
+            // Clamp position so descent stays strictly within screen
+            insect.position.x = min(safeMaxX, max(safeMinX, insect.position.x))
+            insect.position.y = min(safeMaxY, max(safeMinY, insect.position.y))
             insect.altitude = max(0.0, insect.altitude - dt * 1.4)
             
             let normX = Float((insect.position.x - hingeX) / (dualScreenSize.width / 2.0))
@@ -330,12 +361,12 @@ public final class ClapTrapGameEngine: ObservableObject {
         // Fly is landed: wings stop fluttering, front legs rub together!
         insect.legRubPhase += dt * 16.0
         
-        // Subtle walking steps
+        // Subtle walking steps - strictly clamped so landed insect never creeps off the screen
         insect.walkStepPhase += dt * 4.0
         let jitterX = cos(insect.walkStepPhase) * 0.3
         let jitterY = sin(insect.walkStepPhase) * 0.3
-        insect.position.x += jitterX
-        insect.position.y += jitterY
+        insect.position.x = min(safeMaxX, max(safeMinX, insect.position.x + jitterX))
+        insect.position.y = min(safeMaxY, max(safeMinY, insect.position.y + jitterY))
         
         insect.timeElapsedSinceLanding += dt
         insect.landTimeRemaining -= dt
@@ -398,22 +429,41 @@ public final class ClapTrapGameEngine: ObservableObject {
     private func generateNextBezierFlightSegment(from start: CGPoint) {
         bezierStart = start
         
-        // Target random point in the playable area
-        let endX = CGFloat.random(in: 40...(dualScreenSize.width - 40))
-        let endY = CGFloat.random(in: 120...(dualScreenSize.height - 160))
+        // Dynamic Screen-Crossing Flight:
+        // 75% chance to cross the central hinge to fly over to the opposite screen half!
+        let shouldCrossHinge = Double.random(in: 0...1) < 0.75
+        let endX: CGFloat
+        
+        if shouldCrossHinge {
+            if start.x < hingeX {
+                // Fly from Left Screen over to the Right Screen!
+                let rightMin = min(safeMaxX - 20.0, hingeX + 40.0)
+                endX = CGFloat.random(in: rightMin...safeMaxX)
+            } else {
+                // Fly from Right Screen over to the Left Screen!
+                let leftMax = max(safeMinX + 20.0, hingeX - 40.0)
+                endX = CGFloat.random(in: safeMinX...leftMax)
+            }
+        } else {
+            // Dynamic wander across the whole safe dual-screen playfield
+            endX = CGFloat.random(in: safeMinX...safeMaxX)
+        }
+        
+        let endY = CGFloat.random(in: safeMinY...safeMaxY)
         bezierEnd = CGPoint(x: endX, y: endY)
         
-        // Organic wandering control points
-        let midX = (start.x + endX) / 2.0
+        // Organic wandering control points - STRICTLY clamped inside safe bounds!
+        let segMidX = (start.x + endX) / 2.0
+        let jitterX: CGFloat = min(120.0, (safeMaxX - safeMinX) * 0.3)
+        let jitterY: CGFloat = 90.0
         
-        let jitter: CGFloat = 140.0
         bezierControl1 = CGPoint(
-            x: midX + CGFloat.random(in: -jitter...jitter),
-            y: min(dualScreenSize.height - 80, max(80, start.y + CGFloat.random(in: -jitter...jitter)))
+            x: min(safeMaxX, max(safeMinX, segMidX + CGFloat.random(in: -jitterX...jitterX))),
+            y: min(safeMaxY, max(safeMinY, start.y + CGFloat.random(in: -jitterY...jitterY)))
         )
         bezierControl2 = CGPoint(
-            x: midX + CGFloat.random(in: -jitter...jitter),
-            y: min(dualScreenSize.height - 80, max(80, endY + CGFloat.random(in: -jitter...jitter)))
+            x: min(safeMaxX, max(safeMinX, segMidX + CGFloat.random(in: -jitterX...jitterX))),
+            y: min(safeMaxY, max(safeMinY, endY + CGFloat.random(in: -jitterY...jitterY)))
         )
     }
     

@@ -157,10 +157,9 @@ public struct FoldableDualScreenContainer: View {
                             .offset(x: -midX)
                     }
                     
-                    // Active Insect
+                    // Active Insect (Right Screen Half)
                     if let insect = gameEngine.activeInsect, insect.state != .swatted {
                         InsectSpriteView(insect: insect)
-                            .offset(x: -midX)
                             .position(x: insect.position.x - midX, y: insect.position.y)
                     }
                 }
