@@ -16,6 +16,7 @@
 		83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */; };
 		96B8F07FA8CE3CB1A118EE0F /* InsectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */; };
 		A329F559D1CF1C59A62E38C4 /* InsectSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00AF97AE824E64D191B464E /* InsectSpriteView.swift */; };
+		A3FE92088BAFD51C4DBFE383 /* GameMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECEF04529C6DC1226CA68D6 /* GameMenuView.swift */; };
 		A6AEBEAD8D7E9D050A2ECD66 /* CleanSpongeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB67D5E17789FC36D055840A /* CleanSpongeView.swift */; };
 		C696C590B8EA8493FFAE297A /* ClapTrapGameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */; };
 		C6E8945C035EFBD4789050AA /* ClapTrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */; };
@@ -49,6 +50,7 @@
 		A00AF97AE824E64D191B464E /* InsectSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectSpriteView.swift; sourceTree = "<group>"; };
 		AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapGameEngine.swift; sourceTree = "<group>"; };
 		AB67D5E17789FC36D055840A /* CleanSpongeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanSpongeView.swift; sourceTree = "<group>"; };
+		AECEF04529C6DC1226CA68D6 /* GameMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenuView.swift; sourceTree = "<group>"; };
 		B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHUDView.swift; sourceTree = "<group>"; };
 		D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectModel.swift; sourceTree = "<group>"; };
 		F665D37E67E0E4903D753790 /* ClapTrapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClapTrapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +106,7 @@
 				3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */,
 				21C72873ACC3DAC80B4B6ED0 /* FoldableDualScreenContainer.swift */,
 				B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */,
+				AECEF04529C6DC1226CA68D6 /* GameMenuView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -242,6 +245,7 @@
 				572C68238BD7E3F7B9A47E43 /* FoldSensorManager.swift in Sources */,
 				35504864CCF26C7A9396F533 /* FoldableDualScreenContainer.swift in Sources */,
 				37F54365E59F3BCA1E1915A4 /* GameHUDView.swift in Sources */,
+				A3FE92088BAFD51C4DBFE383 /* GameMenuView.swift in Sources */,
 				96B8F07FA8CE3CB1A118EE0F /* InsectModel.swift in Sources */,
 				A329F559D1CF1C59A62E38C4 /* InsectSpriteView.swift in Sources */,
 				83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */,

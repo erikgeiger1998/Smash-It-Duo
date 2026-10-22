@@ -22,14 +22,14 @@ public struct ExternalCoverScreenView: View {
     @State private var wingFlapPhase: Bool = false
     
     private let funnyQuips = [
-        "Mmm... tasty phone screen! 🍉",
-        "Bet you can't squish me! 😜",
-        "Fold gently! Don't break your screen! 📱",
-        "Open the phone if you dare! 🪰",
-        "Free crumbs! Don't mind if I do! 🍰",
-        "Close smoothly — no need to slam! 🍉",
-        "Too slow for my 360° vision! 👀",
-        "Save your hinges, fold calmly! ⚠️"
+        "Mmm... tasty picnic treat!",
+        "Bet you cannot squish me!",
+        "Fold gently, protect your screen!",
+        "Open the phone if you dare!",
+        "Free crumbs! Do not mind if I do!",
+        "Close smoothly, no need to slam!",
+        "Too swift for two hands!",
+        "Save your hinges, fold calmly!"
     ]
     
     public init() {}
@@ -174,6 +174,30 @@ public struct ExternalCoverScreenView: View {
                     }
                     .padding(.horizontal, 18)
                 }
+                
+                // Top Right Settings Button (Cover Screen)
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            gameEngine.isGameMenuPresented = true
+                        }) {
+                            Image(systemName: "gearshape.fill")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
+                                .padding(8)
+                                .background(
+                                    Circle()
+                                        .fill(Color.white.opacity(0.78))
+                                        .shadow(color: .black.opacity(0.18), radius: 4, y: 1)
+                                )
+                        }
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, isLandscape ? 8 : 14)
+                    
+                    Spacer()
+                }
             }
             .onAppear {
                 startCartoonAnimations()
@@ -197,22 +221,23 @@ public struct ExternalCoverScreenView: View {
     
     // MARK: - Safety Disclaimer Badge
     private var safetyDisclaimerView: some View {
-        HStack(spacing: 5) {
-            Text("⚠️")
-                .font(.system(size: 9))
-            Text("SAFETY NOTICE: Close phone gently! Developer assumes no liability for screen or hinge damages.")
-                .font(.system(size: 8.5, weight: .bold, design: .rounded))
-                .foregroundColor(Color(red: 0.45, green: 0.20, blue: 0.08).opacity(0.88))
+        HStack(spacing: 6) {
+            Image(systemName: "exclamationmark.triangle")
+                .font(.system(size: 9, weight: .bold))
+                .foregroundColor(Color(red: 0.55, green: 0.28, blue: 0.12))
+            Text("SAFETY NOTICE: Fold phone gently.")
+                .font(.system(size: 9, weight: .heavy, design: .rounded))
+                .foregroundColor(Color(red: 0.45, green: 0.20, blue: 0.08))
                 .multilineTextAlignment(.center)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 4)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 5)
         .background(
             Capsule()
-                .fill(Color.white.opacity(0.65))
+                .fill(Color.white.opacity(0.70))
                 .overlay(
                     Capsule()
-                        .stroke(Color(red: 0.55, green: 0.28, blue: 0.12).opacity(0.3), lineWidth: 1)
+                        .stroke(Color(red: 0.55, green: 0.28, blue: 0.12).opacity(0.35), lineWidth: 1)
                 )
         )
     }
@@ -256,7 +281,9 @@ public struct ExternalCoverScreenView: View {
             if isTrapped, let outcome = gameEngine.lastOutcome {
                 if outcome.reactionTimeMs > 0 {
                     HStack(spacing: 4) {
-                        Text("⚡️")
+                        Image(systemName: "bolt.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(.yellow)
                         Text("\(outcome.reactionTimeMs)ms")
                             .font(.system(size: 13, weight: .black, design: .rounded))
                             .foregroundColor(.white)
@@ -406,7 +433,7 @@ struct CartoonGameLogoView: View {
                         .shadow(color: Color(red: 0.5, green: 0.1, blue: 0.1), radius: 0, x: 0, y: 5)
                         .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 8)
                     
-                    Text("💥 GAME OVER 💥")
+                    Text("GAME OVER")
                         .font(.system(size: 15, weight: .black, design: .rounded))
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
@@ -426,7 +453,7 @@ struct CartoonGameLogoView: View {
                         .shadow(color: Color(red: 0.1, green: 0.4, blue: 0.2), radius: 0, x: 0, y: 5)
                         .shadow(color: .black.opacity(0.4), radius: 8, x: 0, y: 8)
                     
-                    Text("🎯 FLY SQUISHED! 🎯")
+                    Text("FLY TRAPPED")
                         .font(.system(size: 14, weight: .black, design: .rounded))
                         .foregroundColor(.white)
                         .padding(.horizontal, 16)
@@ -467,14 +494,16 @@ struct CartoonGameLogoView: View {
                         
                         // Wooden Plaquette Ribbon
                         HStack(spacing: 6) {
-                            Text("⭐️")
-                                .font(.system(size: 10))
+                            Image(systemName: "star.fill")
+                                .font(.system(size: 8))
+                                .foregroundColor(.yellow)
                             Text("THE FOLDABLE FLY SWATTER")
                                 .font(.system(size: 11, weight: .black, design: .rounded))
                                 .foregroundColor(.white)
                                 .tracking(1)
-                            Text("⭐️")
-                                .font(.system(size: 10))
+                            Image(systemName: "star.fill")
+                                .font(.system(size: 8))
+                                .foregroundColor(.yellow)
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 4)
@@ -642,16 +671,27 @@ struct ChubbyCartoonFlyCharacter: View {
             }
             .offset(y: -18)
             
-            // 6 Jointed Spiky Cartoon Legs
-            // Back 4 legs planted
-            HStack(spacing: 52) {
+            // 4 Jointed Spiky Cartoon Legs (Vector Capsules)
+            HStack(spacing: 56) {
                 VStack(spacing: 8) {
-                    Text("🦵").font(.system(size: 14)).rotationEffect(.degrees(60))
-                    Text("🦵").font(.system(size: 14)).rotationEffect(.degrees(100))
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: 14, height: 3.5)
+                        .rotationEffect(.degrees(35))
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: 15, height: 3.5)
+                        .rotationEffect(.degrees(70))
                 }
                 VStack(spacing: 8) {
-                    Text("🦵").font(.system(size: 14)).rotationEffect(.degrees(-60)).scaleEffect(x: -1, y: 1)
-                    Text("🦵").font(.system(size: 14)).rotationEffect(.degrees(-100)).scaleEffect(x: -1, y: 1)
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: 14, height: 3.5)
+                        .rotationEffect(.degrees(-35))
+                    Capsule()
+                        .fill(Color.black)
+                        .frame(width: 15, height: 3.5)
+                        .rotationEffect(.degrees(-70))
                 }
             }
             .offset(y: 4)
@@ -881,11 +921,11 @@ struct CartoonTrappedFlyStage: View {
                 
                 // Comic Dizziness "X_X" Eyes
                 HStack(spacing: 16) {
-                    Text("✖")
-                        .font(.system(size: 16, weight: .black))
+                    Text("X")
+                        .font(.system(size: 16, weight: .black, design: .monospaced))
                         .foregroundColor(.yellow)
-                    Text("✖")
-                        .font(.system(size: 16, weight: .black))
+                    Text("X")
+                        .font(.system(size: 16, weight: .black, design: .monospaced))
                         .foregroundColor(.yellow)
                 }
             }
@@ -897,13 +937,14 @@ struct CartoonTrappedFlyStage: View {
                 let x = cos(rad) * 48.0
                 let y = sin(rad) * 32.0 - 15.0
                 
-                Text("💫")
-                    .font(.system(size: 16))
+                Image(systemName: "sparkle")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.yellow)
                     .offset(x: x, y: y)
             }
             
             // Comic Word Bubble: SQUISHED!
-            Text("💥 SPLAT! 💥")
+            Text("SPLAT! TRAPPED")
                 .font(.system(size: 14, weight: .black, design: .rounded))
                 .foregroundColor(.black)
                 .padding(.horizontal, 14)
@@ -943,13 +984,14 @@ struct CartoonEscapedFlyStage: View {
                 .offset(y: 28)
             
             // Comic Dust Poof
-            Text("💨")
-                .font(.system(size: 44))
+            Image(systemName: "wind")
+                .font(.system(size: 36, weight: .bold))
+                .foregroundColor(Color.gray.opacity(0.55))
                 .offset(x: -30, y: -10)
             
             // Cartoon Fly Flying Away Mocking the Player!
             VStack(spacing: 2) {
-                Text("😜 BZZZZ! MISSED ME!")
+                Text("BZZZZ! MISSED ME!")
                     .font(.system(size: 11, weight: .black, design: .rounded))
                     .foregroundColor(.black)
                     .padding(.horizontal, 10)
@@ -959,8 +1001,9 @@ struct CartoonEscapedFlyStage: View {
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.black, lineWidth: 1.5))
                 
                 HStack(spacing: 4) {
-                    Text("🪰")
-                        .font(.system(size: 32))
+                    Image(systemName: "ladybug.fill")
+                        .font(.system(size: 26))
+                        .foregroundColor(Color(red: 0.15, green: 0.45, blue: 0.35))
                         .scaleEffect(x: -1, y: 1)
                         .offset(y: laughBob ? -4 : 4)
                 }
@@ -1072,9 +1115,10 @@ struct CartoonWoodenSignPrompt: View {
         VStack(spacing: 4) {
             // The Cartoon Wooden Sign
             HStack(spacing: 12) {
-                // Cartoon Clapping / Hinge Icon
-                Text(isGameOver ? "🔄" : (isTrapped ? "⭐️" : "📱"))
-                    .font(.system(size: 26))
+                // Cartoon Action Icon (SF Symbol)
+                Image(systemName: isGameOver ? "arrow.counterclockwise.circle.fill" : (isTrapped ? "star.circle.fill" : "iphone.gen3"))
+                    .font(.system(size: 26, weight: .bold))
+                    .foregroundColor(Color(red: 0.35, green: 0.15, blue: 0.05))
                     .scaleEffect(bounce ? 1.15 : 0.95)
                 
                 VStack(alignment: .leading, spacing: 2) {

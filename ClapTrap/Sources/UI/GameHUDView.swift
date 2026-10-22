@@ -42,9 +42,10 @@ public struct GameHUDView: View {
                     // Streak Combo Multiplier
                     if gameEngine.streak > 1 {
                         let mult = min(5, 1 + (gameEngine.streak / 3))
-                        VStack(spacing: 1) {
-                            Text("🔥")
-                                .font(.system(size: 11))
+                        HStack(spacing: 3) {
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 10))
+                                .foregroundColor(.yellow)
                             Text("\(mult)X")
                                 .font(.system(size: 11, weight: .black, design: .monospaced))
                                 .foregroundColor(.yellow)
@@ -86,8 +87,9 @@ public struct GameHUDView: View {
                         let isBoss = insect.type == .mutantHorsefly
                         
                         HStack(spacing: 4) {
-                            Text(isWasp ? "⚠️" : (isBoss ? "👑" : "🪰"))
+                            Image(systemName: isWasp ? "exclamationmark.shield.fill" : (isBoss ? "crown.fill" : "target"))
                                 .font(.system(size: 9))
+                                .foregroundColor(isWasp ? .yellow : (isBoss ? .red : .cyan))
                             
                             Text(insect.type.displayName.uppercased())
                                 .font(.system(size: 8, weight: .black, design: .monospaced))
@@ -107,7 +109,7 @@ public struct GameHUDView: View {
                     .fill(Color.white.opacity(0.2))
                     .frame(width: 1.2, height: 38)
                 
-                // 3. RIGHT POD: Lives & Squeegee Sponge Button
+                // 3. RIGHT POD: Lives, Squeegee Sponge, and Settings Menu Button
                 HStack(spacing: 10) {
                     // Hearts Lives
                     HStack(spacing: 3) {
@@ -124,8 +126,9 @@ public struct GameHUDView: View {
                         gameEngine.wipeScreenWithSponge()
                     }) {
                         HStack(spacing: 4) {
-                            Text("🧽")
-                                .font(.system(size: 14))
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(.yellow)
                             
                             if gameEngine.persistentSplatters.count > 0 {
                                 Text("\(gameEngine.persistentSplatters.count)")
@@ -146,6 +149,20 @@ public struct GameHUDView: View {
                                         )
                                 )
                         )
+                    }
+                    
+                    // Menu & Settings Gear Button
+                    Button(action: {
+                        gameEngine.isGameMenuPresented = true
+                    }) {
+                        Image(systemName: "gearshape.fill")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(.white.opacity(0.85))
+                            .padding(6)
+                            .background(
+                                Circle()
+                                    .fill(Color.white.opacity(0.12))
+                            )
                     }
                 }
             }
@@ -174,7 +191,7 @@ public struct GameHUDView: View {
             if gameEngine.gameState == .landed {
                 VStack(spacing: 5) {
                     HStack(spacing: 8) {
-                        Text("⚡️ FOLD PHONE GENTLY TO SWAT! ⚡️")
+                        Text("FOLD PHONE GENTLY TO SWAT")
                             .font(.system(size: 11, weight: .black, design: .monospaced))
                             .foregroundColor(.green)
                         
@@ -184,10 +201,11 @@ public struct GameHUDView: View {
                     }
                     
                     // Safety subtext reminder
-                    HStack(spacing: 4) {
-                        Text("⚠️")
-                            .font(.system(size: 8))
-                        Text("Close smoothly — do not slam device!")
+                    HStack(spacing: 5) {
+                        Image(systemName: "exclamationmark.triangle")
+                            .font(.system(size: 8, weight: .bold))
+                            .foregroundColor(.yellow)
+                        Text("SAFETY NOTICE: Fold phone gently.")
                             .font(.system(size: 9, weight: .heavy, design: .rounded))
                             .foregroundColor(.white.opacity(0.85))
                     }

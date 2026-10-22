@@ -35,6 +35,16 @@ public struct FoldableDualScreenContainer: View {
                         .ignoresSafeArea()
                 }
             }
+            .overlay(
+                Group {
+                    if gameEngine.isGameMenuPresented {
+                        GameMenuView(onDismiss: {
+                            gameEngine.isGameMenuPresented = false
+                        })
+                        .transition(.opacity)
+                    }
+                }
+            )
             .onAppear {
                 updateScreenConfiguration(size: screenSize)
             }
@@ -284,9 +294,12 @@ struct SwatAftermathBanner: View {
                     }
                     
                     if outcome.isMach2 {
-                        Text("⚠️ HARD CLAP! FOLD GENTLY TO PROTECT HINGES")
-                            .font(.system(size: 10, weight: .black, design: .monospaced))
-                            .foregroundColor(.orange)
+                        HStack(spacing: 4) {
+                            Image(systemName: "exclamationmark.triangle")
+                            Text("SAFETY NOTICE: Fold phone gently.")
+                        }
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .foregroundColor(.orange)
                     }
                     
                     Text("+\(outcome.pointsEarned) PTS")
@@ -295,9 +308,12 @@ struct SwatAftermathBanner: View {
                 }
             } else if outcome.isStung {
                 VStack(spacing: 4) {
-                    Text("🐝 YOU GOT STUNG! 🐝")
-                        .font(.system(size: 20, weight: .black, design: .rounded))
-                        .foregroundColor(.red)
+                    HStack(spacing: 6) {
+                        Image(systemName: "exclamationmark.shield.fill")
+                        Text("STUNG BY WASP!")
+                    }
+                    .font(.system(size: 20, weight: .black, design: .rounded))
+                    .foregroundColor(.red)
                     
                     Text(outcome.mockingText)
                         .font(.system(size: 11, weight: .bold, design: .monospaced))
@@ -310,9 +326,12 @@ struct SwatAftermathBanner: View {
                 }
             } else {
                 VStack(spacing: 4) {
-                    Text("💨 WHIFF! MISSED! 💨")
-                        .font(.system(size: 18, weight: .black, design: .rounded))
-                        .foregroundColor(.orange)
+                    HStack(spacing: 6) {
+                        Image(systemName: "wind")
+                        Text("MISSED! ESCAPED!")
+                    }
+                    .font(.system(size: 18, weight: .black, design: .rounded))
+                    .foregroundColor(.orange)
                     
                     Text(outcome.mockingText)
                         .font(.system(size: 11, weight: .medium, design: .monospaced))
@@ -322,13 +341,16 @@ struct SwatAftermathBanner: View {
             }
             
             Button(action: onContinue) {
-                Text("NEXT WAVE ➔")
-                    .font(.system(size: 11, weight: .black, design: .monospaced))
-                    .foregroundColor(.black)
-                    .padding(.horizontal, 18)
-                    .padding(.vertical, 8)
-                    .background(Color.yellow)
-                    .cornerRadius(8)
+                HStack(spacing: 4) {
+                    Text("NEXT WAVE")
+                    Image(systemName: "arrow.right")
+                }
+                .font(.system(size: 11, weight: .black, design: .monospaced))
+                .foregroundColor(.black)
+                .padding(.horizontal, 18)
+                .padding(.vertical, 8)
+                .background(Color.yellow)
+                .cornerRadius(8)
             }
             .padding(.top, 4)
         }
@@ -396,9 +418,9 @@ struct TitleMenuView: View {
                 Button(action: onStartGame) {
                     VStack(spacing: 6) {
                         HStack(spacing: 8) {
-                            Image(systemName: "hand.tap.fill")
-                            Text("TAP TO START HUNTING")
-                            Image(systemName: "hand.tap.fill")
+                            Image(systemName: "play.fill")
+                            Text("START HUNTING")
+                            Image(systemName: "play.fill")
                         }
                         .font(.system(size: 14, weight: .black, design: .monospaced))
                         .foregroundColor(.black)
@@ -419,23 +441,46 @@ struct TitleMenuView: View {
                     }
                 }
                 
+                // Settings & Target Intel Menu Button
+                Button(action: {
+                    ClapTrapGameEngine.shared.isGameMenuPresented = true
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "gearshape.fill")
+                        Text("SETTINGS & INTEL")
+                    }
+                    .font(.system(size: 12, weight: .black, design: .monospaced))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+                    .background(
+                        RoundedRectangle(cornerRadius: 14)
+                            .fill(Color.white.opacity(0.12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .stroke(Color.white.opacity(0.20), lineWidth: 1)
+                            )
+                    )
+                }
+                .padding(.horizontal, 24)
+                
                 if ClapTrapGameEngine.shared.highScore > 0 {
                     Text("ALL-TIME HIGH SCORE: \(ClapTrapGameEngine.shared.highScore)")
                         .font(.system(size: 11, weight: .heavy, design: .monospaced))
                         .foregroundColor(.yellow.opacity(0.9))
                 }
                 
-                // Gentle Play Safety Notice & Legal Disclaimer
-                HStack(spacing: 5) {
-                    Text("⚠️")
-                        .font(.system(size: 10))
-                    Text("SAFETY NOTICE: Fold phone gently. Developer assumes zero liability for device damages.")
-                        .font(.system(size: 9, weight: .bold, design: .rounded))
-                        .foregroundColor(.white.opacity(0.70))
-                        .multilineTextAlignment(.center)
+                // Safety Notice Badge
+                HStack(spacing: 6) {
+                    Image(systemName: "exclamationmark.triangle")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.yellow)
+                    Text("SAFETY NOTICE: Fold phone gently.")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundColor(.white.opacity(0.85))
                 }
-                .padding(.horizontal, 20)
-                .padding(.vertical, 4)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 6)
                 .background(
                     Capsule()
                         .fill(Color.white.opacity(0.10))
@@ -478,7 +523,7 @@ struct GameOverBragView: View {
     @State private var copied: Bool = false
     
     var bragText: String {
-        "I reached Wave \(wave) with \(score) pts in ClapTrap: The Foldable Fly Swatter on my $2,000 Foldable iPhone! 🪰📱⚡️"
+        "I reached Wave \(wave) with \(score) pts in ClapTrap: The Foldable Fly Swatter on my Foldable iPhone!"
     }
     
     var body: some View {
@@ -505,9 +550,15 @@ struct GameOverBragView: View {
                         .foregroundColor(.white)
                     
                     if score >= highScore && score > 0 {
-                        Text("🏆 NEW HIGH SCORE! 🏆")
-                            .font(.system(size: 14, weight: .black, design: .monospaced))
-                            .foregroundColor(.green)
+                        HStack(spacing: 6) {
+                            Image(systemName: "trophy.fill")
+                                .foregroundColor(.yellow)
+                            Text("NEW HIGH SCORE!")
+                                .font(.system(size: 14, weight: .black, design: .monospaced))
+                                .foregroundColor(.green)
+                            Image(systemName: "trophy.fill")
+                                .foregroundColor(.yellow)
+                        }
                     }
                 }
                 .padding(.horizontal, 32)

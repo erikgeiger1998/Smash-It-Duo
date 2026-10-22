@@ -32,7 +32,7 @@ public final class FoldSensorManager: ObservableObject {
     @Published public var isMotionHardwareActive: Bool = false
     
     /// Threshold angle considered "Shut" (default: 35 degrees)
-    public let closedThresholdAngle: Double = 35.0
+    public var closedThresholdAngle: Double = 35.0
     
     /// Slam shut event publisher for game engine triggers
     public let slamEventPublisher = PassthroughSubject<SlamImpactData, Never>()

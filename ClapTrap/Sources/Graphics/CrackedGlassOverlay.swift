@@ -107,13 +107,17 @@ public struct CrackedGlassOverlay: View {
                     if !showReliefBanner {
                         // Heart attack warning
                         VStack(spacing: 6) {
-                            Text("⚠️ CRITICAL IMPACT ⚠️")
-                                .font(.system(size: 20, weight: .black, design: .monospaced))
-                                .foregroundColor(.red)
-                                .shadow(color: .black, radius: 4)
+                            HStack(spacing: 6) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                Text("CRITICAL IMPACT")
+                                Image(systemName: "exclamationmark.triangle.fill")
+                            }
+                            .font(.system(size: 18, weight: .black, design: .monospaced))
+                            .foregroundColor(.red)
+                            .shadow(color: .black, radius: 4)
                             
-                            Text("MACH 2 CLAP DETECTED!")
-                                .font(.system(size: 14, weight: .bold, design: .monospaced))
+                            Text("FAST SLAM DETECTED")
+                                .font(.system(size: 13, weight: .bold, design: .monospaced))
                                 .foregroundColor(.white)
                         }
                         .padding(.horizontal, 24)
@@ -128,23 +132,22 @@ public struct CrackedGlassOverlay: View {
                     } else {
                         // Relief banner & Safety warning: Just Kidding!
                         VStack(spacing: 8) {
-                            Text("😅 JUST KIDDING! 😅")
+                            Text("JUST KIDDING!")
                                 .font(.system(size: 24, weight: .black, design: .rounded))
                                 .foregroundColor(.green)
                             
-                            Text("YOUR SCREEN IS INTACT, BUT PLEASE FOLD GENTLY!")
+                            Text("YOUR SCREEN IS INTACT, BUT PLEASE FOLD GENTLY")
                                 .font(.system(size: 11, weight: .heavy, design: .monospaced))
                                 .foregroundColor(.white.opacity(0.95))
                                 .multilineTextAlignment(.center)
                             
-                            VStack(spacing: 3) {
-                                Text("⚠️ NO NEED TO SLAM!")
-                                    .font(.system(size: 13, weight: .black, design: .rounded))
+                            HStack(spacing: 6) {
+                                Image(systemName: "exclamationmark.triangle")
+                                    .font(.system(size: 11, weight: .bold))
                                     .foregroundColor(.yellow)
-                                
-                                Text("Disclaimer: Developer is not liable for device damages.")
-                                    .font(.system(size: 9, weight: .medium, design: .monospaced))
-                                    .foregroundColor(.orange)
+                                Text("SAFETY NOTICE: Fold phone gently.")
+                                    .font(.system(size: 11, weight: .black, design: .rounded))
+                                    .foregroundColor(.yellow)
                             }
                         }
                         .padding(.horizontal, 28)

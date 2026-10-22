@@ -42,6 +42,7 @@ public final class ClapTrapGameEngine: ObservableObject {
     @Published public var showCrackedScreenOverlay: Bool = false
     @Published public var crackedScreenImpactPoint: CGPoint = .zero
     @Published public var isSpongeWiping: Bool = false
+    @Published public var isGameMenuPresented: Bool = false
     
     // Reaction timer progress for HUD (1.0 = full time remaining, 0.0 = time's up)
     @Published public var reactionProgress: Double = 1.0
@@ -478,16 +479,16 @@ public final class ClapTrapGameEngine: ObservableObject {
         // Praise badge evaluation
         let praise: String
         if impactData.isMach2 {
-            praise = "⚠️ TOO HARD! FOLD GENTLY!"
+            praise = "TOO HARD! FOLD GENTLY!"
         } else if reactionMs < 500 {
-            praise = "⚡️ LIGHTNING REFLEX!"
+            praise = "LIGHTNING REFLEX!"
             soundEngine.playGodlikeFanfare()
         } else if reactionMs < 1200 {
-            praise = "✨ SMOOTH & SAFE SWAT!"
+            praise = "SMOOTH & SAFE SWAT!"
         } else if reactionMs < 2200 {
-            praise = "🎯 NICE & GENTLE SWAT!"
+            praise = "PERFECT TIMING!"
         } else {
-            praise = "👍 GOT IT IN TIME!"
+            praise = "TRAPPED IN TIME!"
         }
         
         self.lastOutcome = SwatOutcome(
