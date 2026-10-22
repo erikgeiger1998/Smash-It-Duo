@@ -1110,11 +1110,9 @@ struct CartoonWoodenSignPrompt: View {
     
     private var subtitleText: String {
         if isGameOver {
-            return "UNFOLD FLAT (180°) TO START NEW GAME"
-        } else if isTrapped {
-            return "UNFOLD FLAT (180°) TO CONTINUE"
+            return "UNFOLD TO RETRY"
         } else {
-            return "UNFOLD FLAT (180°) TO HUNT FLIES"
+            return "UNFOLD TO CONTINUE"
         }
     }
     

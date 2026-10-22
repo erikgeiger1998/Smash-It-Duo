@@ -457,8 +457,8 @@ public struct GameMenuView: View {
             instructionStepRow(
                 number: "1",
                 icon: "iphone.gen3",
-                title: "OPEN PHONE FLAT",
-                desc: "Unfold the device to 180° flat. The game starts automatically on the dual-screen picnic table."
+                title: "OPEN PHONE",
+                desc: "Unfold the device. The game starts automatically on the dual-screen picnic table."
             )
             
             instructionStepRow(
@@ -617,7 +617,7 @@ public struct GameMenuView: View {
                 keyTrait: "Armored Titan Boss",
                 timeRange: "3.4s -> 1.10s (x2)",
                 points: "750 PTS (BOSS)",
-                description: "Armored titan boss: survives the first fold (HP 2 -> 1)! As soon as you fold, immediately reopen flat and fold a second time to defeat it before it escapes!"
+                description: "Armored titan boss: survives the first fold (HP 2 -> 1)! As soon as you fold, immediately reopen and fold a second time to defeat it before it escapes!"
             )
             
             // 4. YELLOWJACKET WASP (TRAP)
