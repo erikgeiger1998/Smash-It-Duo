@@ -252,19 +252,19 @@ final class ClapTrapTests: XCTestCase {
     func testAllSpeciesReactionWindowFloorsMatchUserSpecification() {
         let engine = ClapTrapGameEngine.shared
         
-        // 1. Házi légy (Housefly): 3.6s -> 0.95s
+        // 1. Housefly: 3.6s -> 0.95s
         XCTAssertEqual(engine.calculateLandingWindow(for: .housefly, wave: 1), 3.60, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .housefly, wave: 100), 0.95, accuracy: 0.01)
         
-        // 2. Szúnyog (Mosquito): 2.6s -> 0.85s
+        // 2. Mosquito: 2.6s -> 0.85s
         XCTAssertEqual(engine.calculateLandingWindow(for: .mosquito, wave: 1), 2.60, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .mosquito, wave: 100), 0.85, accuracy: 0.01)
         
-        // 3. Mutáns bögöly (Mutant Horsefly Boss): 3.4s -> 1.10s
+        // 3. Mutant Horsefly Boss: 3.4s -> 1.10s
         XCTAssertEqual(engine.calculateLandingWindow(for: .mutantHorsefly, wave: 1), 3.40, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .mutantHorsefly, wave: 100), 1.10, accuracy: 0.01)
         
-        // 4. Darázs (Yellowjacket Wasp Trap): 3.5s -> 2.20s
+        // 4. Yellowjacket Wasp Trap: 3.5s -> 2.20s
         XCTAssertEqual(engine.calculateLandingWindow(for: .wasp, wave: 1), 3.50, accuracy: 0.01)
         XCTAssertEqual(engine.calculateLandingWindow(for: .wasp, wave: 100), 2.20, accuracy: 0.01)
     }
@@ -666,5 +666,118 @@ final class ClapTrapTests: XCTestCase {
         let reopenScreen = CGSize(width: 800, height: 600)
         XCTAssertEqual(splatter1.position(for: reopenScreen), kill1Pos)
         XCTAssertEqual(splatter2.position(for: reopenScreen), kill2Pos)
+    }
+    
+    // MARK: - Smash it! & iPhone Duo Exclusivity Tests
+    
+    func testiPhoneDuoGatekeeperModelDetection() {
+        // Valid iPhone Duo targets
+        XCTAssertTrue(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "iPhone19,4", deviceName: "iPhone Duo"),
+            "iPhone19,4 must be authorized as an authentic iPhone Duo"
+        )
+        XCTAssertTrue(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "iPhone-Duo", deviceName: "iPhone Duo Simulator"),
+            "Simulator iPhone-Duo must be recognized"
+        )
+        XCTAssertTrue(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "x86_64", deviceName: "iPhone Duo"),
+            "Device named iPhone Duo must be recognized"
+        )
+        
+        // Incompatible single-slab phone models MUST be rejected
+        XCTAssertFalse(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "iPhone15,2", deviceName: "iPhone 14 Pro"),
+            "iPhone 14 Pro (single-slab) must NOT be authorized"
+        )
+        XCTAssertFalse(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "iPhone16,1", deviceName: "iPhone 15 Pro"),
+            "iPhone 15 Pro (single-slab) must NOT be authorized"
+        )
+        XCTAssertFalse(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "iPhone14,6", deviceName: "iPhone SE (3rd generation)"),
+            "iPhone SE must NOT be authorized"
+        )
+        XCTAssertFalse(
+            iPhoneDuoGatekeeper.isModeliPhoneDuo(modelIdentifier: "iPad13,18", deviceName: "iPad Air"),
+            "iPads must NOT be authorized"
+        )
+    }
+    
+    func testiPhoneDuoGatekeeperDeveloperBypass() {
+        let gatekeeper = iPhoneDuoGatekeeper.shared
+        
+        // Developer bypass allows testing and preview in debug builds
+        gatekeeper.developerBypassEnabled = true
+        gatekeeper.reevaluateAuthorization()
+        XCTAssertTrue(gatekeeper.isAuthorized)
+        
+        // Reset
+        gatekeeper.developerBypassEnabled = false
+        gatekeeper.reevaluateAuthorization()
+    }
+    
+    func testAppStoreExclusivityConfigurationInInfoPlist() {
+        guard let plistPath = Bundle(for: type(of: self)).path(forResource: "Info", ofType: "plist", inDirectory: nil) ??
+                Bundle.main.path(forResource: "Info", ofType: "plist") ??
+                Bundle.main.infoDictionary.map({ _ in "" }) else {
+            return
+        }
+        
+        if let info = NSDictionary(contentsOfFile: "/Users/erikgeiger/Documents/Developing/Smash it/ClapTrap/Info.plist") as? [String: Any] {
+            // 1. Game display name
+            XCTAssertEqual(info["CFBundleDisplayName"] as? String, "Smash it!", "App display name must be 'Smash it!'")
+            
+            // 2. iPhone Duo App Store restriction
+            let supportedDevices = info["UISupportedDevices"] as? [String]
+            XCTAssertNotNil(supportedDevices, "UISupportedDevices must be defined for App Store filtering")
+            XCTAssertEqual(supportedDevices, ["iPhone19,4"], "UISupportedDevices must contain exclusively iPhone19,4 (iPhone Duo)")
+            
+            // 3. iPhone only (no iPad or Mac)
+            XCTAssertEqual(info["TARGETED_DEVICE_FAMILY"] as? String, "1", "TARGETED_DEVICE_FAMILY must be 1 (iPhone only)")
+            
+            // 4. Required motion and fold sensors
+            let requiredCaps = info["UIRequiredDeviceCapabilities"] as? [String]
+            XCTAssertNotNil(requiredCaps)
+            XCTAssertTrue(requiredCaps?.contains("accelerometer") == true)
+            XCTAssertTrue(requiredCaps?.contains("gyroscope") == true)
+            XCTAssertTrue(requiredCaps?.contains("haptics") == true)
+        }
+    }
+    
+    func testSmashItTitleViewInstantiation() {
+        let titleView = SmashItTitleView()
+        XCTAssertNotNil(titleView.body, "SmashItTitleView must render cleanly")
+        
+        let overlayView = iPhoneDuoExclusiveRequiredView()
+        XCTAssertNotNil(overlayView.body, "iPhoneDuoExclusiveRequiredView must render cleanly")
+    }
+    
+    func testSmashItGlassIconViewAllAppearances() {
+        // Test all appearance options for the glassmorphic icon
+        for appearance in GlassIconAppearance.allCases {
+            let iconView = SmashItGlassIconView(
+                size: 80,
+                appearanceOverride: appearance,
+                showGlow: true,
+                interactive: true
+            )
+            XCTAssertNotNil(iconView.body, "SmashItGlassIconView must render cleanly for appearance \(appearance.rawValue)")
+        }
+        
+        // Test the glass icon showcase inspector card
+        let showcaseView = SmashItGlassIconShowcaseView()
+        XCTAssertNotNil(showcaseView.body, "SmashItGlassIconShowcaseView must render cleanly")
+    }
+    
+    func testAppIconAssetCatalogConfiguration() {
+        // Verify CFBundleIcons in Bundle.main or Info.plist dictionary
+        if let info = Bundle.main.infoDictionary {
+            if let bundleIcons = info["CFBundleIcons"] as? [String: Any],
+               let primaryIcon = bundleIcons["CFBundlePrimaryIcon"] as? [String: Any] {
+                let iconName = primaryIcon["CFBundleIconName"] as? String
+                XCTAssertEqual(iconName, "AppIcon", "Primary app icon name must be AppIcon")
+            }
+        }
     }
 }

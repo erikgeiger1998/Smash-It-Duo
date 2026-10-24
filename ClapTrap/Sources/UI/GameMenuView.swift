@@ -38,7 +38,7 @@ public struct GameMenuView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("CLAPTRAP")
+                        Text("SMASH IT!")
                             .font(.system(size: 22, weight: .black, design: .rounded))
                             .foregroundStyle(
                                 LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
@@ -51,6 +51,9 @@ public struct GameMenuView: View {
                     }
                     
                     Spacer()
+                    
+                    // Glassmorphic App Icon in Header
+                    SmashItGlassIconView(size: 42, showGlow: true, interactive: true)
                 }
                 .padding(.horizontal, 20)
                 .padding(.top, 24)
@@ -304,6 +307,9 @@ public struct GameMenuView: View {
                     }
                 }
             }
+            
+            // 5. Smash it! App Icon & Glassmorphic Inspector Card
+            SmashItGlassIconShowcaseView()
         }
     }
     

@@ -1,12 +1,13 @@
 import SwiftUI
 
 @main
-struct ClapTrapApp: App {
+struct SmashItApp: App {
     init() {
-        // Initialize procedural audio, sensors, and game engine
+        // Initialize procedural audio, sensors, iPhone Duo gatekeeper, and game engine
         _ = ProceduralSoundEngine.shared
         _ = FoldSensorManager.shared
         _ = ClapTrapGameEngine.shared
+        _ = iPhoneDuoGatekeeper.shared
     }
     
     var body: some Scene {

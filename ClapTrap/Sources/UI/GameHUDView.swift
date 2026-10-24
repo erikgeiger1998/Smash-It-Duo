@@ -206,7 +206,7 @@ public struct GameHUDView: View {
             if gameEngine.gameState == .landed {
                 VStack(spacing: 5) {
                     HStack(spacing: 8) {
-                        Text("FOLD GENTLY TO SWAT")
+                        Text("FOLD GENTLY TO SMASH")
                             .font(.system(size: 11, weight: .black, design: .monospaced))
                             .foregroundColor(gameEngine.reactionProgress < 0.3 ? .orange : .green)
                         

@@ -370,7 +370,7 @@ struct CartoonGameLogoView: View {
                         .shadow(color: .black.opacity(0.3), radius: 4)
                 }
             } else {
-                // Main Cartoon Game Logo: "CLAPTRAP"
+                // Main Cartoon Game Logo: "SMASH IT!"
                 ZStack {
                     // Back Swatters crossed
                     HStack(spacing: 80) {
@@ -383,20 +383,20 @@ struct CartoonGameLogoView: View {
                     .offset(y: -5)
                     
                     // 3D Layered Cartoon Text
-                    VStack(spacing: -8) {
-                        HStack(spacing: 2) {
-                            Text("CLAP")
-                                .font(.system(size: 46, weight: .black, design: .rounded))
+                    VStack(spacing: -6) {
+                        HStack(spacing: 4) {
+                            Text("SMASH")
+                                .font(.system(size: 42, weight: .black, design: .rounded))
                                 .foregroundStyle(
                                     LinearGradient(colors: [.yellow, .orange], startPoint: .top, endPoint: .bottom)
                                 )
-                            Text("TRAP")
-                                .font(.system(size: 46, weight: .black, design: .rounded))
+                            Text("IT!")
+                                .font(.system(size: 42, weight: .black, design: .rounded))
                                 .foregroundStyle(
-                                    LinearGradient(colors: [Color(red: 1.0, green: 0.35, blue: 0.45), .red], startPoint: .top, endPoint: .bottom)
+                                    LinearGradient(colors: [Color(red: 0.25, green: 0.98, blue: 0.85), Color(red: 0.10, green: 0.70, blue: 1.0)], startPoint: .top, endPoint: .bottom)
                                 )
                         }
-                        .shadow(color: Color(red: 0.45, green: 0.18, blue: 0.08), radius: 0, x: 0, y: 5)
+                        .shadow(color: Color(red: 0.35, green: 0.12, blue: 0.05), radius: 0, x: 0, y: 5)
                         .shadow(color: .black.opacity(0.35), radius: 8, x: 0, y: 7)
                         
                         // Wooden Plaquette Ribbon

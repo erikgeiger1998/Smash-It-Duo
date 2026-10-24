@@ -4,3 +4,8 @@ DerivedData/
 *.xcuserstate
 xcuserdata/
 .build/
+
+# Website
+website/node_modules/
+website/.next/
+website/out/

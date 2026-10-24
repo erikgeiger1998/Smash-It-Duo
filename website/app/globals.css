@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 5, 6, 8;
+  --background-end-rgb: 10, 12, 18;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #050608;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  selection-background-color: #39ff14;
+  selection-color: #000;
+}
+
+::selection {
+  background: #39ff14;
+  color: #000;
+}
+
+/* Comic / Arcade Text Outlines */
+.comic-outline {
+  text-shadow:
+    -2px -2px 0 #000,
+     2px -2px 0 #000,
+    -2px  2px 0 #000,
+     2px  2px 0 #000,
+     0px  4px 0 #000,
+     4px  4px 0 #000;
+}
+
+.comic-outline-thick {
+  text-shadow:
+    -3px -3px 0 #000,
+     3px -3px 0 #000,
+    -3px  3px 0 #000,
+     3px  3px 0 #000,
+     0px  6px 0 #000,
+     6px  6px 0 #000;
+}
+
+.comic-shadow-sm {
+  filter: drop-shadow(3px 3px 0px #000);
+}
+
+.comic-shadow {
+  filter: drop-shadow(5px 5px 0px #000);
+}
+
+/* Custom Arcade Grid Background */
+.arcade-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Glow Utilities */
+.neon-border-green {
+  box-shadow: 0 0 15px rgba(57, 255, 20, 0.35), inset 0 0 15px rgba(57, 255, 20, 0.15);
+}
+
+.neon-glow-text {
+  text-shadow: 0 0 20px rgba(57, 255, 20, 0.8), 0 0 40px rgba(57, 255, 20, 0.4);
+}
+
+.neon-orange-glow-text {
+  text-shadow: 0 0 20px rgba(255, 94, 0, 0.8), 0 0 40px rgba(255, 94, 0, 0.4);
+}
+
+/* Perspective & 3D */
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}

@@ -6,6 +6,7 @@ import SwiftUI
 public struct FoldableDualScreenContainer: View {
     @ObservedObject var gameEngine = ClapTrapGameEngine.shared
     @ObservedObject var foldSensor = FoldSensorManager.shared
+    @ObservedObject var gatekeeper = iPhoneDuoGatekeeper.shared
     
     // Inward gesture tracking
     @State private var dragLastX: CGFloat = 0.0
@@ -19,9 +20,15 @@ public struct FoldableDualScreenContainer: View {
             let screenSize = proxy.size
             let isCover = isExternalCoverScreen(size: screenSize)
             let isClosedOrCover = isCover || foldSensor.isClosed
+            let isAuthorized = gatekeeper.isAuthorized
             
             Group {
-                if isClosedOrCover {
+                if !isAuthorized {
+                    // EXCLUSIVE IPHONE DUO HARDWARE REQUIRED
+                    iPhoneDuoExclusiveRequiredView()
+                        .edgesIgnoringSafeArea(.all)
+                        .ignoresSafeArea()
+                } else if isClosedOrCover {
                     // 1. EXTERNAL COVER SCREEN (Phone Closed)
                     // The game NEVER runs on this cover screen under any circumstance (portrait or landscape).
                     // Strictly shows whether the fly was trapped or escaped, and prompts player to unfold.
@@ -378,19 +385,14 @@ struct TitleMenuView: View {
             VStack(spacing: 16) {
                 Spacer()
                 
-                VStack(spacing: 4) {
-                    Text("CLAPTRAP")
-                        .font(.system(size: 44, weight: .black, design: .rounded))
-                        .foregroundStyle(
-                            LinearGradient(colors: [.yellow, .orange, .red], startPoint: .top, endPoint: .bottom)
-                        )
-                        .shadow(color: .yellow.opacity(0.6), radius: 12)
-                    
-                    Text("THE FOLDABLE FLY SWATTER")
-                        .font(.system(size: 12, weight: .black, design: .monospaced))
-                        .foregroundColor(.cyan)
-                        .tracking(3)
-                }
+                // Frosted Glassmorphic App Icon Badge
+                SmashItGlassIconView(size: 64, showGlow: true, interactive: true)
+                    .padding(.bottom, -6)
+                
+                // Cool, playful animated Smash it! title
+                SmashItTitleView()
+                    .scaleEffect(0.95)
+                    .padding(.top, 10)
                 
                 // Bestiary Showcase Cards
                 Button(action: {
@@ -552,7 +554,7 @@ struct GameOverBragView: View {
     @State private var copied: Bool = false
     
     var bragText: String {
-        "I reached Wave \(wave) with \(score) pts in ClapTrap: The Foldable Fly Swatter on my Foldable iPhone!"
+        "I reached Wave \(wave) with \(score) pts in Smash it!: The Foldable Fly Swatter on my Foldable iPhone!"
     }
     
     var body: some View {

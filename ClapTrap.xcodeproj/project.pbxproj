@@ -7,25 +7,29 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1F6F844227651D4790FC9B4F /* FoodBaitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60B303A547CE71AD515A3E4F /* FoodBaitModel.swift */; };
 		35504864CCF26C7A9396F533 /* FoldableDualScreenContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C72873ACC3DAC80B4B6ED0 /* FoldableDualScreenContainer.swift */; };
 		37F54365E59F3BCA1E1915A4 /* GameHUDView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */; };
+		408E280A1ACA5CC8BCFBB21F /* SmashItTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A774FE22D2B0A092D5456764 /* SmashItTitleView.swift */; };
 		572C68238BD7E3F7B9A47E43 /* FoldSensorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367AB1BB3091EDC3887FF7C0 /* FoldSensorManager.swift */; };
 		6D68B4F86C1D7A8CEE26D813 /* SplatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2811299F602DC75C7E4E4883 /* SplatView.swift */; };
 		6DF46A45EBE30FE5B6CE436A /* ExternalCoverScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */; };
 		765B48D590DC0E97FCFBBBC2 /* CrackedGlassOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */; };
 		83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */; };
 		96B8F07FA8CE3CB1A118EE0F /* InsectModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */; };
+		9DAAF5E3591E2BFFCB5D65D8 /* FoodBaitPlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C988155CDEE894A639DAB3E6 /* FoodBaitPlateView.swift */; };
 		A329F559D1CF1C59A62E38C4 /* InsectSpriteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A00AF97AE824E64D191B464E /* InsectSpriteView.swift */; };
 		A3FE92088BAFD51C4DBFE383 /* GameMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AECEF04529C6DC1226CA68D6 /* GameMenuView.swift */; };
 		A6AEBEAD8D7E9D050A2ECD66 /* CleanSpongeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB67D5E17789FC36D055840A /* CleanSpongeView.swift */; };
+		A7AACE37DA600A91F3C7B851 /* iPhoneDuoGatekeeper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC0DD3A48C294FCEEA8ACC03 /* iPhoneDuoGatekeeper.swift */; };
+		BE51A9AE891A29AE7CAB72F1 /* SmashItGlassIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C5B0EF234FD18F31CCDA5B0 /* SmashItGlassIconView.swift */; };
 		C696C590B8EA8493FFAE297A /* ClapTrapGameEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */; };
 		C6E8945C035EFBD4789050AA /* ClapTrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */; };
 		D00B17036A6991415F8C8167 /* ProceduralSoundEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C26F77A91B4FC2ABB08FD3 /* ProceduralSoundEngine.swift */; };
 		D6ADCBDCF06818031EFF879B /* TableTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C7604DF7C4D6F8DA223389F /* TableTheme.swift */; };
 		DDBF9C8119DF945349631388 /* ClapTrapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */; };
 		EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */; };
-		FBD400022830C58214CAB0A2 /* FoodBaitModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD400012830C58214CAB0A1 /* FoodBaitModel.swift */; };
-		FBD40004F5A77829CD674534 /* FoodBaitPlateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD40003F5A77829CD674533 /* FoodBaitPlateView.swift */; };
+		EFFE70450FA7FB2D7C5F9350 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8972FFB659801258EE834536 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,18 +52,22 @@
 		3C7604DF7C4D6F8DA223389F /* TableTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableTheme.swift; sourceTree = "<group>"; };
 		3FC8947327EB796583BF1DD6 /* ExternalCoverScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalCoverScreenView.swift; sourceTree = "<group>"; };
 		4BD34705BFE17C4D4D9DF1C4 /* WatermelonBaitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatermelonBaitView.swift; sourceTree = "<group>"; };
+		4C5B0EF234FD18F31CCDA5B0 /* SmashItGlassIconView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmashItGlassIconView.swift; sourceTree = "<group>"; };
+		60B303A547CE71AD515A3E4F /* FoodBaitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBaitModel.swift; sourceTree = "<group>"; };
 		6D11DA01993651FF3E9FDD86 /* ClapTrapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapTests.swift; sourceTree = "<group>"; };
 		862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicnicTableView.swift; sourceTree = "<group>"; };
-		9981008E16BE80AA2C545612 /* ClapTrap.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = ClapTrap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8972FFB659801258EE834536 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		9981008E16BE80AA2C545612 /* ClapTrap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClapTrap.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A00AF97AE824E64D191B464E /* InsectSpriteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectSpriteView.swift; sourceTree = "<group>"; };
+		A774FE22D2B0A092D5456764 /* SmashItTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmashItTitleView.swift; sourceTree = "<group>"; };
 		AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClapTrapGameEngine.swift; sourceTree = "<group>"; };
 		AB67D5E17789FC36D055840A /* CleanSpongeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanSpongeView.swift; sourceTree = "<group>"; };
 		AECEF04529C6DC1226CA68D6 /* GameMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameMenuView.swift; sourceTree = "<group>"; };
 		B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameHUDView.swift; sourceTree = "<group>"; };
+		C988155CDEE894A639DAB3E6 /* FoodBaitPlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBaitPlateView.swift; sourceTree = "<group>"; };
+		CC0DD3A48C294FCEEA8ACC03 /* iPhoneDuoGatekeeper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iPhoneDuoGatekeeper.swift; sourceTree = "<group>"; };
 		D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsectModel.swift; sourceTree = "<group>"; };
 		F665D37E67E0E4903D753790 /* ClapTrapTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ClapTrapTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FBD400012830C58214CAB0A1 /* FoodBaitModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBaitModel.swift; sourceTree = "<group>"; };
-		FBD40003F5A77829CD674533 /* FoodBaitPlateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodBaitPlateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -67,7 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				AB3BB1751DA50239092764FC /* ClapTrapGameEngine.swift */,
-				FBD400012830C58214CAB0A1 /* FoodBaitModel.swift */,
+				60B303A547CE71AD515A3E4F /* FoodBaitModel.swift */,
 				D33F1D41FF950E8F3AF163B5 /* InsectModel.swift */,
 				3C7604DF7C4D6F8DA223389F /* TableTheme.swift */,
 			);
@@ -80,6 +88,14 @@
 				37BD9662D112C6C25DE078A7 /* ClapTrapApp.swift */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		507A0BC6CDB3FB59DD5CCCAE /* Hardware */ = {
+			isa = PBXGroup;
+			children = (
+				CC0DD3A48C294FCEEA8ACC03 /* iPhoneDuoGatekeeper.swift */,
+			);
+			path = Hardware;
 			sourceTree = "<group>";
 		};
 		6247EE84450FC19E6450E72C /* Audio */ = {
@@ -115,6 +131,8 @@
 				21C72873ACC3DAC80B4B6ED0 /* FoldableDualScreenContainer.swift */,
 				B9D2FE5B22F4B1D5F549CA35 /* GameHUDView.swift */,
 				AECEF04529C6DC1226CA68D6 /* GameMenuView.swift */,
+				4C5B0EF234FD18F31CCDA5B0 /* SmashItGlassIconView.swift */,
+				A774FE22D2B0A092D5456764 /* SmashItTitleView.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -131,10 +149,12 @@
 		A667C41355E9109A1F115601 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8972FFB659801258EE834536 /* Assets.xcassets */,
 				43CE2B41B8D7491CBEEE3021 /* App */,
 				6247EE84450FC19E6450E72C /* Audio */,
 				2830C582A58A322714CAB0A7 /* Game */,
 				F5A778290F235AD9CD674533 /* Graphics */,
+				507A0BC6CDB3FB59DD5CCCAE /* Hardware */,
 				B780E4FA3032825E4E44AB99 /* Sensors */,
 				9314F6F3B270B9CDA0688447 /* UI */,
 			);
@@ -155,7 +175,7 @@
 			children = (
 				AB67D5E17789FC36D055840A /* CleanSpongeView.swift */,
 				3854522E45D0CEA83ACE81E6 /* CrackedGlassOverlay.swift */,
-				FBD40003F5A77829CD674533 /* FoodBaitPlateView.swift */,
+				C988155CDEE894A639DAB3E6 /* FoodBaitPlateView.swift */,
 				A00AF97AE824E64D191B464E /* InsectSpriteView.swift */,
 				862DE1B098B7A50A81EC8388 /* PicnicTableView.swift */,
 				2811299F602DC75C7E4E4883 /* SplatView.swift */,
@@ -190,6 +210,7 @@
 			buildConfigurationList = 782CCE80E270FAF39A7C84CC /* Build configuration list for PBXNativeTarget "ClapTrap" */;
 			buildPhases = (
 				F6DE24669C74E81448640FD7 /* Sources */,
+				29E59B284AD92DC8979AA360 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -210,8 +231,6 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
-				TargetAttributes = {
-				};
 			};
 			buildConfigurationList = 8395A302A0E17789186123F9 /* Build configuration list for PBXProject "ClapTrap" */;
 			developmentRegion = en;
@@ -233,6 +252,17 @@
 		};
 /* End PBXProject section */
 
+/* Begin PBXResourcesBuildPhase section */
+		29E59B284AD92DC8979AA360 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EFFE70450FA7FB2D7C5F9350 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D5DDFDC4C26A3F41F3B2EAFA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -253,17 +283,20 @@
 				6DF46A45EBE30FE5B6CE436A /* ExternalCoverScreenView.swift in Sources */,
 				572C68238BD7E3F7B9A47E43 /* FoldSensorManager.swift in Sources */,
 				35504864CCF26C7A9396F533 /* FoldableDualScreenContainer.swift in Sources */,
+				1F6F844227651D4790FC9B4F /* FoodBaitModel.swift in Sources */,
+				9DAAF5E3591E2BFFCB5D65D8 /* FoodBaitPlateView.swift in Sources */,
 				37F54365E59F3BCA1E1915A4 /* GameHUDView.swift in Sources */,
 				A3FE92088BAFD51C4DBFE383 /* GameMenuView.swift in Sources */,
 				96B8F07FA8CE3CB1A118EE0F /* InsectModel.swift in Sources */,
 				A329F559D1CF1C59A62E38C4 /* InsectSpriteView.swift in Sources */,
 				83613B31190A6C2259A589C7 /* PicnicTableView.swift in Sources */,
 				D00B17036A6991415F8C8167 /* ProceduralSoundEngine.swift in Sources */,
+				BE51A9AE891A29AE7CAB72F1 /* SmashItGlassIconView.swift in Sources */,
+				408E280A1ACA5CC8BCFBB21F /* SmashItTitleView.swift in Sources */,
 				6D68B4F86C1D7A8CEE26D813 /* SplatView.swift in Sources */,
 				D6ADCBDCF06818031EFF879B /* TableTheme.swift in Sources */,
 				EA0F2CAC3631F0AF9F972510 /* WatermelonBaitView.swift in Sources */,
-				FBD400022830C58214CAB0A2 /* FoodBaitModel.swift in Sources */,
-				FBD40004F5A77829CD674534 /* FoodBaitPlateView.swift in Sources */,
+				A7AACE37DA600A91F3C7B851 /* iPhoneDuoGatekeeper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -437,22 +470,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMotionUsageDescription = "ClapTrap uses motion sensors to detect folding slams and fast swats.";
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				DEVELOPMENT_TEAM = 7J9HUBGLTN;
+				INFOPLIST_FILE = ClapTrap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Smash it!";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.erikgeiger.ClapTrap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ggproduction.SmashIt;
+				PRODUCT_MODULE_NAME = ClapTrap;
 				PRODUCT_NAME = ClapTrap;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -460,22 +494,23 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSMotionUsageDescription = "ClapTrap uses motion sensors to detect folding slams and fast swats.";
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				DEVELOPMENT_TEAM = 7J9HUBGLTN;
+				INFOPLIST_FILE = ClapTrap/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "Smash it!";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.erikgeiger.ClapTrap;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ggproduction.SmashIt;
+				PRODUCT_MODULE_NAME = ClapTrap;
 				PRODUCT_NAME = ClapTrap;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

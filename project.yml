@@ -10,14 +10,28 @@ targets:
     deploymentTarget: "17.0"
     sources:
       - path: ClapTrap/Sources
+    info:
+      path: ClapTrap/Info.plist
+      properties:
+        CFBundleDisplayName: "Smash it!"
+        UIRequiredDeviceCapabilities:
+          - "arm64"
+        TARGETED_DEVICE_FAMILY: "1"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - "UIInterfaceOrientationPortrait"
+          - "UIInterfaceOrientationLandscapeLeft"
+          - "UIInterfaceOrientationLandscapeRight"
+        NSMotionUsageDescription: "Smash it! uses motion sensors to detect folding smashes."
     settings:
       base:
         PRODUCT_NAME: ClapTrap
-        PRODUCT_BUNDLE_IDENTIFIER: com.erikgeiger.ClapTrap
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_NSMotionUsageDescription: "ClapTrap uses motion sensors to detect folding slams and fast swats."
-        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_MODULE_NAME: ClapTrap
+        PRODUCT_BUNDLE_IDENTIFIER: com.erikgeiger.SmashIt
+        TARGETED_DEVICE_FAMILY: "1"
+        INFOPLIST_KEY_CFBundleDisplayName: "Smash it!"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         CURRENT_PROJECT_VERSION: 1
         MARKETING_VERSION: "1.0.0"
   ClapTrapTests:
