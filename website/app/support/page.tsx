@@ -75,7 +75,7 @@ export default function SupportPage() {
   };
 
   const copyEmail = () => {
-    navigator.clipboard.writeText('support@erikgeiger.com');
+    navigator.clipboard.writeText('support@erikgeiger.ro');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -113,11 +113,11 @@ export default function SupportPage() {
           <div className="mt-6 inline-flex flex-wrap items-center justify-center gap-3 p-3.5 rounded-2xl bg-obsidian-850 border border-obsidian-border">
             <span className="text-xs font-mono text-zinc-400">Direct Developer Support:</span>
             <a
-              href="mailto:support@erikgeiger.com"
+              href="mailto:support@erikgeiger.ro"
               className="font-mono text-sm font-bold text-bugJuice hover:underline flex items-center gap-1.5"
             >
               <Mail className="w-4 h-4" />
-              <span>support@erikgeiger.com</span>
+              <span>support@erikgeiger.ro</span>
             </a>
             <button
               onClick={copyEmail}
@@ -245,8 +245,8 @@ export default function SupportPage() {
             </h3>
             <p className="text-xs sm:text-sm text-zinc-400 mt-1">
               Have an inquiry, feedback, or bug report? Submit the form below or write directly to{' '}
-              <a href="mailto:support@erikgeiger.com" className="text-bugJuice hover:underline">
-                support@erikgeiger.com
+              <a href="mailto:support@erikgeiger.ro" className="text-bugJuice hover:underline">
+                support@erikgeiger.ro
               </a>.
             </p>
           </div>

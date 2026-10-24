@@ -39,11 +39,11 @@ export default function Footer() {
             App Store Support
           </Link>
           <a
-            href="mailto:support@erikgeiger.com"
+            href="mailto:support@erikgeiger.ro"
             className="flex items-center gap-1 hover:text-bugJuice transition text-bugJuice"
           >
             <Mail className="w-3.5 h-3.5" />
-            <span>support@erikgeiger.com</span>
+            <span>support@erikgeiger.ro</span>
           </a>
         </div>
 

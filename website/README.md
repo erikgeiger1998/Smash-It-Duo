@@ -36,7 +36,7 @@ Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **
    - Kinematics & CMMotionManager sensor explanation.
    - Safety guideline: "Fold gently — velocity is measured immediately upon hinge movement".
    - Interactive FAQ Accordion.
-   - Direct Contact Card for developer Erik Geiger (`support@erikgeiger.com`).
+   - Direct Contact Card for developer Erik Geiger (`support@erikgeiger.ro`).
 
 ---
 
