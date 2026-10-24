@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Mail, ShieldCheck, Smartphone, ExternalLink, Zap } from 'lucide-react';
+import { Mail, ShieldCheck, Smartphone, FileText } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -25,7 +25,7 @@ export default function Footer() {
         </div>
 
         {/* Quick Links & App Store Review Compliance */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-zinc-400">
+        <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-6 text-xs text-zinc-400">
           <Link href="/" className="hover:text-bugJuice transition">
             Home
           </Link>
@@ -36,11 +36,19 @@ export default function Footer() {
             The Enemies
           </Link>
           <Link href="/support" className="hover:text-bugJuice text-white font-semibold transition">
-            App Store Support
+            Support
+          </Link>
+          <Link href="/privacy" className="hover:text-bugJuice text-zinc-300 transition flex items-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-bugJuice" />
+            <span>Privacy Policy</span>
+          </Link>
+          <Link href="/terms" className="hover:text-arcade-gold text-zinc-300 transition flex items-center gap-1">
+            <FileText className="w-3.5 h-3.5 text-arcade-gold" />
+            <span>Terms &amp; Conditions</span>
           </Link>
           <a
             href="mailto:support@erikgeiger.ro"
-            className="flex items-center gap-1 hover:text-bugJuice transition text-bugJuice"
+            className="flex items-center gap-1 hover:text-bugJuice transition text-bugJuice font-mono"
           >
             <Mail className="w-3.5 h-3.5" />
             <span>support@erikgeiger.ro</span>

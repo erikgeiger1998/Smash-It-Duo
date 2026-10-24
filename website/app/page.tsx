@@ -63,7 +63,7 @@ export default function HomePage() {
               DON&apos;T TAP IT.
             </span>
             <br />
-            <span className="bg-gradient-to-r from-arcade-yellow via-arcade-orange to-arcade-crimson bg-clip-text text-transparent comic-outline-thick drop-shadow-[0_12px_0_#000]">
+            <span className="text-arcade-gold comic-outline-thick drop-shadow-[0_12px_0_#000]">
               CLAP IT
             </span>
             <span className="text-bugJuice comic-outline-thick drop-shadow-[0_12px_0_#000]">

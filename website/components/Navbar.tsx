@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Smartphone, Bug, HelpCircle, Download, Sparkles } from 'lucide-react';
+import { Smartphone, Bug, HelpCircle, ShieldCheck, Download } from 'lucide-react';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -55,6 +55,18 @@ export default function Navbar() {
           >
             <HelpCircle className="w-4 h-4 text-arcade-crimson" />
             <span>Support</span>
+          </Link>
+
+          <Link
+            href="/privacy"
+            className={`transition flex items-center gap-1.5 ${
+              pathname === '/privacy' || pathname === '/privacy/'
+                ? 'text-bugJuice font-bold'
+                : 'hover:text-white'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>Privacy</span>
           </Link>
         </nav>
 
