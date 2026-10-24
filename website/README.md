@@ -1,49 +1,52 @@
-# 🪰 SMASH IT! — Official Promotional Website
+# 🪰 SMASH IT! DUO — Showcase & App Store Portal
 
-The official, interactive promotional website for **"SMASH IT! The Foldable Fly Swatter"**, built with Next.js 14 (App Router), React, Tailwind CSS, Framer Motion, and Lucide React.
+The official, ultra-modern showcase website for **"SMASH IT! The Foldable Fly Swatter"** built exclusively for the foldable iPhone Duo.
 
-Configured for **GitHub Pages Static Export** (`output: 'export'`).
+Built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, and **Framer Motion**.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Key Highlights
 
-### 1. Install Dependencies
-```bash
-npm install
-```
+1. **Live 3D Hardware Simulation (`components/LiveFoldableDemo.tsx`)**:
+   - 100% code-rendered iPhone Duo with 3D CSS perspective (`1400px`) and `transform-style: preserve-3d`.
+   - In-screen game matching the real iOS game: horizontal warm wood planks, red-and-white checkered picnic runner, watermelon bait slice on the central hinge crease.
+   - Arcade HUD: `SCORE: 5,900`, `WAVE 6`, 3 red hearts, and `FOLD GENTLY TO SMASH: 0.65s` countdown.
+   - Continuous 4-Stage Automated Loop:
+     - **Stage 1 (The Hunt)**: Animated SVG fly buzzes and lands on the watermelon.
+     - **Stage 2 (The Clap)**: Warning flashes, dual displays violently fold shut in 3D (`rotateY: 85° / -85°`) with motion blur, "CLAP!" comic burst, and heavy camera shake.
+     - **Stage 3 (Haptic Buzz)**: Closed phone physically jitters with radiating neon soundwaves simulating CoreHaptics death throes (`"BZZZZ-BZZ-BZ..."`).
+     - **Stage 4 (The Reveal)**: Springs back open flat, revealing massive symmetrical neon-green inkblot splat on both sides of the hinge crease with `⚡ 142ms - GODLIKE! +1,750 PTS` badge.
+     - **Stage 5 (Sponge Wipe)**: Cartoon sponge wipes screen clean with soap bubbles and loop restarts!
+   - **Interactive Mode**: "TRY IT YOURSELF: SLAM SHUT!" button to slam at any time.
 
-### 2. Run Local Development Server
+2. **Interactive Feature Bento Grid**:
+   - Symmetrical Inkblot Physics
+   - CoreHaptics Death Throes
+   - 3D Spatial Audio Buzzing
+   - "Too Hard!" Easter Egg (clickable fake cracked screen overlay + "+500 Brutality Bonus")
+
+3. **The Bestiary / Enemy Waves**:
+   - Common Housefly (158 Hz | 0.75s window)
+   - Stealth Mosquito (460 Hz | 0.48s window)
+   - Mutant Horsefly Boss (92 Hz | Armored Double-Clap)
+   - Yellowjacket Wasp (230 Hz | Trap Hazard — DO NOT CLAP)
+
+4. **App Store Compliant Support Page (`/support`)**:
+   - Kinematics & CMMotionManager sensor explanation.
+   - Safety guideline: "Fold gently — velocity is measured immediately upon hinge movement".
+   - Interactive FAQ Accordion.
+   - Direct Contact Card for developer Erik Geiger (`support@erikgeiger.com`).
+
+---
+
+## 🛠 Local Development & Static Export
+
 ```bash
+# Run locally
 npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) to view the site in your browser.
 
-### 3. Build & Static Export (GitHub Pages)
-```bash
+# Static Export for GitHub Pages
 npm run build
 ```
-This generates the production-ready static export inside the `/out` directory, including:
-- `/out/index.html` (Marketing Home Page)
-- `/out/support/index.html` (App Store Support & Contact Page)
-- `/out/.nojekyll` (Ensures GitHub Pages serves `_next` assets properly)
-
----
-
-## 📱 Features & Highlights
-
-- **Interactive 3D Foldable Phone (`components/FoldablePhone.tsx`)**:
-  - Landscape orientation foldable device with left screen, right screen, and center mechanical hinge.
-  - 3D CSS perspective & `transform-style: preserve-3d`.
-  - Pure SVG code-animated fly buzzing randomly across both displays with high-frequency wing flutter.
-  - Physical 3D folding snap using `rotateY` triggered by tapping the phone or clicking "SQUASH IT!".
-  - Screen shake effect, dynamic "SPLAT!" comic pop-up badge, and instant spring-rebound reveal of a massive, symmetrical neon-green SVG inkblot splat.
-  - Integrated digital sponge wipe mechanic to reset the screen.
-  - Synthesized Web Audio API sound effects (no external audio files needed).
-- **Dark Arcade Aesthetics**:
-  - Deep black palette, neon green, vibrant comic orange, and yellow accents.
-  - Extruded comic typography and action dropshadows.
-- **App Store Compliant Support Page (`app/support/page.tsx`)**:
-  - Interactive Framer Motion FAQ accordion.
-  - Styled contact inquiry form.
-  - Visible support contact (`support@erikgeiger.com`).
+Output is generated in `/out` with `.nojekyll` ready for GitHub Pages hosting.

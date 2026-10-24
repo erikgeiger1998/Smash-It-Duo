@@ -9,47 +9,52 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        arcade: {
+        obsidian: {
           950: "#050608",
-          900: "#090b10",
-          850: "#0e111a",
-          800: "#151926",
-          700: "#22273d",
-          border: "#262c45",
+          900: "#090A0F",
+          850: "#0F121C",
+          800: "#161B2B",
+          700: "#242C44",
+          border: "#1E253A",
         },
-        splat: {
-          green: "#39ff14",
+        bugJuice: {
+          DEFAULT: "#39FF14",
           lime: "#22c55e",
           glow: "#50fa7b",
-          dark: "#14532d",
+          dark: "#15803d",
         },
-        comic: {
-          yellow: "#ffe600",
-          orange: "#ff5e00",
-          red: "#ff2a55",
-          cyan: "#00f0ff",
+        arcade: {
+          gold: "#FFD700",
+          yellow: "#FFE600",
+          orange: "#FF5E00",
+          crimson: "#FF2A55",
+          red: "#FF3B30",
+          cyan: "#00F0FF",
+        },
+        table: {
+          light: "#A06533",
+          wood: "#8A5326",
+          dark: "#5C3517",
+          groove: "#3B200D",
         },
       },
       boxShadow: {
         "comic-sm": "3px 3px 0px 0px #000000",
         "comic": "5px 5px 0px 0px #000000",
         "comic-lg": "8px 8px 0px 0px #000000",
-        "comic-green": "0px 0px 30px rgba(57, 255, 20, 0.45)",
-        "comic-orange": "0px 0px 30px rgba(255, 94, 0, 0.45)",
-        "neon-glow": "0 0 20px rgba(57, 255, 20, 0.5), 0 0 40px rgba(57, 255, 20, 0.2)",
-      },
-      fontFamily: {
-        comic: ["system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        "neon-green": "0 0 25px rgba(57, 255, 20, 0.5), 0 0 50px rgba(57, 255, 20, 0.2)",
+        "neon-gold": "0 0 25px rgba(255, 215, 0, 0.5), 0 0 50px rgba(255, 215, 0, 0.2)",
+        "neon-crimson": "0 0 25px rgba(255, 42, 85, 0.5)",
       },
       animation: {
         "pulse-fast": "pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 3s ease-in-out infinite",
-        "glitch": "glitch 1s linear infinite",
+        "wiggle": "wiggle 0.3s ease-in-out infinite",
+        "radar": "radar 2s linear infinite",
       },
       keyframes: {
-        float: {
-          "0%, 100%": { transform: "translateY(0px)" },
-          "50%": { transform: "translateY(-8px)" },
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-3deg)" },
+          "50%": { transform: "rotate(3deg)" },
         },
       },
     },
